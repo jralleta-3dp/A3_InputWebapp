@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sheets Web App</title>
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    /* Dark Mode Styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .container {
+      background-color: #1e1e1e;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      width: 80%;
+      max-width: 500px;
+    }
+
+    h1 {
+      color: #f0f0f0;
+      font-size: 2.5em;
+    }
+
+    #status {
+      font-size: 1.5em;
+      margin: 10px;
+      color: #ff9800;
+    }
+
+    button {
+      background-color: #6200ea;
+      color: white;
+      font-size: 1.2em;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 200px;
+    }
+
+    button:hover {
+      background-color: #3700b3;
+    }
+
+    #inputSection {
+      margin-top: 20px;
+      display: none;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      font-size: 1em;
+      width: 100%;
+      border: 2px solid #bb86fc;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      background-color: #333;
+      color: #e0e0e0;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #3700b3;
+    }
+
+    .submit-btn {
+      background-color: #6200ea;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background-color: #3700b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Google Sheets Web App</h1>
+    <div id="status">Not signed in</div>
+    <div id="signInButton"></div> <!-- Sign In Button -->
+    <br><br>
+    <div id="inputSection" style="display:none;">
+      <input type="text" id="dataInput" placeholder="Enter something..." />
+      <button onclick="submitToSheet()">Submit</button>
+    </div>
+  </div>
+
+  <script>
+    let accessToken;
+    let tokenClient;
+    const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
+    const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo';
+
+    // Check if user is already authenticated
+    function checkAuthStatus() {
+      accessToken = localStorage.getItem('accessToken');
+      if (accessToken) {
+        // Token exists, user is signed in, redirect
+        window.location.href = "newpage.html"; // Redirect
+      } else {
+        // No token, need to initialize Google Sign-In client
+        initializeGISClient();
+      }
+    }
+
+    // Initialize Google Identity Services (Only if no accessToken exists)
+    function initializeGISClient() {
+      google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleCredentialResponse
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById("signInButton"),
+        { theme: "outline", size: "large" }
+      );
+    }
+
+    // Callback function after sign-in
+    function handleCredentialResponse(response) {
+      const tokenResponse = response.credential;
+      if (tokenResponse) {
+        requestAccessToken(tokenResponse); // Pass token to access Google Sheets API
+      }
+    }
+
+    // Request access token to interact with Google Sheets API
+    function requestAccessToken(tokenResponse) {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/spreadsheets',
+        callback: (tokenResponse) => {
+          accessToken = tokenResponse.access_token;
+          document.getElementById("status").textContent = "Signed in!";
+          document.getElementById("inputSection").style.display = "block";
+
+          // Save token to localStorage and redirect to new page
+          localStorage.setItem('accessToken', accessToken);
+          window.location.href = "newpage.html"; // Redirect after successful login
+        },
+      });
+
+      tokenClient.requestAccessToken();
+    }
+
+    // Initialize on page load
+    window.onload = checkAuthStatus;
+  </script>
+</body>
+</html>
