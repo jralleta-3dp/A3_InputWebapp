@@ -1023,16 +1023,17 @@
         
 
         //listener logic for sample type dropdown
-        document.getElementById("SampleType").addEventListener("change",function(event) {
+        document.getElementById("SampleType").addEventListener("change", function(event) {
           const selectedSampleType = event.target.value;
 
-          //CALL FUNCTION HERE WITH THE INPUT ABOVE!!!
-          safeApiCall(() => writeSampleTypeToSheet(selectedSampleType));
-
-          // Use setTimeout to reset the dropdown value after the event handler completes
-          setTimeout(() => {
-            event.target.selectedIndex = 0; // Reset to the first option
-          }, 0);
+          // Call the function and reset the dropdown after the promise resolves
+          safeApiCall(() => writeSampleTypeToSheet(selectedSampleType))
+            .then(() => {
+              event.target.selectedIndex = 0; // Reset to the first option
+            })
+            .catch(err => {
+              console.error("Error writing sample type:", err);
+            });
         });
 
         // Add the event listener to detect when the Return key is pressed in the Units field
