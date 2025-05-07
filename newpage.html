@@ -1027,15 +1027,15 @@
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
       }
   
-      document.querySelector(".button-group button:first-child").addEventListener("click", () => {
+      document.querySelector(".button-group-box button:first-child").addEventListener("click", () => {
         if (count > 1) {
           count--;
           updateLabel();
           clearFields();
         }
       });
-  
-      document.querySelector(".button-group button:nth-child(2)").addEventListener("click", () => {
+
+      document.querySelector(".button-group-box button:nth-child(2)").addEventListener("click", () => {
         count++;
         updateLabel();
         clearFields();
