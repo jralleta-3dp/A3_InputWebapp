@@ -717,8 +717,9 @@
           .then(data => {
               console.log("Sample Type Written:", data);
           })
-          .catch(error => {
-              console.error("Failed to write Sample Type:", error);
+          .catch(err => {
+            console.error("Failed to write Sample Type:", err); // Log the error
+            reject(err); // Propagate the error
           });
       }
       
@@ -1004,7 +1005,7 @@
           const selectedSampleType = event.target.value;
 
           //CALL FUNCTION HERE WITH THE INPUT ABOVE!!!
-          writeSampleTypeToSheet(selectedSampleType);
+          safeApiCall(() => writeSampleTypeToSheet(selectedSampleType));
           event.target.value = "";
         });
 
