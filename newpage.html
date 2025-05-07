@@ -1028,7 +1028,7 @@
 
           //CALL FUNCTION HERE WITH THE INPUT ABOVE!!!
           safeApiCall(() => writeSampleTypeToSheet(selectedSampleType));
-          event.target.value = "";
+          event.target.selectedIndex = 0; // Reset to the first option
         });
 
         // Add the event listener to detect when the Return key is pressed in the Units field
