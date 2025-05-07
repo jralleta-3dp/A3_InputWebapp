@@ -1027,6 +1027,7 @@
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
       }
   
+      // Back Button Logic
       document.querySelector(".button-group-box button:first-child").addEventListener("click", () => {
         if (count > 1) {
           count--;
@@ -1035,17 +1036,25 @@
         }
       });
 
+      // Next Button Logic
       document.querySelector(".button-group-box button:nth-child(2)").addEventListener("click", () => {
         count++;
         updateLabel();
         clearFields();
       });
-  
-      const startButton = document.querySelectorAll(".button-group .button")[2];
+
+      // Start Time Button Logic
+      const startButton = document.querySelectorAll(".button-group-box .button")[0]; // First button in the first button-group-box
       startButton.addEventListener("click", () => {
         safeApiCall(writeStartTime);
       });
-  
+
+      // End Time Button Logic
+      const endButton = document.querySelectorAll(".button-group-box .button")[1]; // Second button in the first button-group-box
+      endButton.addEventListener("click", () => {
+        safeApiCall(writeEndTime);
+      });
+
       function writeStartTime() {
         return new Promise((resolve, reject) => {
           const nowGMT = new Date().toISOString();
@@ -1090,11 +1099,6 @@
           .catch(err => reject(err));
         });
       }
-  
-      const endButton = document.querySelectorAll(".button-group .button")[3];
-      endButton.addEventListener("click", () => {
-        safeApiCall(writeEndTime);
-      });
   
       function writeEndTime() {
         return new Promise((resolve, reject) => {
