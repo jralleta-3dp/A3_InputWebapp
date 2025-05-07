@@ -672,56 +672,58 @@
       }
       //function for writing sample type to sheet
       function writeSampleTypeToSheet(selectedSampleType) {
-        const targetRow = count + 1;
-        const nowGMT = new Date().toISOString();  // Current time in GMT format
-        const rangeToWrite = `Sheet1!A${targetRow}:F${targetRow}`;  // Write to column F of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
-        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
-              method: "GET",
-              headers: {
-                  "Authorization": `Bearer ${accessToken}`,
-              }
+        return new Promise((resolve, reject) => {
+          const targetRow = count + 1;
+          const nowGMT = new Date().toISOString();
+          const rangeToWrite = `Sheet1!A${targetRow}:F${targetRow}`;
+          const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;
+  
+          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${accessToken}`,
+            },
           })
-          .then(res => {
+            .then(res => {
               if (!res.ok) throw res;
               return res.json();
-          })
-          .then(data => {
+            })
+            .then(data => {
               let existingRow = data.values?.[0] || [];
-
               let values;
-
-              // Check if columns A and B are empty
+  
               if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
-                  // If A and B are empty, initialize them with count and timestamp, and write the crew description in column D
-                  values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], selectedSampleType]  // Initialize with count, timestamp, and description
-                  ];
+                values = [
+                  [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], selectedSampleType],
+                ];
               } else {
-                  // If A and B are not empty, only update the crew description in column D
-                  values = [
-                      [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], selectedSampleType]  // Keep existing values in A, B, C, and update D
-                  ];
+                values = [
+                  [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], selectedSampleType],
+                ];
               }
-
-              // Update the row in the sheet with the new values
+  
               return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
-                  method: "PUT",
-                  headers: {
-                      "Authorization": `Bearer ${accessToken}`,
-                      "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify({ values })
+                method: "PUT",
+                headers: {
+                  "Authorization": `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ values }),
               });
-          })
-          .then(response => response.json())
-          .then(data => {
+            })
+            .then(res => {
+              if (!res.ok) throw res;
+              return res.json();
+            })
+            .then(data => {
               console.log("Sample Type Written:", data);
-          })
-          .catch(err => {
-            console.error("Failed to write Sample Type:", err); // Log the error
-            reject(err); // Propagate the error
-          });
+              resolve(); // Resolve the Promise
+            })
+            .catch(err => {
+              console.error("Failed to write Sample Type:", err);
+              reject(err); // Reject the Promise
+            });
+        });
       }
       
 
@@ -834,7 +836,7 @@
         if (!accessToken) {
           alert("Session expired. Please sign in again.");
           window.location.href = 'index.html'; // Redirect to your login page
-          return;
+          return Promise.reject("No access token"); // Return a rejected Promise
         }
       
         return apiFunction().catch(err => {
@@ -1023,12 +1025,13 @@
         
 
         //listener logic for sample type dropdown
-        document.getElementById("SampleType").addEventListener("change", function(event) {
+        document.getElementById("SampleType").addEventListener("change", function (event) {
           const selectedSampleType = event.target.value;
 
           // Call the function and reset the dropdown after the promise resolves
           safeApiCall(() => writeSampleTypeToSheet(selectedSampleType))
             .then(() => {
+              console.log("Sample type written successfully.");
               event.target.selectedIndex = 0; // Reset to the first option
             })
             .catch(err => {
