@@ -12,187 +12,350 @@
     /* Base styles */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background-color: #0e0e0f;
-      color: #f2f2f2;
+      background-color: #f6f8fa; /* Light gray background like GitHub */
+      color: #24292e; /* Dark text color */
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: flex-start;
+      padding: 20px;
       margin: 0;
     }
-  
+
     .container {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       gap: 20px;
-      background-color: #1c1c1e;
-      padding: 24px; /* Adjust padding to reduce the gap */
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      max-width:800px; /* Reduce the max-width to align with the foreground boxes */
-      width: 90%;
-      margin: 0 auto; /* Center the container horizontally */
+      background-color: #ffffff; /* White background for the container */
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      max-width: 800px;
+      width: 100%;
     }
-  
-    /* Sections */
+
+    /* Section styles */
     .row-layout,
     .second-row-layout,
     .third-row-layout,
     .bottom-section,
-    .Last-Section {
+    .last-section {
       display: flex;
-      background-color: #2c2c2e;
-      padding: 16px 24px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-  
-    .third-row-layout,
-    .last-section-layout {
       flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid #d0d7de; /* Light border for separation */
+      border-radius: 6px;
+      background-color: #ffffff;
     }
-  
+
+    /* First Row Layout */
     .row-layout {
       display: flex;
-      align-items: center;
+      flex-direction: row;
       justify-content: space-between;
-      gap: 40px;
-      background-color: #2c2c2e;
-      padding: 16px 24px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-  
-    .second-row-layout {
       align-items: center;
-      justify-content: space-between;
+      gap: 20px;
+      width: 100%; /* Ensure it matches the container width */
+      box-sizing: border-box; /* Include padding and border in the width calculation */
     }
-  
-    /* Buttons */
-    .button-group {
+
+    /* Label Box */
+    .label-box {
+      flex: 1; /* Take up available space on the left */
+      background-color: #f6f8fa; /* Light gray background */
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #24292e;
+      box-sizing: border-box; /* Include padding in the width calculation */
+    }
+
+    /* Button Group Box */
+    .button-group-box {
       display: flex;
-      gap: 12px;
+      gap: 10px;
+      background-color: #ffffff; /* White background */
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box; /* Include padding in the width calculation */
     }
-  
+
+    /* Buttons */
     .button {
-      padding: 10px 16px;
-      font-size: 16px;
-      background-color: #6200ea;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      background-color: #2da44e; /* GitHub green */
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: background-color 0.2s ease;
     }
-  
+
     .button:hover {
-      background-color: #3700b3;
-      transform: translateY(-1px);
+      background-color: #218838; /* Darker green on hover */
     }
-  
+
+    .button.secondary {
+      background-color: #f6f8fa; /* Light gray for secondary buttons */
+      color: #24292e;
+      border: 1px solid #d0d7de;
+    }
+
+    .button.secondary:hover {
+      background-color: #eaeef2; /* Slightly darker gray on hover */
+    }
+
     /* Labels */
-    label,
-    #label {
-      font-size: 17px;
+    label {
+      font-size: 14px;
       font-weight: 600;
-      color: #d1d1d6;
+      color: #57606a; /* Subtle gray for labels */
     }
-  
-    /* Checkboxes group */
-    .checkbox-label-g1 {
-      display: flex;
-      gap: 30px;
-    }
-  
-    /* Shared input & select styles */
+
+    /* Inputs and Selects */
     input[type="text"],
     select {
-      background-color: #1c1c1e;
-      color: #ffffff;
+      width: 100%;
       padding: 8px 12px;
-      font-size: 15px;
-      border: 1px solid #3a3a3c;
-      border-radius: 8px;
+      font-size: 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #24292e;
       outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
+      transition: border-color 0.2s ease;
     }
-  
-    /* Only select elements — add dropdown arrow */
-    select {
-      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23d1d1d6' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 12px;
-      padding-right: 36px;
+
+    input[type="text"]:focus,
+    select:focus {
+      border-color: #0969da; /* GitHub blue for focus */
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
     }
-  
-    select:focus,
-    input[type="text"]:focus {
-      border-color: #0a84ff;
+
+    /* Checkboxes */
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2em; /* Make the text larger */
+      font-weight: bold;
+      color: #24292e;
     }
-  
+
+    .checkbox-label input {
+      width: 24px; /* Make the checkbox larger */
+      height: 24px;
+      cursor: pointer;
+    }
+
+    /* Textarea */
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #24292e;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    textarea:focus {
+      border-color: #0969da;
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+    }
+
+    /* Grid layout for bottom section */
     .grid-3col {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px 24px;
-      width: 100%;
+      gap: 16px;
     }
-  
-    .grid-3col label,
-    .third-row-layout label,
-    .second-row-layout label,
-    .last-section-layout label {
-      margin-bottom: 6px;
+
+    /* Section headers */
+    .section-header {
+      font-size: 16px;
+      font-weight: bold;
+      color: #24292e;
+      margin-bottom: 8px;
     }
-  
-    .last-section-layout {
+
+    /* Third Row Layout */
+    .third-row-layout {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
-      max-width: 400px;
+      padding: 16px;
+      border: 1px solid #d0d7de; /* Light border for separation */
+      border-radius: 6px;
+      background-color: #ffffff;
+      box-sizing: border-box; /* Include padding and border in the width calculation */
     }
-  
-    .Last-Section {
-      gap: 40px;
-      justify-content: space-between;
+
+    /* Input Box */
+    .third-row-layout input[type="text"] {
+      width: 100%; /* Ensure it spans the full width of the section */
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #24292e;
+      outline: none;
+      box-sizing: border-box; /* Include padding and border in the width calculation */
+      transition: border-color 0.2s ease;
+    }
+
+    .third-row-layout input[type="text"]:focus {
+      border-color: #0969da; /* GitHub blue for focus */
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
+    }
+
+    /* Second Row Layout */
+    .second-row-layout {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between; /* Space out the two boxes */
+      align-items: center;
+      padding: 16px;
+      border: 1px solid #d0d7de; /* Light border for separation */
+      border-radius: 6px;
+      background-color: #ffffff;
+      box-sizing: border-box;
+    }
+
+    /* Dropdown Group Box */
+    .dropdown-group-box {
+      display: flex;
+      flex-direction: row; /* Keep dropdowns horizontal */
+      gap: 20px; /* Add space between dropdowns */
+      padding: 16px;
+      background-color: #f6f8fa; /* Light gray background */
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 48%; /* Increase width to almost meet in the middle */
+      box-sizing: border-box;
+      justify-content: flex-start; /* Align dropdowns inside the box */
+      align-items: center; /* Vertically center the dropdowns */
+    }
+
+    /* Dropdown Inputs */
+    .dropdown-input select {
+      width: 100%; /* Ensure dropdown spans the full width of its container */
+      padding: 120px; /* Increase padding for a larger clickable area */
+      font-size: 20px; /* Increase font size for better readability */
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #24292e;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease;
+    }
+
+    .dropdown-input select:focus {
+      border-color: #0969da; /* GitHub blue for focus */
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
+    }
+
+    /* Checkbox Group Box */
+    .checkbox-group-box {
+      display: flex;
+      flex-direction: row; /* Keep checkboxes horizontal */
+      gap: 20px; /* Add space between checkboxes */
+      padding: 16px;
+      background-color: #f6f8fa; /* Light gray background */
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 48%; /* Increase width to almost meet in the middle */
+      box-sizing: border-box;
+      justify-content: flex-start; /* Align checkboxes inside the box */
+      align-items: center; /* Vertically center the checkboxes */
+    }
+
+    /* Checkbox Labels */
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2em; /* Make the text larger */
+      font-weight: bold;
+      color: #24292e;
+    }
+
+    /* Checkboxes */
+    .checkbox-label input {
+      width: 28px; /* Make the checkbox larger */
+      height: 28px;
+      cursor: pointer;
     }
   </style>
-  
-  
 </head>
 <body>
     <div class="container">
         <!-- Button row, this should be a back and next arrow -->
         <div class="row-layout">
-            <!-- Back and Next -->
-            <div class="button-group">
-              <button class="button">&#8592; Back</button>
-              <button class="button">Next &#8594;</button>
-            </div>
-          
-            <!-- Label -->
+          <!-- Label Box -->
+          <div class="label-box">
             <div id="label">Entry #0</div>
-          
-            <!-- Extra Buttons -->
-            <div class="button-group">
-              <button class="button">Start Time</button>
-              <button class="button">End Time</button>
-            </div>
+          </div>
+
+          <!-- Start/End Time Buttons Box -->
+          <div class="button-group-box">
+            <button class="button">Start Time</button>
+            <button class="button">End Time</button>
+          </div>
+
+          <!-- Back/Next Buttons Box -->
+          <div class="button-group-box">
+            <button class="button">&#8592; Back</button>
+            <button class="button">Next &#8594;</button>
+          </div>
         </div>
 
         <div class="second-row-layout">
-            <div class="checkbox-label-g1">
-                <label>
-                    <input type="checkbox" id = "Planned" name="Planned" value="True">
-                    Planned
-                </label>   
-                
-                <label>
-                    <input type="checkbox" id="Unplanned" name="Unplanned" value="True">
-                    Unplanned
-                </label>
-            </div>
+          <!-- Dropdown Group Box -->
+          <div class="dropdown-group-box">
+            <label class="dropdown-input">
+              <select id="Station" name="Station:">
+                <option value="" disabled selected>Station...</option>
+                <option value="Location 1">Location 1</option>
+                <option value="Location 2">Location 2</option>
+                <option value="Location 3">Location 3</option>
+                <option value="Location 4">Location 4</option>
+              </select>
+            </label>
+            <label class="dropdown-input">
+              <select id="EVAnumber" name="EVA Number:">
+                <option value="" disabled selected>EVA...</option>
+                <option value="Location A">A</option>
+                <option value="Location B">B</option>
+                <option value="Location C">C</option>
+                <option value="Location D">D</option>
+              </select>
+            </label>
+          </div>
+        
+          <!-- Checkbox Group Box -->
+          <div class="checkbox-group-box">
+            <label class="checkbox-label">
+              <input type="checkbox" id="Planned" name="Planned" value="True">
+              Planned
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="Unplanned" name="Unplanned" value="True">
+              Unplanned
+            </label>
+          </div>
         </div>
 
         <div class="third-row-layout">
