@@ -809,6 +809,12 @@
       }
   
       function refreshAccessToken(callback) {
+        if (!tokenClient) {
+          alert("Session expired. Please sign in again.");
+          window.location.href = 'index.html'; // Redirect to your login page
+          return;
+        }
+
         tokenClient.callback = (tokenResponse) => {
           if (tokenResponse.access_token) {
             accessToken = tokenResponse.access_token;
@@ -825,14 +831,23 @@
       }
   
       function safeApiCall(apiFunction) {
+        if (!accessToken) {
+          alert("Session expired. Please sign in again.");
+          window.location.href = 'index.html'; // Redirect to your login page
+          return;
+        }
+      
         return apiFunction().catch(err => {
           if (err?.status === 401 || err?.message?.includes('401')) {
             console.warn("Access token expired. Attempting refresh...");
-            refreshAccessToken(() => {
-              apiFunction(); // Retry
+            return new Promise((resolve, reject) => {
+              refreshAccessToken(() => {
+                apiFunction().then(resolve).catch(reject); // Retry the API call
+              });
             });
           } else {
             console.error("API error:", err);
+            throw err; // Re-throw the error for further handling
           }
         });
       }
@@ -982,6 +997,12 @@
       }
   
       window.onload = () => {
+        if (!localStorage.getItem('accessToken')) {
+          alert("Session expired. Please sign in again.");
+          window.location.href = 'index.html'; // Redirect to your login page
+          return;
+        }
+
         initTokenClient();
         updateLabel();
 
@@ -1122,4 +1143,3 @@
     </script>
   </body>
   </html>
- 
