@@ -325,7 +325,8 @@
 
     /* Entry Number */
     .entry-number {
-      font-size: 0.9em;
+      visibility: hidden;
+      font-size: 0.4em;
       color: #57606a; /* Subtle gray */
       margin-top: 4px;
     }
@@ -1063,19 +1064,20 @@
           } else {
             alert("Session expired. Please sign in again.");
             localStorage.removeItem('accessToken');
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; // Redirect to your login page
           }
         };
+
         tokenClient.requestAccessToken({ prompt: '' });
       }
-  
-      function safeApiCall(apiFunction) {
+    
+    function safeApiCall(apiFunction) {
         if (!accessToken) {
           alert("Session expired. Please sign in again.");
           window.location.href = 'index.html'; // Redirect to your login page
           return Promise.reject("No access token"); // Return a rejected Promise
         }
-      
+
         return apiFunction().catch(err => {
           if (err?.status === 401 || err?.message?.includes('401')) {
             console.warn("Access token expired. Attempting refresh...");
