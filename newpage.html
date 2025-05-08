@@ -994,6 +994,31 @@
           });
       }
 
+      // Function to fetch the pre-filled name for the current row
+      function fetchNameForRow(rowIndex) {
+        const range = `Sheet1!A${rowIndex + 2}:A${rowIndex + 2}`; // Adjusted to use rowIndex + 2 to account for headers
+
+        return safeApiCall(() => {
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?majorDimension=ROWS`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${accessToken}`,
+            },
+          })
+            .then((response) => {
+              if (!response.ok) throw response;
+              return response.json();
+            })
+            .then((data) => {
+              return data.values?.[0]?.[0] || `Station ${rowIndex + 1} Sample ${rowIndex + 1}`; // Default name if empty
+            })
+            .catch((error) => {
+              console.error("Failed to fetch name:", error);
+              return `Station ${rowIndex + 1} Sample ${rowIndex + 1}`; // Default name on error
+            });
+        });
+      }
+
       let tokenClient;
       const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
       const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo';
@@ -1323,8 +1348,7 @@
           }
         });
       }
-
-      // Update the name and entry number when navigating between rows
+     // Update the name and entry number when navigating between rows
       function updateNameAndEntry() {
         const editableName = document.getElementById("editableName");
         const entryNumber = document.getElementById("entryNumber");
