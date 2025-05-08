@@ -1306,11 +1306,11 @@
             return response.json();
           })
           .then((data) => {
-            return data.values?.[0]?.[0] || `Station ${rowIndex + 1} Sample ${rowIndex + 1}`; // Default name if empty
+            return data.values?.[0]?.[0] || `Sample Name`; // Default name if empty
           })
           .catch((error) => {
             console.error("Failed to fetch name:", error);
-            return `Station ${rowIndex + 1} Sample ${rowIndex + 1}`; // Default name on error
+            return `Could not Fetch Sample Name, Invalid token??!`; // Default name on error
           });
       }
 
