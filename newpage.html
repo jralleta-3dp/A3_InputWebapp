@@ -346,6 +346,15 @@
     .green-button:hover {
       background-color: #218838; /* Darker green on hover */
     }
+    /* Footer */
+    .footer {
+      text-align: center;
+      font-size: 12px; /* Small font size */
+      color: #57606a; /* Subtle gray color */
+      margin-top: 20px; /* Add spacing from the content above */
+      padding: 10px 0;
+      border-top: 1px solid #d0d7de; /* Subtle top border for separation */
+    } 
   </style>
 </head>
 <body>
@@ -463,6 +472,8 @@
                 <input type="text" id="SamplingTools" name="Sampling Tool(s)">
             </div>
         </div>
+        <div class="footer" id="footerCount">Count: 1</div>
+        
     </div>
 
     <script>
@@ -1109,13 +1120,23 @@
   
       function updateLabel() {
         const entryNumber = document.getElementById("entryNumber");
+        const footerCount = document.getElementById("footerCount");
+
         if (entryNumber) {
           entryNumber.innerText = `Entry #${count}`;
           console.log("Label updated to:", entryNumber.innerText); // Debugging log
         } else {
           console.error("Entry number element not found.");
         }
+
+        if (footerCount) {
+          footerCount.innerText = `Count: ${count}`;
+          console.log("Footer updated to:", footerCount.innerText); // Debugging log
+        } else {
+          console.error("Footer element not found.");
+        }
       }
+
       function clearFields() {
         document.querySelectorAll('input[type="text"]').forEach(input => input.value = "");
         document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
