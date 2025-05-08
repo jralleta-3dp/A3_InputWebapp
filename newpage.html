@@ -997,28 +997,42 @@
 
       // Function to fetch the pre-filled name for the current row
       function fetchNameForRow(rowIndex) {
-        const range = `Sheet1!A${rowIndex + 2}:A${rowIndex + 2}`; // Adjusted to use rowIndex + 2 to account for headers
+      const range = `Sheet1!A${rowIndex + 2}:A${rowIndex + 2}`; // Adjusted to use rowIndex + 2 to account for headers
 
-        return safeApiCall(() => {
-          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?majorDimension=ROWS`, {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${accessToken}`,
-            },
+      return safeApiCall(() => {
+        return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?majorDimension=ROWS`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) throw response;
+            return response.json();
           })
-            .then((response) => {
-              if (!response.ok) throw response;
-              return response.json();
-            })
-            .then((data) => {
-              return data.values?.[0]?.[0] || `Sample Name#8e9296`; // Default name if empty
-            })
-            .catch((error) => {
-              console.error("Failed to fetch name:", error);
-              return `Error: Unable to Fetch Name. Token invalid?`; // Default name on error
-            });
-        });
-      }
+          .then((data) => {
+            const editableName = document.getElementById("editableName");
+            const name = data.values?.[0]?.[0] || "Sample Name";
+
+            if (editableName) {
+              editableName.value = name;
+
+              // Apply gray color if the placeholder is used
+              if (name === "Sample Name") {
+                editableName.style.color = "#8e9296"; // Gray color
+              } else {
+                editableName.style.color = "#24292e"; // Default text color
+              }
+            }
+
+            return name;
+          })
+          .catch((error) => {
+            console.error("Failed to fetch name:", error);
+            return "Sample Name"; // Default name on error
+          });
+      });
+    }
 
       let tokenClient;
       const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
