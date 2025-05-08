@@ -1067,9 +1067,14 @@
       }
   
       function updateLabel() {
-        document.getElementById("label").innerText = `Entry #${count}`;
+        const entryNumber = document.getElementById("entryNumber");
+        if (entryNumber) {
+          entryNumber.innerText = `Entry #${count}`;
+          console.log("Label updated to:", entryNumber.innerText); // Debugging log
+        } else {
+          console.error("Entry number element not found.");
+        }
       }
-  
       function clearFields() {
         document.querySelectorAll('input[type="text"]').forEach(input => input.value = "");
         document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
