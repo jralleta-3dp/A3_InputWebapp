@@ -61,14 +61,14 @@
 
     /* Label Box */
     .label-box {
-      display: flex; /* Take up available space on the left */
+      display: flex;
       flex-direction: row;
       background-color: #f6f8fa; /* Light gray background */
       padding: 16px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       text-align: center;
-      width: 80% !important;
+      width: 70%; /* Take up 70% of the container */
       font-size: 1.2em;
       font-weight: bold;
       color: #24292e;
@@ -84,6 +84,9 @@
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       box-sizing: border-box; /* Include padding in the width calculation */
+      width: 30%; /* Take up 30% of the container */
+      justify-content: center; /* Center the buttons horizontally */
+      align-items: center; /* Center the buttons vertically */
     }
 
     /* Buttons */
