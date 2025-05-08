@@ -299,7 +299,36 @@
       height: 28px;
       cursor: pointer;
     }
+    /* Editable Name */
+    .editable-name {
+      font-size: 1.2em;
+      font-weight: normal;
+      color: #24292e;
+      border: none;
+      background-color: transparent;
+      outline: none;
+      text-align: center;
+      width: 100%;
+      cursor: text;
+      transition: color 0.2s ease, font-weight 0.2s ease;
+    }
 
+    .editable-name:focus {
+      border-bottom: 1px solid #0969da; /* Subtle underline when editing */
+    }
+
+    /* Bold and Colored Name After Editing */
+    .editable-name.saved {
+      font-weight: bold;
+      color: #0969da; /* GitHub blue */
+    }
+
+    /* Entry Number */
+    .entry-number {
+      font-size: 0.9em;
+      color: #57606a; /* Subtle gray */
+      margin-top: 4px;
+    }
     .green-button {
       padding: 4px 8px;
       font-size: 16px;
@@ -324,7 +353,8 @@
         <div class="row-layout">
           <!-- Label Box -->
           <div class="label-box">
-            <div id="label">Entry #0</div>
+            <input id="editableName" class="editable-name" type="text" placeholder="Station 1 Sample 1" />
+            <div id="entryNumber" class="entry-number">Entry #0</div>
             <button id="addRowButton" class="button green-button">+</button>
           </div>
 
@@ -1045,24 +1075,6 @@
         document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
       }
-  
-      // Back Button Logic
-      document.querySelectorAll(".button-group-box")[1].querySelector("button:first-child").addEventListener("click", () => {
-        if (count > 1) {
-          count--;
-          console.log("Back button clicked. Updated count:", count); // Debugging log
-          updateLabel();
-          clearFields();
-        } else {
-          console.log("Back button clicked, but count is already at minimum value:", count); // Debugging log
-        }
-      });
-      document.querySelectorAll(".button-group-box")[1].querySelector("button:nth-child(2)").addEventListener("click", () => {
-        count++;
-        console.log("Next button clicked. Updated count:", count); // Debugging log
-        updateLabel();
-        clearFields();
-      });
 
       // Start Time Button Logic
       const startButton = document.querySelectorAll(".button-group-box .button")[0]; // First button in the first button-group-box
@@ -1232,6 +1244,95 @@
             console.error("Failed to insert row:", error);
           });
       }
+      // Function to fetch the pre-filled name for the current row
+      function fetchNameForRow(rowIndex) {
+        const range = `Sheet1!A${rowIndex + 1}:A${rowIndex + 1}`; // Assuming names are in column A
+        return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?majorDimension=ROWS`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) throw response;
+            return response.json();
+          })
+          .then((data) => {
+            return data.values?.[0]?.[0] || `Station ${rowIndex + 1} Sample ${rowIndex + 1}`; // Default name if empty
+          })
+          .catch((error) => {
+            console.error("Failed to fetch name:", error);
+            return `Station ${rowIndex + 1} Sample ${rowIndex + 1}`; // Default name on error
+          });
+      }
+
+      // Function to write the updated name to the spreadsheet
+      function writeNameToSheet(rowIndex, name) {
+        const range = `Sheet1!A${rowIndex + 1}:A${rowIndex + 1}`; // Assuming names are in column A
+        const values = [[name]];
+
+        return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?valueInputOption=RAW`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ values }),
+        })
+          .then((response) => {
+            if (!response.ok) throw response;
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Name updated successfully:", data);
+          })
+          .catch((error) => {
+            console.error("Failed to update name:", error);
+          });
+      }
+
+      // Initialize the editable name and entry number
+      function initializeNameAndEntry() {
+        const editableName = document.getElementById("editableName");
+        const entryNumber = document.getElementById("entryNumber");
+
+        // Fetch and display the name for the current row
+        fetchNameForRow(count - 1).then((name) => {
+          editableName.value = name;
+        });
+
+        // Update the entry number
+        entryNumber.innerText = `Entry #${count}`;
+
+        // Add event listener for editing the name
+        editableName.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.keyCode === 13) {
+            const updatedName = editableName.value.trim();
+            if (updatedName) {
+              writeNameToSheet(count - 1, updatedName).then(() => {
+                // Apply the "saved" style
+                editableName.classList.add("saved");
+                setTimeout(() => editableName.classList.remove("saved"), 2000); // Remove the style after 2 seconds
+              });
+            }
+          }
+        });
+      }
+
+      // Update the name and entry number when navigating between rows
+      function updateNameAndEntry() {
+        const editableName = document.getElementById("editableName");
+        const entryNumber = document.getElementById("entryNumber");
+
+        // Fetch and display the name for the current row
+        fetchNameForRow(count - 1).then((name) => {
+          editableName.value = name;
+        });
+
+        // Update the entry number
+        entryNumber.innerText = `Entry #${count}`;
+      }
+
   
       window.onload = () => {
         if (!localStorage.getItem('accessToken')) {
@@ -1242,7 +1343,24 @@
 
         initTokenClient();
         updateLabel();
+        initializeNameAndEntry();
 
+        // Update name and entry number when navigating rows
+        document.querySelectorAll(".button-group-box")[1].querySelector("button:first-child").addEventListener("click", () => {
+          if (count > 1) {
+            count--;
+            updateLabel();
+            updateNameAndEntry();
+            clearFields();
+          }
+        });
+
+        document.querySelectorAll(".button-group-box")[1].querySelector("button:nth-child(2)").addEventListener("click", () => {
+          count++;
+          updateLabel();
+          updateNameAndEntry();
+          clearFields();
+        });
         //event listener logic
          // Add the event listener to detect when the Return key is pressed in the Crew Description field
          document.getElementById("CrewDescription").addEventListener("keydown", function(event) {
