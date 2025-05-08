@@ -1355,41 +1355,42 @@
 
       // Initialize the editable name and entry number
       function initializeNameAndEntry() {
-      const editableName = document.getElementById("editableName");
-      const entryNumber = document.getElementById("entryNumber");
+        const editableName = document.getElementById("editableName");
+        const entryNumber = document.getElementById("entryNumber");
 
-      // Fetch and display the name for the current row
-      fetchNameForRow(count - 1).then((name) => {
-        editableName.value = name;
+        // Fetch and display the name for the current row
+        fetchNameForRow(count - 1).then((name) => {
+          editableName.value = name;
 
-        // Apply gray color if the placeholder is used
-        if (name === "Sample Name") {
-          editableName.style.color = "#8e9296"; // Gray color for placeholder
-        } else {
-          editableName.style.color = "#24292e"; // Default text color
-        }
-      });
-
-      // Update the entry number
-      entryNumber.innerText = `Entry #${count}`;
-
-      // Add event listener for editing the name
-      editableName.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.keyCode === 13) {
-          const updatedName = editableName.value.trim();
-          if (updatedName) {
-            writeNameToSheet(count - 1, updatedName).then(() => {
-              // Apply the "saved" style
-              editableName.classList.add("saved");
-              editableName.style.color = "#0969da"; // Set color to blue when saved
-              setTimeout(() => {
-                editableName.classList.remove("saved");
-                editableName.style.color = "#24292e"; // Reset to default text color
-              }, 2000); // Remove the style after 2 seconds
-            });
+          // Apply gray color if the placeholder is used
+          if (name === "Sample Name") {
+            editableName.style.color = "#8e9296"; // Gray color for placeholder
+          } else {
+            editableName.style.color = "#24292e"; // Default text color
           }
-        }
-      });
+        });
+
+        // Update the entry number
+        entryNumber.innerText = `Entry #${count}`;
+
+        // Add event listener for editing the name
+        editableName.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.keyCode === 13) {
+            const updatedName = editableName.value.trim();
+            if (updatedName) {
+              writeNameToSheet(count - 1, updatedName).then(() => {
+                // Apply the "saved" style
+                editableName.classList.add("saved");
+                editableName.style.color = "#0969da"; // Set color to blue when saved
+                setTimeout(() => {
+                  editableName.classList.remove("saved");
+                  editableName.style.color = "#24292e"; // Reset to default text color
+                }, 2000); // Remove the style after 2 seconds
+              });
+            }
+          }
+        });
+      }
      // Update the name and entry number when navigating between rows
       function updateNameAndEntry() {
         const editableName = document.getElementById("editableName");
