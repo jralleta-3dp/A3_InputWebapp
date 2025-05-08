@@ -1269,6 +1269,22 @@
 
             // Update the label to reflect the new entry
             updateLabel();
+
+            // Fetch and display the name for the new row
+            fetchNameForRow(count - 1).then((name) => {
+              const editableName = document.getElementById("editableName");
+              const entryNumber = document.getElementById("entryNumber");
+
+              if (editableName) {
+                editableName.value = name;
+                console.log("Editable name updated to:", name);
+              }
+
+              if (entryNumber) {
+                entryNumber.innerText = `Entry #${count}`;
+                console.log("Entry number updated to:", entryNumber.innerText);
+              }
+            });
           })
           .catch((error) => {
             console.error("Failed to insert row:", error);
