@@ -298,6 +298,23 @@
       height: 28px;
       cursor: pointer;
     }
+
+    .green-button {
+      padding: 4px 8px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #2da44e; /* GitHub green */
+      color: white;
+      border: none;
+      border-radius: 50%; /* Circular button */
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-left: 10px; /* Add spacing from the label */
+    }
+
+    .green-button:hover {
+      background-color: #218838; /* Darker green on hover */
+    }
   </style>
 </head>
 <body>
@@ -307,6 +324,7 @@
           <!-- Label Box -->
           <div class="label-box">
             <div id="label">Entry #0</div>
+            <button id="addRowButton" class="button green-button">+</button>
           </div>
 
           <!-- Start/End Time Buttons Box -->
@@ -1166,6 +1184,53 @@
           });
         });
       }
+
+      function insertRowBelow(targetRowIndex) {
+        const sheetId = 0; // Replace with your sheet's ID (usually 0 for the first sheet)
+        const insertRowIndex = targetRowIndex + 1; // Add 1 to insert below the target row
+
+        const requestBody = {
+          requests: [
+            {
+              insertDimension: {
+                range: {
+                  sheetId: sheetId,
+                  dimension: "ROWS",
+                  startIndex: insertRowIndex,
+                  endIndex: insertRowIndex + 1, // Insert one row
+                },
+                inheritFromBefore: false, // Set to true if you want the new row to inherit formatting
+              },
+            },
+          ],
+        };
+
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        })
+          .then((response) => {
+            if (!response.ok) throw response;
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Row inserted successfully:", data);
+
+            // Increment count to reflect the new row
+            count++;
+            console.log("Count updated to:", count);
+
+            // Update the label to reflect the new entry
+            updateLabel();
+          })
+          .catch((error) => {
+            console.error("Failed to insert row:", error);
+          });
+      }
   
       window.onload = () => {
         if (!localStorage.getItem('accessToken')) {
@@ -1314,7 +1379,10 @@
             }
           }
         });
-
+        document.getElementById("addRowButton").addEventListener("click", () => {
+          console.log(`Inserting a new row below Entry #${count}`);
+          insertRowBelow(count); // Use the current count as the input argument
+        });
         
       };
     </script>
