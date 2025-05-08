@@ -354,7 +354,7 @@
         <div class="row-layout">
           <!-- Label Box -->
           <div class="label-box">
-            <input id="editableName" class="editable-name" type="text" placeholder="Station 1 Sample 1" />
+            <input id="editableName" class="editable-name" type="text" placeholder="fetching..." />
             <div id="entryNumber" class="entry-number">Entry #0</div>
             <button id="addRowButton" class="button green-button">+</button>
           </div>
@@ -1011,7 +1011,7 @@
               return response.json();
             })
             .then((data) => {
-              return data.values?.[0]?.[0] || `Sample Name`; // Default name if empty
+              return data.values?.[0]?.[0] || `Sample Name#8e9296`; // Default name if empty
             })
             .catch((error) => {
               console.error("Failed to fetch name:", error);
