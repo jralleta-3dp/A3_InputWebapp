@@ -384,7 +384,7 @@
     .grid-3col {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 equal columns with flexible widths */
-      gap: 16px; /* Add spacing between grid items */
+      gap: 20px; /* Add spacing between grid items */
       align-items: start; /* Align items to the top of their grid cells */
     }
 
@@ -399,7 +399,7 @@
     /* Inputs and Dropdowns in the Bottom Section */
     .bottom-section input[type="text"],
     .bottom-section select {
-      width: 100%; /* Ensure inputs span the full width of their container */
+      width: 65%; /* Ensure inputs span the full width of their container */
       padding: 8px 12px;
       font-size: 14px;
       border: 1px solid #d0d7de;
@@ -421,7 +421,7 @@
       display: flex;
       flex-direction: column; /* Stack the content vertically */
       gap: 16px; /* Add spacing between rows */
-      padding: 16px;
+      padding: 16px; /* Consistent padding */
       border: 1px solid #d0d7de; /* Light border for separation */
       border-radius: 6px; /* Rounded corners */
       background-color: #ffffff; /* White background */
@@ -561,15 +561,16 @@
             <input type="text" id="ContainerNumber" name="Container Number(s)">
           </div>
         </div>
-        <div class="Last-Section">
-            <div class="last-section-layout">
-                <label for="ContaminationNotes">Contamination Notes:</label><br>
-                <input type="text" id="ContaminationNotes" name="Contamination Notes">
-            </div>
-            <div class="last-section-layout">
-                <label for="SamplingTools">Sampling Tool(s):</label><br>
-                <input type="text" id="SamplingTools" name="Sampling Tool(s)">
-            </div>
+        <div class="last-section">
+          <div class="section-header">Collection Details</div>
+          <div class="last-section-layout">
+            <label for="ContaminationNotes">Contamination Notes:</label>
+            <input type="text" id="ContaminationNotes" name="Contamination Notes">
+          </div>
+          <div class="last-section-layout">
+            <label for="SamplingTools">Sampling Tool(s):</label>
+            <input type="text" id="SamplingTools" name="Sampling Tool(s)">
+          </div>
         </div>
         <div class="footer" id="footerCount">1</div>
         
