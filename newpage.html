@@ -1016,9 +1016,9 @@
               let existingRow = data.values?.[0] || [];
               let values;
   
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                 values = [
-                  [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], selectedSampleType],
+                  [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], selectedSampleType],
                 ];
               } else {
                 values = [
