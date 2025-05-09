@@ -188,7 +188,7 @@
 
     /* Section headers */
     .section-header {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
       color: #24292e;
       margin-bottom: 8px;
@@ -204,6 +204,12 @@
       border-radius: 6px;
       background-color: #ffffff;
       box-sizing: border-box; /* Include padding and border in the width calculation */
+    }
+
+    .third-row-layout label {
+      font-size: 18px;
+      font-weight: bold;
+      color: #000000; /* Subtle gray for labels */
     }
 
     /* Input Box */
@@ -359,6 +365,53 @@
       padding: 10px 0;
       border-top: 1px solid #d0d7de; /* Subtle top border for separation */
     } 
+
+    /* Bottom Section */
+    .bottom-section {
+      display: flex;
+      flex-direction: column; /* Stack the content vertically */
+      gap: 16px; /* Add spacing between elements */
+      padding: 16px; /* Consistent padding */
+      border: 1px solid #d0d7de; /* Light border for separation */
+      border-radius: 6px; /* Rounded corners */
+      background-color: #ffffff; /* White background */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      box-sizing: border-box; /* Include padding and border in the width calculation */
+    }
+
+    /* Grid Layout for Sample Characteristics */
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+      gap: 16px; /* Add spacing between grid items */
+    }
+
+    /* Labels in the Bottom Section */
+    .bottom-section label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #57606a; /* Subtle gray for labels */
+    }
+
+    /* Inputs in the Bottom Section */
+    .bottom-section input[type="text"],
+    .bottom-section select {
+      width: 100%; /* Ensure inputs span the full width of their container */
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #24292e;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .bottom-section input[type="text"]:focus,
+    .bottom-section select:focus {
+      border-color: #0969da; /* GitHub blue for focus */
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
+    }
   </style>
 </head>
 <body>
@@ -426,8 +479,10 @@
             <input type="text" id="CrewDescription" name="Crew Description">
         </div>
         <div class="bottom-section">
+            <div class="section-header">Sample Characteristics</div>
             <div class="grid-3col">
               <!-- Row 1: Labels -->
+              
               <label for="SampleType">Sample Type:</label>
               <label for="Units">Units:</label>
               <label for="Condition">Condition:</label>
