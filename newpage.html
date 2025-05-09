@@ -599,10 +599,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], existingRow[11], selectedTools]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], existingRow[11], selectedTools]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -651,10 +651,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], selectedContamination]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], selectedContamination]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -703,10 +703,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], selectedContainer]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], selectedContainer]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -756,10 +756,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], selectedVolume]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], selectedVolume]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -808,10 +808,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], selectedMass]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], selectedMass]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -860,10 +860,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], selectedCondition]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], selectedCondition]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -912,10 +912,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9] , existingRow[10], existingRow[11], existingRow[12], labelText]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9] , existingRow[10], existingRow[11], existingRow[12], labelText]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -964,10 +964,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column D
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], selectedUnits]  // Initialize with count, timestamp, and entry
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], selectedUnits]  // Initialize with count, timestamp, and entry
                   ];
               } else {
                   // If A and B are not empty, only update the entry in its column
@@ -1075,10 +1075,10 @@
               let values;
 
               // Check if columns A and B are empty
-              if (existingRow.length === 0 || existingRow[0] === "" || existingRow[1] === "") {
+              if (existingRow.length === 0 || existingRow[1] === "") {
                   // If A and B are empty, initialize them with count and timestamp, and write the crew description in column E
                   values = [
-                      [count.toString(), nowGMT, existingRow[2], existingRow[3], crewDescription]  // Initialize with count, timestamp, and description
+                      [existingRow[0], nowGMT, existingRow[2], existingRow[3], crewDescription]  // Initialize with count, timestamp, and description
                   ];
               } else {
                   // If A and B are not empty, only update the crew description in column D
