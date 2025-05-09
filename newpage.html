@@ -582,7 +582,7 @@
       const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:M${targetRow}`;  // Write to column M of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  // Check the first two columns (A,B)
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -634,7 +634,7 @@
         const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:L${targetRow}`;  // Write to column L of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp 
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -686,7 +686,7 @@
         const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:K${targetRow}`;  // Write to column K of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -739,7 +739,7 @@
         const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:J${targetRow}`;  // Write to column J of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -791,7 +791,7 @@
         const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:I${targetRow}`;  // Write to column I of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -843,7 +843,7 @@
         const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:H${targetRow}`;  // Write to column H of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -895,7 +895,7 @@
         const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:N${targetRow}`;  // Write to column N of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -947,7 +947,7 @@
         const targetRow = count + 1;
         const nowGMT = new Date().toISOString();  // Current time in GMT format
         const rangeToWrite = `Sheet1!A${targetRow}:G${targetRow}`;  // Write to column G of the target row
-        const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;  // Check the first two columns (A,B)
+        const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
               method: "GET",
               headers: {
@@ -1000,7 +1000,7 @@
           const targetRow = count + 1;
           const nowGMT = new Date().toISOString();
           const rangeToWrite = `Sheet1!A${targetRow}:F${targetRow}`;
-          const rangeToCheck = `Sheet1!A${targetRow}:B${targetRow}`;
+          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp
   
           fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
             method: "GET",
