@@ -1273,8 +1273,8 @@
           })
           .then(data => {
             let existingRow = data.values?.[0] || [];
-            let values = (existingRow.length === 0 || existingRow.every(cell => cell === ""))
-              ? [[count.toString(), nowGMT, nowGMT]]
+            let values = (existingRow.length === 0 || existingRow[1] === "")
+              ? [[existingRow[0], nowGMT, nowGMT]]
               : [[existingRow[0], existingRow[1], nowGMT]];
   
             return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?valueInputOption=RAW`, {
