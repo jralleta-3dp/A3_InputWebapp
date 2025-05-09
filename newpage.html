@@ -412,6 +412,44 @@
       border-color: #0969da; /* GitHub blue for focus */
       box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
     }
+
+    /* Last Section */
+    .last-section {
+      display: flex;
+      flex-direction: column; /* Stack the content vertically */
+      gap: 16px; /* Add spacing between rows */
+      padding: 16px;
+      border: 1px solid #d0d7de; /* Light border for separation */
+      border-radius: 6px; /* Rounded corners */
+      background-color: #ffffff; /* White background */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      box-sizing: border-box; /* Include padding and border in the width calculation */
+    }
+
+    /* Layout for individual rows in the last section */
+    .last-section-layout {
+      display: flex;
+      flex-direction: column; /* Stack label and input vertically */
+      gap: 8px; /* Add spacing between label and input */
+    }
+
+    /* Inputs in the Last Section */
+    .last-section input[type="text"] {
+      width: 100%; /* Ensure inputs span the full width of their container */
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #24292e;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .last-section input[type="text"]:focus {
+      border-color: #0969da; /* GitHub blue for focus */
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
+    }
   </style>
 </head>
 <body>
@@ -479,47 +517,46 @@
             <input type="text" id="CrewDescription" name="Crew Description">
         </div>
         <div class="bottom-section">
-            <div class="section-header">Sample Characteristics</div>
-            <div class="grid-3col">
-              <!-- Row 1: Labels -->
-              
-              <label for="SampleType">Sample Type:</label>
-              <label for="Units">Units:</label>
-              <label for="Condition">Condition:</label>
-          
-              <!-- Row 2: Inputs -->
-              <select id="SampleType" name="Sample Type:">
-                <option value=""></option>
-                <option value="Rake">Rake</option>
-                <option value="Scoop">Scoop</option>
-                <option value="Chip">Chip</option>
-                <option value="Float">Float</option>
-                <option value="Skim">Skim</option>
-                <option value="Single Drive Tube">Single Drive Tube</option>
-                <option value="Double Drive Tube">Double Drive Tube</option>
-              </select>
-              
-              <input type="text" id="Units" name="Unit:">
-              
-              <select id="Condition" name="Condition:">
-                <option value=""></option>
-                <option value="Illuminated">Illuminated</option>
-                <option value="Shadowed">Shadowed</option>
-                <option value="Undisturbed">Undisturbed</option>
-                <option value="Disturbed">Disturbed</option>
-                <option value="Cold">Cold</option>
-              </select>
-          
-              <!-- Row 3: Labels -->
-              <label for="MassEstimate">Mass Estimate:</label>
-              <label for="VolumeEstimate">Volume Estimate:</label>
-              <label for="ContainerNumber">Container Number(s):</label>
-          
-              <!-- Row 4: Inputs -->
-              <input type="text" id="MassEstimate" name="Mass Estimate:">
-              <input type="text" id="VolumeEstimate" name="Volume Estimate:">
-              <input type="text" id="ContainerNumber" name="Container Number(s)">
-            </div>
+          <div class="section-header">Sample Characteristics</div>
+          <div class="grid-3col">
+            <!-- Row 1: Labels -->
+            <label for="SampleType">Sample Type:</label>
+            <label for="Units">Units:</label>
+            <label for="Condition">Condition:</label>
+        
+            <!-- Row 2: Inputs -->
+            <select id="SampleType" name="Sample Type:">
+              <option value=""></option>
+              <option value="Rake">Rake</option>
+              <option value="Scoop">Scoop</option>
+              <option value="Chip">Chip</option>
+              <option value="Float">Float</option>
+              <option value="Skim">Skim</option>
+              <option value="Single Drive Tube">Single Drive Tube</option>
+              <option value="Double Drive Tube">Double Drive Tube</option>
+            </select>
+        
+            <input type="text" id="Units" name="Unit:">
+        
+            <select id="Condition" name="Condition:">
+              <option value=""></option>
+              <option value="Illuminated">Illuminated</option>
+              <option value="Shadowed">Shadowed</option>
+              <option value="Undisturbed">Undisturbed</option>
+              <option value="Disturbed">Disturbed</option>
+              <option value="Cold">Cold</option>
+            </select>
+        
+            <!-- Row 3: Labels -->
+            <label for="MassEstimate">Mass Estimate:</label>
+            <label for="VolumeEstimate">Volume Estimate:</label>
+            <label for="ContainerNumber">Container Number(s):</label>
+        
+            <!-- Row 4: Inputs -->
+            <input type="text" id="MassEstimate" name="Mass Estimate:">
+            <input type="text" id="VolumeEstimate" name="Volume Estimate:">
+            <input type="text" id="ContainerNumber" name="Container Number(s)">
+          </div>
         </div>
         <div class="Last-Section">
             <div class="last-section-layout">
