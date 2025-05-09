@@ -1259,7 +1259,7 @@
         return new Promise((resolve, reject) => {
           const nowGMT = new Date().toISOString();
           const targetRow = count + 1;
-          const rangeToCheck = `Sheet1!A${targetRow}:C${targetRow}`;
+          const rangeToCheck = `Sheet1!B${targetRow}`;
   
           fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
             method: "GET",
@@ -1273,7 +1273,7 @@
           })
           .then(data => {
             let existingRow = data.values?.[0] || [];
-            let values = (existingRow.length === 0 || existingRow[1] === "")
+            let values = (existingRow.length === 0 || existingRow[0] === "")
               ? [[existingRow[0], nowGMT, nowGMT]]
               : [[existingRow[0], existingRow[1], nowGMT]];
   
