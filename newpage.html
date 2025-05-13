@@ -438,7 +438,7 @@
 
     /* Inputs in the Last Section */
     .last-section input[type="text"] {
-      width: 80% !important; /* Ensure inputs span the full width of their container */
+      width: 95% !important; /* Ensure inputs span the full width of their container */
       padding: 8px 12px;
       font-size: 14px;
       border: 1px solid #d0d7de;
@@ -1327,68 +1327,69 @@
       });
 
       function insertRowBelow(targetRowIndex) {
-        return safeApiCall(() => {
-          const sheetId = 0; // Replace with your sheet's ID (usually 0 for the first sheet)
-          const insertRowIndex = targetRowIndex + 1; // Add 1 to insert below the target row
+          return safeApiCall(() => {
+              const sheetId = 0; // Replace with your sheet's ID (usually 0 for the first sheet)
+              const insertRowIndex = targetRowIndex + 1; // Add 1 to insert below the target row
 
-          const requestBody = {
-            requests: [
-              {
-                insertDimension: {
-                  range: {
-                    sheetId: sheetId,
-                    dimension: "ROWS",
-                    startIndex: insertRowIndex,
-                    endIndex: insertRowIndex + 1, // Insert one row
+              const requestBody = {
+                  requests: [
+                      {
+                          insertDimension: {
+                              range: {
+                                  sheetId: sheetId,
+                                  dimension: "ROWS",
+                                  startIndex: insertRowIndex,
+                                  endIndex: insertRowIndex + 1, // Insert one row
+                              },
+                              inheritFromBefore: true, // Set to true to inherit formatting from the row above
+                          },
+                      },
+                  ],
+              };
+
+              return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
+                  method: "POST",
+                  headers: {
+                      "Authorization": `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
                   },
-                  inheritFromBefore: true, // Set to true to inherit formatting from the row above
-                },
-              },
-            ],
-          };
+                  body: JSON.stringify(requestBody),
+              })
+                  .then((response) => {
+                      if (!response.ok) throw response;
+                      return response.json();
+                  })
+                  .then((data) => {
+                      console.log("Row inserted successfully:", data);
 
-          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          })
-            .then((response) => {
-              if (!response.ok) throw response;
-              return response.json();
-            })
-            .then((data) => {
-              console.log("Row inserted successfully:", data);
+                      // Increment count to reflect the new row
+                      count++;
+                      localStorage.setItem('count', count); // Update local storage
+                      console.log("Count updated to:", count);
 
-              // Increment count to reflect the new row
-              count++;
-              console.log("Count updated to:", count);
+                      // Update the label to reflect the new entry
+                      updateLabel();
 
-              // Update the label to reflect the new entry
-              updateLabel();
+                      // Fetch and display the name for the new row
+                      fetchNameForRow(count - 1).then((name) => {
+                          const editableName = document.getElementById("editableName");
+                          const entryNumber = document.getElementById("entryNumber");
 
-              // Fetch and display the name for the new row
-              fetchNameForRow(count - 1).then((name) => {
-                const editableName = document.getElementById("editableName");
-                const entryNumber = document.getElementById("entryNumber");
+                          if (editableName) {
+                              editableName.value = name || "Sample Name"; // Default to "Sample Name" if no name exists
+                              console.log("Editable name updated to:", name);
+                          }
 
-                if (editableName) {
-                  editableName.value = name || "Sample Name"; // Default to "Sample Name" if no name exists
-                  console.log("Editable name updated to:", name);
-                }
-
-                if (entryNumber) {
-                  entryNumber.innerText = `Entry #${count}`;
-                  console.log("Entry number updated to:", entryNumber.innerText);
-                }
-              });
-            })
-            .catch((error) => {
-              console.error("Failed to insert row:", error);
-            });
-        });
+                          if (entryNumber) {
+                              entryNumber.innerText = `Entry #${count}`;
+                              console.log("Entry number updated to:", entryNumber.innerText);
+                          }
+                      });
+                  })
+                  .catch((error) => {
+                      console.error("Failed to insert row:", error);
+                  });
+          });
       }
 
       // Function to write the updated name to the spreadsheet
@@ -1503,13 +1504,18 @@
         }
   
       window.onload = () => {
-        if (!localStorage.getItem('accessToken')) {
-          alert("Session expired. Please sign in again.");
-          window.location.href = 'index.html'; // Redirect to your login page
-          return;
+            if (!localStorage.getItem('accessToken')) {
+            alert("Session expired. Please sign in again.");
+            window.location.href = 'index.html'; // Redirect to your login page
+            return;
         }
 
         initTokenClient();
+
+        // Initialize count from local storage
+        count = parseInt(localStorage.getItem('count')) || 1; // Default to 1 if no value is found
+        console.log("Count initialized to:", count);
+
         updateLabel();
         initializeNameAndEntry();
 
@@ -1572,19 +1578,21 @@
         const nextButton = document.querySelectorAll(".button-group-box")[1].querySelector("button:nth-child(2)");
 
         backButton.addEventListener("click", () => {
-          if (count > 1) {
-            count--;
-            updateLabel();
-            updateNameAndEntry();
-            clearFields();
-          }
+            if (count > 1) {
+                count--;
+                localStorage.setItem('count', count); // Update local storage
+                updateLabel();
+                updateNameAndEntry();
+                clearFields();
+            }
         });
 
         nextButton.addEventListener("click", () => {
-          count++;
-          updateLabel();
-          updateNameAndEntry();
-          clearFields();
+            count++;
+            localStorage.setItem('count', count); // Update local storage
+            updateLabel();
+            updateNameAndEntry();
+            clearFields();
         });
       };
     </script>
