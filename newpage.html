@@ -1456,17 +1456,19 @@
       }
      // Update the name and entry number when navigating between rows
       function updateNameAndEntry() {
-        const editableName = document.getElementById("editableName");
-        const entryNumber = document.getElementById("entryNumber");
+        return safeApiCall(() => {
+          const editableName = document.getElementById("editableName");
+          const entryNumber = document.getElementById("entryNumber");
 
-        // Fetch and display the name for the current row
-        fetchNameForRow(count - 1).then((name) => {
-          editableName.value = name;
-        });
+          // Fetch and display the name for the current row
+          fetchNameForRow(count - 1).then((name) => {
+            editableName.value = name;
+          });
 
-        // Update the entry number
-        entryNumber.innerText = `Entry #${count}`;
-      }
+          // Update the entry number
+          entryNumber.innerText = `Entry #${count}`;
+      })
+    };
 
       function handleInputEvent(event, apiFunction) {
         const key = event.key || event.keyCode || event.which;
@@ -1493,7 +1495,6 @@
           safeApiCall(() => apiFunction(value))
             .then(() => {
               console.log(`${event.target.id} written successfully.`);
-              event.target.selectedIndex = 0; // Reset the dropdown
             })
             .catch(err => {
               console.error(`Failed to write ${event.target.id}:`, err);
