@@ -578,10 +578,10 @@
 
     <script>
       //Function to write Start Time to Sheet with safeApiCall checks
-      function writeStartTime() {
+      function writeStartTime(currentCount) {
         return safeApiCall(() => {
           const nowGMT = new Date().toISOString();
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const rangeToWrite = `Sheet1!A${targetRow}:C${targetRow}`;
           const rangeToCheck = `Sheet1!B${targetRow}`;
 
@@ -613,10 +613,10 @@
         });
       }
       //Function to write End Time to Sheet with safeApiCall checks
-      function writeEndTime() {
+      function writeEndTime(currentCount) {
         return safeApiCall(() => {
           const nowGMT = new Date().toISOString();
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const rangeToCheck = `Sheet1!A${targetRow}:D${targetRow}`;
           const rangeToWrite = `Sheet1!A${targetRow}:D${targetRow}`;
 
@@ -648,9 +648,9 @@
         });
       }
       //function for writing Crew Description to Sheet with safeApiCall checks
-      function writeCrewDescriptionToSheet(crewDescription) {
+      function writeCrewDescriptionToSheet(crewDescription, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();
           const rangeToWrite = `Sheet1!E${targetRow}`;
           const rangeToCheck = `Sheet1!A${targetRow}:E${targetRow}`;
@@ -683,9 +683,9 @@
         });
       }
       // function for writing sampling tools to sheet with safeApiCall checks
-      function writeToolsToSheet(selectedTools) {
+      function writeToolsToSheet(selectedTools, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:M${targetRow}`;  // Write to column M of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  // Check the first two columns (A,B)
@@ -737,9 +737,9 @@
         })
       };
       // function for writing Sample Type to sheet with safeApiCall checks
-      function writeSampleTypeToSheet(selectedSampleType) {
+      function writeSampleTypeToSheet(selectedSampleType, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();
           const rangeToWrite = `Sheet1!A${targetRow}:F${targetRow}`;
           const rangeToCheck = `Sheet1!B${targetRow}`;
@@ -772,9 +772,9 @@
         });
       }
       // function for writing Contamination Notes:
-      function writeContaminationToSheet(selectedContamination) {
+      function writeContaminationToSheet(selectedContamination, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:L${targetRow}`;  // Write to column L of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp 
@@ -827,9 +827,9 @@
       };
 
       //function for writing Container Number(s) to sheet
-      function writeContainerToSheet(selectedContainer) {
+      function writeContainerToSheet(selectedContainer, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:K${targetRow}`;  // Write to column K of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
@@ -882,9 +882,9 @@
       };
 
       //function for writing Volume Estimate
-      function writeVolumeToSheet(selectedVolume) {
+      function writeVolumeToSheet(selectedVolume, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:J${targetRow}`;  // Write to column J of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
@@ -937,9 +937,9 @@
       };
 
       // function for writing Mass Estimate
-      function writeMassToSheet(selectedMass) {
+      function writeMassToSheet(selectedMass, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:I${targetRow}`;  // Write to column I of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
@@ -992,9 +992,9 @@
       };
 
       //function for writing Condition
-      function writeConditionToSheet(selectedCondition) {
+      function writeConditionToSheet(selectedCondition, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:H${targetRow}`;  // Write to column H of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
@@ -1047,9 +1047,9 @@
       };
 
       //function for writing checkbox entry
-      function writeCheckboxToSheet(labelText) {
+      function writeCheckboxToSheet(labelText, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:N${targetRow}`;  // Write to column N of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
@@ -1102,9 +1102,9 @@
       };
 
       //function for writing units to sheet
-      function writeUnitsToSheet(selectedUnits) {
+      function writeUnitsToSheet(selectedUnits, currentCount) {
         return safeApiCall(() => {
-          const targetRow = count + 1;
+          const targetRow = currentCount + 1;
           const nowGMT = new Date().toISOString();  // Current time in GMT format
           const rangeToWrite = `Sheet1!A${targetRow}:G${targetRow}`;  // Write to column G of the target row
           const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
@@ -1317,13 +1317,13 @@
       // Start Time Button Logic
       const startButton = document.querySelectorAll(".button-group-box .button")[0]; // First button in the first button-group-box
       startButton.addEventListener("click", () => {
-        safeApiCall(writeStartTime);
+        safeApiCall(() => writeStartTime(count));
       });
 
       // End Time Button Logic
       const endButton = document.querySelectorAll(".button-group-box .button")[1]; // Second button in the first button-group-box
       endButton.addEventListener("click", () => {
-        safeApiCall(writeEndTime);
+        safeApiCall(() => writeEndTime(count));
       });
 
       function insertRowBelow(targetRowIndex) {
@@ -1475,32 +1475,32 @@
 
         // Check for Enter key (keyCode 13)
         if (key === "Enter" || key === 13) {
-          const value = event.target.value.trim();
-          if (value) {
-            safeApiCall(() => apiFunction(value))
-              .then(() => {
-                console.log(`${event.target.id} written successfully.`);
-                event.target.value = ""; // Clear the input field
-              })
-              .catch(err => {
-                console.error(`Failed to write ${event.target.id}:`, err);
-              });
-          }
+            const value = event.target.value.trim();
+            if (value) {
+                safeApiCall(() => apiFunction(value, count)) // Pass count here
+                    .then(() => {
+                        console.log(`${event.target.id} written successfully.`);
+                        event.target.value = ""; // Clear the input field
+                    })
+                    .catch(err => {
+                        console.error(`Failed to write ${event.target.id}:`, err);
+                    });
+            }
         }
       }
 
       function handleDropdownChange(event, apiFunction) {
         const value = event.target.value;
         if (value) {
-          safeApiCall(() => apiFunction(value))
-            .then(() => {
-              console.log(`${event.target.id} written successfully.`);
-            })
-            .catch(err => {
-              console.error(`Failed to write ${event.target.id}:`, err);
-            });
+            safeApiCall(() => apiFunction(value, count)) // Pass count here
+                .then(() => {
+                    console.log(`${event.target.id} written successfully.`);
+                })
+                .catch(err => {
+                    console.error(`Failed to write ${event.target.id}:`, err);
+                });
+            }
         }
-      }
   
       window.onload = () => {
         if (!localStorage.getItem('accessToken')) {
@@ -1515,35 +1515,35 @@
 
         // Attach event listeners to all text inputs
         document.querySelectorAll('input[type="text"]').forEach(input => {
-          input.addEventListener("keydown", event => {
-            switch (input.id) {
-              case "CrewDescription":
-                handleInputEvent(event, writeCrewDescriptionToSheet);
-                break;
-              case "Units":
-                handleInputEvent(event, writeUnitsToSheet);
-                break;
-              case "MassEstimate":
-                handleInputEvent(event, writeMassToSheet);
-                break;
-              case "VolumeEstimate":
-                handleInputEvent(event, writeVolumeToSheet);
-                break;
-              case "ContainerNumber":
-                handleInputEvent(event, writeContainerToSheet);
-                break;
-              case "ContaminationNotes":
-                handleInputEvent(event, writeContaminationToSheet);
-                break;
-              case "SamplingTools":
-                handleInputEvent(event, writeToolsToSheet);
-                break;
-              default:
-                console.warn(`No handler defined for input: ${input.id}`);
-            }
-          });
+            input.addEventListener("keydown", event => {
+                switch (input.id) {
+                    case "CrewDescription":
+                        handleInputEvent(event, (value) => writeCrewDescriptionToSheet(value, count));
+                        break;
+                    case "Units":
+                        handleInputEvent(event, (value) => writeUnitsToSheet(value, count));
+                        break;
+                    case "MassEstimate":
+                        handleInputEvent(event, (value) => writeMassToSheet(value, count));
+                        break;
+                    case "VolumeEstimate":
+                        handleInputEvent(event, (value) => writeVolumeToSheet(value, count));
+                        break;
+                    case "ContainerNumber":
+                        handleInputEvent(event, (value) => writeContainerToSheet(value, count));
+                        break;
+                    case "ContaminationNotes":
+                        handleInputEvent(event, (value) => writeContaminationToSheet(value, count));
+                        break;
+                    case "SamplingTools":
+                        handleInputEvent(event, (value) => writeToolsToSheet(value, count));
+                        break;
+                    default:
+                        console.warn(`No handler defined for input: ${input.id}`);
+                }
+            });
         });
-        
+
         // Attach event listener to the plus button
         const addRowButton = document.getElementById("addRowButton");
         addRowButton.addEventListener("click", () => {
@@ -1553,18 +1553,18 @@
 
         // Attach event listeners to all dropdowns
         document.querySelectorAll('select').forEach(select => {
-          select.addEventListener("change", event => {
-            switch (select.id) {
-              case "SampleType":
-                handleDropdownChange(event, writeSampleTypeToSheet);
-                break;
-              case "Condition":
-                handleDropdownChange(event, writeConditionToSheet);
-                break;
-              default:
-                console.warn(`No handler defined for dropdown: ${select.id}`);
-            }
-          });
+            select.addEventListener("change", event => {
+                switch (select.id) {
+                    case "SampleType":
+                        handleDropdownChange(event, (value) => writeSampleTypeToSheet(value, count));
+                        break;
+                    case "Condition":
+                        handleDropdownChange(event, (value) => writeConditionToSheet(value, count));
+                        break;
+                    default:
+                        console.warn(`No handler defined for dropdown: ${select.id}`);
+                }
+            });
         });
 
         // Attach event listeners to forward and back buttons
