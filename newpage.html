@@ -1327,68 +1327,69 @@
       });
 
       function insertRowBelow(targetRowIndex) {
-        const sheetId = 0; // Replace with your sheet's ID (usually 0 for the first sheet)
-        const insertRowIndex = targetRowIndex + 1; // Add 1 to insert below the target row
+        return safeApiCall(() => {
+          const sheetId = 0; // Replace with your sheet's ID (usually 0 for the first sheet)
+          const insertRowIndex = targetRowIndex + 1; // Add 1 to insert below the target row
 
-        const requestBody = {
-          requests: [
-            {
-              insertDimension: {
-                range: {
-                  sheetId: sheetId,
-                  dimension: "ROWS",
-                  startIndex: insertRowIndex,
-                  endIndex: insertRowIndex + 1, // Insert one row
+          const requestBody = {
+            requests: [
+              {
+                insertDimension: {
+                  range: {
+                    sheetId: sheetId,
+                    dimension: "ROWS",
+                    startIndex: insertRowIndex,
+                    endIndex: insertRowIndex + 1, // Insert one row
+                  },
+                  inheritFromBefore: true, // Set to true to inherit formatting from the row above
                 },
-                inheritFromBefore: false, // Set to true if you want the new row to inherit formatting
               },
+            ],
+          };
+
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
             },
-          ],
-        };
-
-        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        })
-          .then((response) => {
-            if (!response.ok) throw response;
-            return response.json();
+            body: JSON.stringify(requestBody),
           })
-          .then((data) => {
-            console.log("Row inserted successfully:", data);
+            .then((response) => {
+              if (!response.ok) throw response;
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Row inserted successfully:", data);
 
-            // Increment count to reflect the new row
-            count++;
-            console.log("Count updated to:", count);
+              // Increment count to reflect the new row
+              count++;
+              console.log("Count updated to:", count);
 
-            // Update the label to reflect the new entry
-            updateLabel();
+              // Update the label to reflect the new entry
+              updateLabel();
 
-            // Fetch and display the name for the new row
-            fetchNameForRow(count - 1).then((name) => {
-              const editableName = document.getElementById("editableName");
-              const entryNumber = document.getElementById("entryNumber");
+              // Fetch and display the name for the new row
+              fetchNameForRow(count - 1).then((name) => {
+                const editableName = document.getElementById("editableName");
+                const entryNumber = document.getElementById("entryNumber");
 
-              if (editableName) {
-                editableName.value = name;
-                console.log("Editable name updated to:", name);
-              }
+                if (editableName) {
+                  editableName.value = name || "Sample Name"; // Default to "Sample Name" if no name exists
+                  console.log("Editable name updated to:", name);
+                }
 
-              if (entryNumber) {
-                entryNumber.innerText = `Entry #${count}`;
-                console.log("Entry number updated to:", entryNumber.innerText);
-              }
+                if (entryNumber) {
+                  entryNumber.innerText = `Entry #${count}`;
+                  console.log("Entry number updated to:", entryNumber.innerText);
+                }
+              });
+            })
+            .catch((error) => {
+              console.error("Failed to insert row:", error);
             });
-          })
-          .catch((error) => {
-            console.error("Failed to insert row:", error);
-          });
+        });
       }
-
 
       // Function to write the updated name to the spreadsheet
       function writeNameToSheet(rowIndex, name) {
@@ -1580,4 +1581,4 @@
       };
     </script>
   </body>
-  </html>
+</html>
