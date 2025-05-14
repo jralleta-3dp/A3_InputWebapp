@@ -580,36 +580,42 @@
       //Function to write Start Time to Sheet with safeApiCall checks
       function writeStartTime(currentCount) {
         return safeApiCall(() => {
-          const nowGMT = new Date().toISOString();
-          const targetRow = currentCount + 1;
-          const rangeToWrite = `Sheet1!A${targetRow}:C${targetRow}`;
-          const rangeToCheck = `Sheet1!B${targetRow}`;
+            const nowGMT = new Date().toISOString();
+            const targetRow = currentCount + 1;
+            const rangeToCheck = `Sheet1!B${targetRow}`;
 
-          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${accessToken}`,
-            }
-          })
-            .then(res => {
-              if (!res.ok) throw res;
-              return res.json();
-            })
-            .then(data => {
-              const existingRow = data.values?.[0] || [];
-              const values = (existingRow.length === 0 || existingRow[0] === "")
-                ? [[existingRow[0], nowGMT, nowGMT]]
-                : [[existingRow[0], existingRow[1], nowGMT]];
-
-              return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
-                method: "PUT",
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+                method: "GET",
                 headers: {
-                  "Authorization": `Bearer ${accessToken}`,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ values })
-              });
-            });
+                    "Authorization": `Bearer ${accessToken}`,
+                }
+            })
+                .then(res => {
+                    if (!res.ok) throw res;
+                    return res.json();
+                })
+                .then(data => {
+                    const existingRow = data.values?.[0] || [];
+                    let rangeToWrite;
+                    let values;
+
+                    if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                        rangeToWrite = `Sheet1!B${targetRow}:C${targetRow}`; // Write to columns B and C
+                        values = [[nowGMT, nowGMT]]; // Write the timestamp to both columns
+                    } else {
+                        rangeToWrite = `Sheet1!C${targetRow}`; // Write to column C only
+                        values = [[nowGMT]]; // Write the timestamp to column C
+                    }
+
+                    return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ values })
+                    });
+                });
         });
       }
       //Function to write End Time to Sheet with safeApiCall checks
