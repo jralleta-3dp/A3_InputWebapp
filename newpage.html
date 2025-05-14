@@ -621,170 +621,175 @@
       //Function to write End Time to Sheet with safeApiCall checks
       function writeEndTime(currentCount) {
         return safeApiCall(() => {
-          const nowGMT = new Date().toISOString();
-          const targetRow = currentCount + 1;
-          const rangeToCheck = `Sheet1!A${targetRow}:D${targetRow}`;
-          const rangeToWrite = `Sheet1!A${targetRow}:D${targetRow}`;
+            const nowGMT = new Date().toISOString();
+            const targetRow = currentCount + 1;
+            const rangeToCheck = `Sheet1!B${targetRow}`; // Check column B
 
-          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${accessToken}`,
-            }
-          })
-            .then(res => {
-              if (!res.ok) throw res;
-              return res.json();
-            })
-            .then(data => {
-              const existingRow = data.values?.[0] || [];
-              const values = (existingRow.length === 0 || existingRow.every(cell => cell === ""))
-                ? [[count.toString(), nowGMT, "", nowGMT]]
-                : [[existingRow[0], existingRow[1], existingRow[2], nowGMT]];
-
-              return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
-                method: "PUT",
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+                method: "GET",
                 headers: {
-                  "Authorization": `Bearer ${accessToken}`,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ values })
-              });
-            });
+                    "Authorization": `Bearer ${accessToken}`,
+                }
+            })
+                .then(res => {
+                    if (!res.ok) throw res;
+                    return res.json();
+                })
+                .then(data => {
+                    const existingRow = data.values?.[0] || [];
+                    let rangeToWrite;
+                    let values;
+
+                    if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                        rangeToWrite = `Sheet1!B${targetRow}:D${targetRow}`; // Write to columns B and D
+                        values = [[nowGMT, existingRow[2] || "", nowGMT]]; // Write the timestamp to B and D, preserve C
+                    } else {
+                        rangeToWrite = `Sheet1!D${targetRow}`; // Write to column D only
+                        values = [[nowGMT]]; // Write the timestamp to column D
+                    }
+
+                    return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ values })
+                    });
+                });
         });
       }
       //function for writing Crew Description to Sheet with safeApiCall checks
       function writeCrewDescriptionToSheet(crewDescription, currentCount) {
         return safeApiCall(() => {
-          const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();
-          const rangeToWrite = `Sheet1!E${targetRow}`;
-          const rangeToCheck = `Sheet1!A${targetRow}:E${targetRow}`;
+            const targetRow = currentCount + 1;
+            const nowGMT = new Date().toISOString();
+            const rangeToCheck = `Sheet1!B${targetRow}`; // Check column B
 
-          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${accessToken}`,
-            }
-          })
-            .then(res => {
-              if (!res.ok) throw res;
-              return res.json();
-            })
-            .then(data => {
-              const existingRow = data.values?.[0] || [];
-              const values = (existingRow.length === 0 || existingRow[1] === "")
-                ? [[existingRow[0], nowGMT, existingRow[2], existingRow[3], crewDescription]]
-                : [[existingRow[0], existingRow[1], existingRow[2], existingRow[3], crewDescription]];
-
-              return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
-                method: "PUT",
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+                method: "GET",
                 headers: {
-                  "Authorization": `Bearer ${accessToken}`,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ values })
-              });
-            });
+                    "Authorization": `Bearer ${accessToken}`,
+                }
+            })
+                .then(res => {
+                    if (!res.ok) throw res;
+                    return res.json();
+                })
+                .then(data => {
+                    const existingRow = data.values?.[0] || [];
+                    let rangeToWrite;
+                    let values;
+
+                    if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                        rangeToWrite = `Sheet1!B${targetRow}:E${targetRow}`; // Write to columns B and E
+                        values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", crewDescription]]; // Write timestamp to B, preserve C and D, and description to E
+                    } else {
+                        rangeToWrite = `Sheet1!E${targetRow}`; // Write to column E only
+                        values = [[crewDescription]]; // Write the description to column E
+                    }
+
+                    return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ values })
+                    });
+                });
         });
       }
       // function for writing sampling tools to sheet with safeApiCall checks
       function writeToolsToSheet(selectedTools, currentCount) {
         return safeApiCall(() => {
-          const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:M${targetRow}`;  // Write to column M of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  // Check the first two columns (A,B)
-          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+            const targetRow = currentCount + 1;
+            const nowGMT = new Date().toISOString();
+            const rangeToCheck = `Sheet1!B${targetRow}`; // Check column B
+
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
                 }
             })
-            .then(res => {
-                if (!res.ok) throw res;
-                return res.json();
-            })
-            .then(data => {
-                let existingRow = data.values?.[0] || [];
+                .then(res => {
+                    if (!res.ok) throw res;
+                    return res.json();
+                })
+                .then(data => {
+                    const existingRow = data.values?.[0] || [];
+                    let rangeToWrite;
+                    let values;
 
-                let values;
+                    if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                        rangeToWrite = `Sheet1!B${targetRow}:M${targetRow}`; // Write to columns B and M
+                        values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", existingRow[9] || "", existingRow[10] || "", existingRow[11] || "", existingRow[12] || "", selectedTools]]; // Write timestamp to B, preserve C-L, and tools to M
+                    } else {
+                        rangeToWrite = `Sheet1!M${targetRow}`; // Write to column M only
+                        values = [[selectedTools]]; // Write the tools to column M
+                    }
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], existingRow[11], selectedTools]  // Initialize with count, timestamp, and entry
-                    ];
-                } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], existingRow[11], selectedTools]
-                    ];
-                }
-
-                // Update the row in the sheet with the new values
-                return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
-                    method: "PUT",
-                    headers: {
-                        "Authorization": `Bearer ${accessToken}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ values })
+                    return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ values })
+                    });
                 });
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Sampling Tools written to Sheet...", data);
-            })
-            .catch(error => {
-                console.error("Failed to write Sampling Tools:", error);
-            });
-        })
-      };
+        });
+      }
       // function for writing Sample Type to sheet with safeApiCall checks
       function writeSampleTypeToSheet(selectedSampleType, currentCount) {
         return safeApiCall(() => {
-          const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();
-          const rangeToWrite = `Sheet1!A${targetRow}:F${targetRow}`;
-          const rangeToCheck = `Sheet1!B${targetRow}`;
+            const targetRow = currentCount + 1;
+            const nowGMT = new Date().toISOString();
+            const rangeToCheck = `Sheet1!B${targetRow}`;
 
-          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${accessToken}`,
-            }
-          })
-            .then(res => {
-              if (!res.ok) throw res;
-              return res.json();
-            })
-            .then(data => {
-              const existingRow = data.values?.[0] || [];
-              const values = (existingRow.length === 0 || existingRow[1] === "")
-                ? [[existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], selectedSampleType]]
-                : [[existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], selectedSampleType]];
-
-              return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
-                method: "PUT",
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+                method: "GET",
                 headers: {
-                  "Authorization": `Bearer ${accessToken}`,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ values })
-              });
-            });
+                    "Authorization": `Bearer ${accessToken}`,
+                }
+            })
+                .then(res => {
+                    if (!res.ok) throw res;
+                    return res.json();
+                })
+                .then(data => {
+                    const existingRow = data.values?.[0] || [];
+                    let rangeToWrite;
+                    let values;
+
+                    if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                        rangeToWrite = `Sheet1!B${targetRow}:F${targetRow}`; // Write to columns B and F
+                        values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", selectedSampleType]]; // Write timestamp to B, preserve C-E, and sample type to F
+                    } else {
+                        rangeToWrite = `Sheet1!F${targetRow}`; // Write to column F only
+                        values = [[selectedSampleType]]; // Write the sample type to column F
+                    }
+
+                    return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ values })
+                    });
+                });
         });
       }
       // function for writing Contamination Notes:
       function writeContaminationToSheet(selectedContamination, currentCount) {
         return safeApiCall(() => {
-          const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:L${targetRow}`;  // Write to column L of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp 
-          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+            const targetRow = currentCount + 1;
+            const nowGMT = new Date().toISOString();
+            const rangeToCheck = `Sheet1!B${targetRow}`; // Check column B
+
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -795,24 +800,18 @@
                 return res.json();
             })
             .then(data => {
-                let existingRow = data.values?.[0] || [];
-
+                const existingRow = data.values?.[0] || [];
+                let rangeToWrite;
                 let values;
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], selectedContamination]  // Initialize with count, timestamp, and entry
-                    ];
+                if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                    rangeToWrite = `Sheet1!B${targetRow}:L${targetRow}`; // Write to columns B and L
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", existingRow[9] || "", existingRow[10] || "", existingRow[11] || "", selectedContamination]]; // Write timestamp to B, preserve C-K, and contamination to L
                 } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], existingRow[10], selectedContamination]
-                    ];
+                    rangeToWrite = `Sheet1!L${targetRow}`; // Write to column L only
+                    values = [[selectedContamination]]; // Write the contamination to column L
                 }
 
-                // Update the row in the sheet with the new values
                 return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
                     method: "PUT",
                     headers: {
@@ -821,25 +820,20 @@
                     },
                     body: JSON.stringify({ values })
                 });
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Contamination Notes written to Sheet...", data);
             })
             .catch(error => {
                 console.error("Failed to write Contamination Notes:", error);
             });
-        })
-      };
-
+        });
+      }
       //function for writing Container Number(s) to sheet
       function writeContainerToSheet(selectedContainer, currentCount) {
         return safeApiCall(() => {
-          const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:K${targetRow}`;  // Write to column K of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
-          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+            const targetRow = currentCount + 1;
+            const nowGMT = new Date().toISOString();
+            const rangeToCheck = `Sheet1!B${targetRow}`; // Check column B
+
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -850,24 +844,18 @@
                 return res.json();
             })
             .then(data => {
-                let existingRow = data.values?.[0] || [];
-
+                const existingRow = data.values?.[0] || [];
+                let rangeToWrite;
                 let values;
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], selectedContainer]  // Initialize with count, timestamp, and entry
-                    ];
+                if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                    rangeToWrite = `Sheet1!B${targetRow}:K${targetRow}`; // Write to columns B and K
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", existingRow[9] || "", existingRow[10] || "", selectedContainer]]; // Write timestamp to B, preserve C-J, and container to K
                 } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9], selectedContainer]
-                    ];
+                    rangeToWrite = `Sheet1!K${targetRow}`; // Write to column K only
+                    values = [[selectedContainer]]; // Write the container to column K
                 }
 
-                // Update the row in the sheet with the new values
                 return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
                     method: "PUT",
                     headers: {
@@ -876,25 +864,20 @@
                     },
                     body: JSON.stringify({ values })
                 });
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Container Number(s) written to Sheet...", data);
             })
             .catch(error => {
                 console.error("Failed to write Container Number(s):", error);
             });
-        })
-      };
-
+        });
+      }
       //function for writing Volume Estimate
       function writeVolumeToSheet(selectedVolume, currentCount) {
         return safeApiCall(() => {
           const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:J${targetRow}`;  // Write to column J of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
-          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+          const nowGMT = new Date().toISOString();
+          const rangeToCheck = `Sheet1!B${targetRow}`;
+
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -905,24 +888,18 @@
                 return res.json();
             })
             .then(data => {
-                let existingRow = data.values?.[0] || [];
-
+                const existingRow = data.values?.[0] || [];
+                let rangeToWrite;
                 let values;
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], selectedVolume]  // Initialize with count, timestamp, and entry
-                    ];
+                if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                    rangeToWrite = `Sheet1!B${targetRow}:J${targetRow}`; // Write to columns B and J
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", existingRow[9] || "", selectedVolume]]; // Write timestamp to B, preserve C-I, and volume to J
                 } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], selectedVolume]
-                    ];
+                    rangeToWrite = `Sheet1!J${targetRow}`; // Write to column J only
+                    values = [[selectedVolume]]; // Write the volume to column J
                 }
 
-                // Update the row in the sheet with the new values
                 return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
                     method: "PUT",
                     headers: {
@@ -932,24 +909,20 @@
                     body: JSON.stringify({ values })
                 });
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Volume Estimate written to Sheet...", data);
-            })
             .catch(error => {
                 console.error("Failed to write Volume Estimate:", error);
             });
-        })
+        });
       };
 
       // function for writing Mass Estimate
       function writeMassToSheet(selectedMass, currentCount) {
         return safeApiCall(() => {
           const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:I${targetRow}`;  // Write to column I of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
-          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+          const nowGMT = new Date().toISOString();
+          const rangeToCheck = `Sheet1!B${targetRow}`;
+
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -960,24 +933,18 @@
                 return res.json();
             })
             .then(data => {
-                let existingRow = data.values?.[0] || [];
-
+                const existingRow = data.values?.[0] || [];
+                let rangeToWrite;
                 let values;
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], selectedMass]  // Initialize with count, timestamp, and entry
-                    ];
+                if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                    rangeToWrite = `Sheet1!B${targetRow}:I${targetRow}`; // Write to columns B and I
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", selectedMass]]; // Write timestamp to B, preserve C-H, and mass to I
                 } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], selectedMass]
-                    ];
+                    rangeToWrite = `Sheet1!I${targetRow}`; // Write to column I only
+                    values = [[selectedMass]]; // Write the mass to column I
                 }
 
-                // Update the row in the sheet with the new values
                 return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
                     method: "PUT",
                     headers: {
@@ -987,24 +954,20 @@
                     body: JSON.stringify({ values })
                 });
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Mass Estimate written to Sheet...", data);
-            })
             .catch(error => {
                 console.error("Failed to write Mass Estimate:", error);
             });
-        })
+        });
       };
 
       //function for writing Condition
       function writeConditionToSheet(selectedCondition, currentCount) {
         return safeApiCall(() => {
           const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:H${targetRow}`;  // Write to column H of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
-          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+          const nowGMT = new Date().toISOString();
+          const rangeToCheck = `Sheet1!B${targetRow}`;
+
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -1015,24 +978,18 @@
                 return res.json();
             })
             .then(data => {
-                let existingRow = data.values?.[0] || [];
-
+                const existingRow = data.values?.[0] || [];
+                let rangeToWrite;
                 let values;
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], selectedCondition]  // Initialize with count, timestamp, and entry
-                    ];
+                if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                    rangeToWrite = `Sheet1!B${targetRow}:H${targetRow}`; // Write to columns B and H
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", selectedCondition]]; // Write timestamp to B, preserve C-G, and condition to H
                 } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], selectedCondition]
-                    ];
+                    rangeToWrite = `Sheet1!H${targetRow}`; // Write to column H only
+                    values = [[selectedCondition]]; // Write the condition to column H
                 }
 
-                // Update the row in the sheet with the new values
                 return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
                     method: "PUT",
                     headers: {
@@ -1042,24 +999,20 @@
                     body: JSON.stringify({ values })
                 });
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Condition Written to Sheet...", data);
-            })
             .catch(error => {
                 console.error("Failed to write Condition:", error);
             });
-        })
+        });
       };
 
       //function for writing checkbox entry
       function writeCheckboxToSheet(labelText, currentCount) {
         return safeApiCall(() => {
-          const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:N${targetRow}`;  // Write to column N of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
-          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+            const targetRow = currentCount + 1;
+            const nowGMT = new Date().toISOString();
+            const rangeToCheck = `Sheet1!B${targetRow}`;
+
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -1070,24 +1023,18 @@
                 return res.json();
             })
             .then(data => {
-                let existingRow = data.values?.[0] || [];
-
+                const existingRow = data.values?.[0] || [];
+                let rangeToWrite;
                 let values;
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column N
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9] , existingRow[10], existingRow[11], existingRow[12], labelText]  // Initialize with count, timestamp, and entry
-                    ];
+                if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                    rangeToWrite = `Sheet1!B${targetRow}:N${targetRow}`; // Write to columns B and N
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", existingRow[9] || "", existingRow[10] || "", existingRow[11] || "", existingRow[12] || "", labelText]]; // Write timestamp to B, preserve C-M, and checkbox to N
                 } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], existingRow[6], existingRow[7], existingRow[8], existingRow[9] , existingRow[10], existingRow[11], existingRow[12], labelText]
-                    ];
+                    rangeToWrite = `Sheet1!N${targetRow}`; // Write to column N only
+                    values = [[labelText]]; // Write the checkbox to column N
                 }
 
-                // Update the row in the sheet with the new values
                 return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
                     method: "PUT",
                     headers: {
@@ -1097,24 +1044,20 @@
                     body: JSON.stringify({ values })
                 });
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Planned/Unplanned Updated:", data);
-            })
             .catch(error => {
-                console.error("Failed to write Planned/Unplanned:", error);
+                console.error("Failed to write Checkbox:", error);
             });
-        })
-      };
+        });
+      }
 
       //function for writing units to sheet
       function writeUnitsToSheet(selectedUnits, currentCount) {
         return safeApiCall(() => {
           const targetRow = currentCount + 1;
-          const nowGMT = new Date().toISOString();  // Current time in GMT format
-          const rangeToWrite = `Sheet1!A${targetRow}:G${targetRow}`;  // Write to column G of the target row
-          const rangeToCheck = `Sheet1!B${targetRow}`;  //checking timestamp  // Check the first two columns (A,B)
-          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+          const nowGMT = new Date().toISOString();
+          const rangeToCheck = `Sheet1!B${targetRow}`;
+
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -1125,24 +1068,18 @@
                 return res.json();
             })
             .then(data => {
-                let existingRow = data.values?.[0] || [];
-
+                const existingRow = data.values?.[0] || [];
+                let rangeToWrite;
                 let values;
 
-                // Check if columns A and B are empty
-                if (existingRow.length === 0 || existingRow[1] === "") {
-                    // If A and B are empty, initialize them with count and timestamp, and write the crew description in column D
-                    values = [
-                        [existingRow[0], nowGMT, existingRow[2], existingRow[3], existingRow[4], existingRow[5], selectedUnits]  // Initialize with count, timestamp, and entry
-                    ];
+                if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
+                    rangeToWrite = `Sheet1!B${targetRow}:G${targetRow}`; // Write to columns B and G
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", selectedUnits]]; // Write timestamp to B, preserve C-F, and units to G
                 } else {
-                    // If A and B are not empty, only update the entry in its column
-                    values = [
-                        [existingRow[0], existingRow[1], existingRow[2], existingRow[3], existingRow[4], existingRow[5], selectedUnits]
-                    ];
+                    rangeToWrite = `Sheet1!G${targetRow}`; // Write to column G only
+                    values = [[selectedUnits]]; // Write the units to column G
                 }
 
-                // Update the row in the sheet with the new values
                 return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
                     method: "PUT",
                     headers: {
@@ -1152,14 +1089,10 @@
                     body: JSON.stringify({ values })
                 });
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Units Written:", data);
-            })
             .catch(error => {
                 console.error("Failed to write Units:", error);
             });
-        })
+        });
       };
       
       // Function to fetch the pre-filled name for the current row
