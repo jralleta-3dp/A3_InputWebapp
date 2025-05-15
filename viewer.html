@@ -11,6 +11,9 @@
       color: #24292e;
       margin: 0;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
     }
     .container {
       max-width: 800px;
@@ -44,6 +47,17 @@
     }
     tr:nth-child(even) {
       background-color: #f9f9f9;
+    }
+    /* Add space between the containers */
+    .container:first-of-type {
+      margin-bottom: 40px;
+    }
+    /* Make the second container fill the remaining vertical space */
+    .container:last-of-type {
+      flex-grow: 1;
+      margin: 0 auto; /* Center the container horizontally */
+      max-width: 800px; /* Match the width of the first container */
+      margin-bottom: 20px; /* Add a small margin at the bottom */
     }
   </style>
 </head>
