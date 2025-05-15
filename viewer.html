@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sheets Viewer</title>
+  <title>Sample Name</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -100,8 +100,11 @@
   <div class="container" style="max-width: 600px;">
     <div class="static-header" style="display: flex; align-items: center; justify-content: center;">
       <button id="backButton" style="margin-right: auto; background-color: green; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); font-family: sans-serif; font-size: 16px;">&lt;</button>
-      <h1 style="margin-left: 10px; margin-right: 10px;">Google Sheets Viewer</h1>
+      <h1 style="margin-left: 10px; margin-right: 10px;">Sample Name</h1>
       <button id="forwardButton" style="margin-left: auto; background-color: green; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); font-family: sans-serif; font-size: 16px;">&gt;</button>
+    </div>
+    <div style="text-align: center; padding: 10px; color: #586069;">
+      EVA __ Station __ Sample# __ of __
     </div>
     <div style="text-align: center; margin-top: 10px;color: #d0d7de;">
       # <span id="pageCount" style="color: #d0d7de;">1</span>
@@ -111,43 +114,27 @@
   <div class="container">
     <div class="column-list">
       <div class="column-item">
-        <span class="column-name">Column 1</span>
+        <span class="column-name">Timestamp</span>
         <span class="empty-cell"></span>
       </div>
       <div class="column-item">
-        <span class="column-name">Column 2</span>
+        <span class="column-name">Description</span>
         <span class="empty-cell"></span>
       </div>
       <div class="column-item">
-        <span class="column-name">Column 3</span>
+        <span class="column-name">Sample Type</span>
         <span class="empty-cell"></span>
       </div>
       <div class="column-item">
-        <span class="column-name">Column 4</span>
+        <span class="column-name">Unit</span>
         <span class="empty-cell"></span>
       </div>
       <div class="column-item">
-        <span class="column-name">Column 5</span>
+        <span class="column-name">Container</span>
         <span class="empty-cell"></span>
       </div>
       <div class="column-item">
-        <span class="column-name">Column 6</span>
-        <span class="empty-cell"></span>
-      </div>
-      <div class="column-item">
-        <span class="column-name">Column 7</span>
-        <span class="empty-cell"></span>
-      </div>
-      <div class="column-item">
-        <span class="column-name">Column 8</span>
-        <span class="empty-cell"></span>
-      </div>
-      <div class="column-item">
-        <span class="column-name">Column 9</span>
-        <span class="empty-cell"></span>
-      </div>
-      <div class="column-item">
-        <span class="column-name">Column 10</span>
+        <span class="column-name">Mass Estimate</span>
         <span class="empty-cell"></span>
       </div>
     </div>
@@ -179,35 +166,7 @@
     document.getElementById('forwardButton').addEventListener('click', addCount);
     document.getElementById('backButton').addEventListener('click', minusCount);
 
-    async function fetchSheetData() {
-      const range = 'Sheet1!A1:J100'; // Adjust range as needed
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
-
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const data = await response.json();
-
-        // Clear existing rows
-        const columnList = document.querySelector('.column-list');
-        columnList.querySelectorAll('.empty-cell').forEach((cell, index) => {
-          cell.textContent = ''; // Clear existing content
-        });
-
-        data.values.slice(1).forEach((row, rowIndex) => {
-          row.forEach((cell, cellIndex) => {
-            const columnList = document.querySelector('.column-list');
-            const emptyCells = columnList.querySelectorAll('.empty-cell');
-            if (emptyCells[cellIndex]) {
-              emptyCells[cellIndex].textContent = cell || '';
-            }
-          });
-        });
-      } catch (error) {
-        console.error('Error fetching sheet data:', error);
-      }
-    }
-
+    
     // Fetch data on page load
     window.onload = fetchSheetData;
   </script>
