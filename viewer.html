@@ -13,7 +13,7 @@
       padding: 20px;
       display: flex;
       flex-direction: column;
-      min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
+      min-height: 100vh;
     }
     .container {
       max-width: 800px;
@@ -50,56 +50,134 @@
     }
     /* Add space between the containers */
     .container:first-of-type {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
     /* Make the second container fill the remaining vertical space */
     .container:last-of-type {
-      flex-grow: 1;
-      margin: 0 auto; /* Center the container horizontally */
-      max-width: 800px; /* Match the width of the first container */
-      margin-bottom: 20px; /* Add a small margin at the bottom */
+      flex-grow: 0; /* Changed from 1 to 0 */
+      margin: 0 auto;
+      max-width: 600px; /* Reduced max-width to slim the container */
+      margin-bottom: 20px;
+      width: 100%; /* Ensure the container takes up full width */
+    }
+    /* Ensure the table in the second container takes full width */
+    .container:last-of-type table {
+      width: 100%;
+    }
+    .column-list {
+      display: flex;
+      flex-direction: column;
+      width: 100%; /* Ensure the column list takes up full width */
+    }
+    .column-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      font-size: 18px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    .column-item:last-child {
+      border-bottom: none;
+    }
+    .empty-cell {
+      width: 50%;
+      text-align: right;
+      border-left: 1px solid #d0d7de; /* Add a left border to the empty cells */
+      padding: 8px; /* Add some padding to the empty cells */
+    }
+    .bottom-line {
+      border-bottom: 2px solid #d0d7de;
+      margin-top: 20px; /* Add some space above the line */
+    }
+    .column-name {
+      width: 50%;
+      text-align: center; /* Center the column names */
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="static-header">
-      <h1>Google Sheets Viewer</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-            <th>Column 4</th>
-            <th>Column 5</th>
-            <th>Column 6</th>
-            <th>Column 7</th>
-            <th>Column 8</th>
-            <th>Column 9</th>
-            <th>Column 10</th>
-          </tr>
-        </thead>
-      </table>
+  <div class="container" style="max-width: 600px;">
+    <div class="static-header" style="display: flex; align-items: center; justify-content: center;">
+      <button id="backButton" style="margin-right: auto; background-color: green; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); font-family: sans-serif; font-size: 16px;">&lt;</button>
+      <h1 style="margin-left: 10px; margin-right: 10px;">Google Sheets Viewer</h1>
+      <button id="forwardButton" style="margin-left: auto; background-color: green; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); font-family: sans-serif; font-size: 16px;">&gt;</button>
     </div>
-    <table id="dataTable">
-      <tbody>
-        <!-- Data rows will be dynamically inserted here -->
-      </tbody>
-    </table>
+    <div style="text-align: center; margin-top: 10px;color: #d0d7de;">
+      # <span id="pageCount" style="color: #d0d7de;">1</span>
+    </div>
   </div>
 
   <div class="container">
-    <table id="dataTable2">
-      <tbody>
-        <!-- Data rows will be dynamically inserted here -->
-      </tbody>
-    </table>
+    <div class="column-list">
+      <div class="column-item">
+        <span class="column-name">Column 1</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 2</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 3</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 4</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 5</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 6</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 7</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 8</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 9</span>
+        <span class="empty-cell"></span>
+      </div>
+      <div class="column-item">
+        <span class="column-name">Column 10</span>
+        <span class="empty-cell"></span>
+      </div>
+    </div>
+    <div class="bottom-line"></div> <!-- Horizontal line at the bottom -->
   </div>
 
   <script>
     const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo';
     const API_KEY = 'YOUR_API_KEY'; // Replace with your Google API key
+
+    let count = 1;
+
+    function updateCountDisplay() {
+      document.getElementById('pageCount').textContent = count;
+    }
+
+    function addCount() {
+      count++;
+      updateCountDisplay();
+    }
+
+    function minusCount() {
+      if (count > 1) {
+        count--;
+        updateCountDisplay();
+      }
+    }
+
+    document.getElementById('forwardButton').addEventListener('click', addCount);
+    document.getElementById('backButton').addEventListener('click', minusCount);
 
     async function fetchSheetData() {
       const range = 'Sheet1!A1:J100'; // Adjust range as needed
@@ -110,17 +188,20 @@
         if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
 
-        const tableBody = document.querySelector('#dataTable tbody');
-        tableBody.innerHTML = ''; // Clear existing rows
+        // Clear existing rows
+        const columnList = document.querySelector('.column-list');
+        columnList.querySelectorAll('.empty-cell').forEach((cell, index) => {
+          cell.textContent = ''; // Clear existing content
+        });
 
-        data.values.slice(1).forEach(row => { // Skip the first row (headers)
-          const tr = document.createElement('tr');
-          row.forEach(cell => {
-            const td = document.createElement('td');
-            td.textContent = cell || ''; // Handle empty cells
-            tr.appendChild(td);
+        data.values.slice(1).forEach((row, rowIndex) => {
+          row.forEach((cell, cellIndex) => {
+            const columnList = document.querySelector('.column-list');
+            const emptyCells = columnList.querySelectorAll('.empty-cell');
+            if (emptyCells[cellIndex]) {
+              emptyCells[cellIndex].textContent = cell || '';
+            }
           });
-          tableBody.appendChild(tr);
         });
       } catch (error) {
         console.error('Error fetching sheet data:', error);
