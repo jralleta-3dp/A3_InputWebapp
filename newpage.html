@@ -894,7 +894,7 @@
 
                 if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
                     rangeToWrite = `Sheet1!B${targetRow}:J${targetRow}`; // Write to columns B and J
-                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", existingRow[9] || "", selectedVolume]]; // Write timestamp to B, preserve C-I, and volume to J
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", selectedVolume]]; // Write timestamp to B, preserve C-I, and volume to J
                 } else {
                     rangeToWrite = `Sheet1!J${targetRow}`; // Write to column J only
                     values = [[selectedVolume]]; // Write the volume to column J
@@ -1273,27 +1273,39 @@
         }
 
         // Dropdowns
-        if (document.getElementById("SampleType")) {
-          document.getElementById("SampleType").value = rowData[5] || "";
+        const sampleType = document.getElementById("SampleType");
+        if (sampleType) {
+          sampleType.value = rowData[5] || "";
         }
-        if (document.getElementById("Condition")) {
-          document.getElementById("Condition").value = rowData[7] || "";
+        const condition = document.getElementById("Condition");
+        if (condition) {
+          condition.value = rowData[7] || "";
         }
-        if (document.getElementById("Station")) {
-          document.getElementById("Station").value = rowData[14] || "";
+        const station = document.getElementById("Station");
+        if (station) {
+          station.value = rowData[14] || "";
         }
-        if (document.getElementById("EVAnumber")) {
-          document.getElementById("EVAnumber").value = rowData[15] || "";
+        const evaNumber = document.getElementById("EVAnumber");
+        if (evaNumber) {
+          evaNumber.value = rowData[15] || "";
         }
 
         // Checkboxes
-        document.getElementById("Planned").checked = rowData[13] === "Planned";
-        document.getElementById("Unplanned").checked = rowData[13] === "Unplanned";
+        const planned = document.getElementById("Planned");
+        const unplanned = document.getElementById("Unplanned");
+        if (planned) planned.checked = rowData[13] === "Planned";
+        if (unplanned) unplanned.checked = rowData[13] === "Unplanned";
+
+        // Update the entry number label
+        const entryNumber = document.getElementById("entryNumber");
+        if (entryNumber) {
+          entryNumber.innerText = `Entry #${count}`;
+        }
       }
 
       let tokenClient;
       const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
-      const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo';
+      const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcTQImzuxyYYZ6uUKGo';
       let accessToken = localStorage.getItem('accessToken');
       let count = 1;
 
@@ -1551,21 +1563,6 @@
           }
         });
       }
-     // Update the name and entry number when navigating between rows
-      function updateNameAndEntry() {
-        return safeApiCall(() => {
-          const editableName = document.getElementById("editableName");
-          const entryNumber = document.getElementById("entryNumber");
-
-          // Fetch and display the name for the current row
-          fetchNameForRow(count - 1).then((name) => {
-            editableName.value = name;
-          });
-
-          // Update the entry number
-          entryNumber.innerText = `Entry #${count}`;
-      })
-    };
 
       function handleInputEvent(event, apiFunction) {
         const key = event.key || event.keyCode || event.which;
@@ -1680,7 +1677,6 @@
                 localStorage.setItem('count', count); // Update local storage
                 clearFields(); // Clear first!
                 updateLabel();
-                updateNameAndEntry();
                 fetchRowData(count - 1).then(fillInputsWithRowData);
             }
         });
@@ -1690,7 +1686,6 @@
             localStorage.setItem('count', count); // Update local storage
             clearFields(); // Clear first!
             updateLabel();
-            updateNameAndEntry();
             fetchRowData(count - 1).then(fillInputsWithRowData);
         });
       };
