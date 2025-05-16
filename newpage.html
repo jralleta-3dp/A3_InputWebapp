@@ -29,7 +29,8 @@
         0 1.5px 8px 0 rgba(44,162,78,0.08),
         0 0.5px 1.5px 0 rgba(33,136,56,0.10);
       padding: 32px 32px 24px 32px;
-      max-width: 820px;
+      max-width: 1200px; /* Increased width for horizontal layout */
+      min-width: 1000px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -75,9 +76,9 @@
     .row-layout {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
-      align-items: stretch;
-      gap: 24px;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 18px;
       width: 100%;
       box-sizing: border-box;
       background: none;
@@ -85,6 +86,8 @@
       box-shadow: none;
       padding: 0;
       margin-bottom: 0;
+      max-width: 100%;
+      min-width: 900px;
     }
     .label-box,
     .button-group-box {
@@ -94,22 +97,6 @@
       display: flex;
       flex-direction: row;
       justify-content: center;
-    }
-    .second-row-layout {
-      display: flex;
-      flex-direction: row; /* Align items in a row */
-      justify-content: space-between;
-      align-items: stretch;
-      padding: 18px 18px 14px 18px;
-      border: 1.5px solid #e1e4e8;
-      border-radius: 10px;
-      background-color: #fff;
-      box-shadow:
-        0 2px 8px rgba(44, 162, 78, 0.08),
-        0 1.5px 6px 0 rgba(33,136,56,0.10);
-      box-sizing: border-box;
-      gap: 20px;
-      position: relative;
     }
     .dropdown-group-box,
     .checkbox-group-box {
@@ -126,9 +113,89 @@
       min-width: 0;
       justify-content: flex-start;
     }
-    .row-layout,
-    .second-row-layout,
-    .third-row-layout,
+    
+    .row-layout {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow:
+        0 2px 8px rgba(44, 162, 78, 0.08),
+        0 1.5px 6px 0 rgba(33,136,56,0.10);
+      border: 1.5px solid #e1e4e8;
+      padding: 18px 18px 14px 18px;
+      gap: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: left;
+      position: relative;
+    }
+    .second-row-layout{
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow:
+        0 2px 8px rgba(44, 162, 78, 0.08),
+        0 1.5px 6px 0 rgba(33,136,56,0.10);
+      border: 1.5px solid #e1e4e8;
+      padding: 18px 18px 14px 18px;
+      gap: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: left;
+      position: relative;
+    }
+
+    .dropdown-group-box .dropdown-input {
+      flex: 1 1 0;
+      min-width: 180px;
+      max-width: 250px;
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
+
+    .checkbox-group-box .checkbox-label {
+      flex: 1 1 0;
+      min-width: 180px;
+      max-width: 250px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .third-row-layout {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow:
+        0 2px 8px rgba(44, 162, 78, 0.08),
+        0 1.5px 6px 0 rgba(33,136,56,0.10);
+      border: 1.5px solid #e1e4e8;
+      padding: 18px 18px 14px 18px;
+      gap: 10px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .third-row-layout label {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #24292e;
+      margin-bottom: 4px;
+    }
+
+    .third-row-layout input[type="text"] {
+      width: 95%;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #24292e;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(44, 162, 78, 0.04);
+    }
+
+
     .bottom-section,
     .last-section {
       background-color: #fff;
@@ -145,30 +212,22 @@
     }
     /* --- Label Box and Button Group --- */
     .label-box {
-      flex: 2 1 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      background-color: #f6f8fa;
-      padding: 18px 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
-      min-width: 0;
-      gap: 10px;
-      width: 100%;
-      max-width: 340px;
-    }
-    .label-box-row {
       display: flex;
       flex-direction: row;
       align-items: center;
+      background-color: #f6f8fa;
+      padding: 12px 18px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
       gap: 10px;
-      width: 100%;
+      min-width: 50%;
+      width: auto;
+      max-width: 420px;
     }
+
     .editable-name {
       flex: 1 1 0;
-      min-width: 0;
+      min-width: 180px;
       font-size: 1.3em !important;
       font-weight: bold;
       color: #24292e;
@@ -185,25 +244,24 @@
       border-bottom: 2px solid #0969da;
     }
     .entry-number {
-      visibility: visible;
-      font-size: 0.95em;
-      color: #57606a;
-      margin-left: 6px;
-      margin-top: 0;
-      font-weight: 500;
-      align-self: flex-end;
+      display: none;
     }
     #addRowButton {
       margin-left: 0;
-      margin-top: 8px;
-      align-self: flex-end;
       min-width: 38px;
       min-height: 38px;
       font-size: 1.3em;
-      padding: 0;
+      padding: 0 12px;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .row-layout .button {
+      min-width: 110px;
+      margin: 0 2px;
+      font-size: 1em;
+      padding: 10px 0;
     }
     .button-group-box {
       flex: 1 1 0;
@@ -215,8 +273,8 @@
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
       box-sizing: border-box;
-      min-width: 140px;
-      max-width: 180px;
+      min-width: 180px;
+      max-width: 220px;
       justify-content: center;
       align-items: stretch;
     }
@@ -262,7 +320,7 @@
     }
     /* --- Inputs and Selects --- */
     input[type="text"], select {
-      width: 100%;
+      width: 90%;
       padding: 8px 12px;
       font-size: 14px;
       border: 1px solid #d0d7de;
@@ -390,21 +448,12 @@
           <!-- Label Box -->
           <div class="label-box">
             <input id="editableName" class="editable-name" type="text" placeholder="Enter Sample Name...." />
-            <div id="entryNumber" class="entry-number">Entry #0</div>
             <button id="addRowButton" class="button green-button">+</button>
           </div>
-
-          <!-- Start/End Time Buttons Box -->
-          <div class="button-group-box">
-            <button class="button">Start Time</button>
-            <button class="button">End Time</button>
-          </div>
-
-          <!-- Back/Next Buttons Box -->
-          <div class="button-group-box">
-            <button class="button">&#8592; Back</button>
-            <button class="button">Next &#8594;</button>
-          </div>
+          <button class="button">Start Time</button>
+          <button class="button">End Time</button>
+          <button class="button">&#8592; Back</button>
+          <button class="button">Next &#8594;</button>
         </div>
 
         <div class="second-row-layout">
