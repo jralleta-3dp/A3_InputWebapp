@@ -74,13 +74,17 @@
     /* --- Card/box shadow for all major sections --- */
     .row-layout {
       display: flex;
-      flex-direction: row; /* Align items in a row */
+      flex-direction: row;
       justify-content: space-between;
       align-items: stretch;
-      gap: 20px;
+      gap: 24px;
       width: 100%;
       box-sizing: border-box;
-      /* Remove vertical stacking */
+      background: none;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin-bottom: 0;
     }
     .label-box,
     .button-group-box {
@@ -141,32 +145,86 @@
     }
     /* --- Label Box and Button Group --- */
     .label-box {
+      flex: 2 1 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      background-color: #f6f8fa;
+      padding: 18px 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
+      min-width: 0;
+      gap: 10px;
+      width: 100%;
+      max-width: 340px;
+    }
+    .label-box-row {
       display: flex;
       flex-direction: row;
-      background-color: #f6f8fa;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
-      text-align: center;
-      width: 70%;
-      font-size: 1.2em;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    .editable-name {
+      flex: 1 1 0;
+      min-width: 0;
+      font-size: 1.3em !important;
       font-weight: bold;
       color: #24292e;
-      box-sizing: border-box;
-      align-items: center;
-      gap: 10px;
+      border: none;
+      background-color: transparent;
+      outline: none;
+      text-align: left;
+      width: 100%;
+      cursor: text;
+      transition: color 0.2s, font-weight 0.2s;
+      padding: 0 0 0 2px;
     }
-    .button-group-box {
+    .editable-name:focus {
+      border-bottom: 2px solid #0969da;
+    }
+    .entry-number {
+      visibility: visible;
+      font-size: 0.95em;
+      color: #57606a;
+      margin-left: 6px;
+      margin-top: 0;
+      font-weight: 500;
+      align-self: flex-end;
+    }
+    #addRowButton {
+      margin-left: 0;
+      margin-top: 8px;
+      align-self: flex-end;
+      min-width: 38px;
+      min-height: 38px;
+      font-size: 1.3em;
+      padding: 0;
       display: flex;
-      gap: 10px;
-      background-color: #ffffff;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
-      box-sizing: border-box;
-      width: 30%;
       justify-content: center;
       align-items: center;
+    }
+    .button-group-box {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: #ffffff;
+      padding: 18px 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
+      box-sizing: border-box;
+      min-width: 140px;
+      max-width: 180px;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .button-group-box .button {
+      width: 100%;
+      margin: 0;
+      font-size: 1.08em;
+      padding: 10px 0;
     }
     /* --- Buttons --- */
     .button, .green-button {
@@ -214,15 +272,28 @@
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
       box-shadow: 0 1px 4px rgba(44, 162, 78, 0.04);
+      margin-bottom: 14px; /* Add space below each input */
+      margin-top: 4px;     /* Add a little space above each input */
     }
-    input[type="text"]:focus, select:focus {
-      border-color: #0969da;
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.13), 0 1px 4px rgba(44, 162, 78, 0.07);
+    /* Remove bottom margin for last input in a section */
+    .third-row-layout input[type="text"]:last-child,
+    .bottom-section input[type="text"]:last-child,
+    .bottom-section select:last-child,
+    .last-section input[type="text"]:last-child {
+      margin-bottom: 0;
     }
-    input[type="text"].saved {
-      color: #0969da !important;
-      font-weight: bold;
-      transition: color 0.2s ease;
+    /* Add spacing between label/input pairs in grid */
+    .grid-3col > * {
+      margin-bottom: 10px;
+    }
+    /* Add padding inside section containers for input spacing */
+    .third-row-layout,
+    .bottom-section,
+    .last-section {
+      padding-top: 22px;
+      padding-bottom: 22px;
+      padding-left: 22px;
+      padding-right: 22px;
     }
     /* --- Checkboxes --- */
     .checkbox-label {
