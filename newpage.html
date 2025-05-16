@@ -452,8 +452,8 @@
           </div>
           <button class="button">Start Time</button>
           <button class="button">End Time</button>
-          <button class="button">&#8592; Back</button>
-          <button class="button">Next &#8594;</button>
+          <button id="backButton" class="button">&#8592; Back</button>
+          <button id="nextButton" class="button">Next &#8594;</button>
         </div>
 
         <div class="second-row-layout">
@@ -1682,8 +1682,8 @@
         });
 
         // Attach event listeners to forward and back buttons
-        const backButton = document.querySelectorAll(".button-group-box")[1].querySelector("button:first-child");
-        const nextButton = document.querySelectorAll(".button-group-box")[1].querySelector("button:nth-child(2)");
+        const backButton = document.getElementById("backButton");
+        const nextButton = document.getElementById("nextButton");
 
         backButton.addEventListener("click", () => {
             if (count > 1) {
