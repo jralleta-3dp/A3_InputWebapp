@@ -1605,7 +1605,8 @@
                 safeApiCall(() => apiFunction(value, count)) // Pass count here
                     .then(() => {
                         console.log(`${event.target.id} written successfully.`);
-                        event.target.value = ""; // Clear the input field
+                        // Do NOT clear the input field; instead, set color to black
+                        event.target.style.color = "#24292e";
                     })
                     .catch(err => {
                         console.error(`Failed to write ${event.target.id}:`, err);
@@ -1720,3 +1721,4 @@
     </script>
   </body>
 </html>
+``` 
