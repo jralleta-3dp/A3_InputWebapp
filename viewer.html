@@ -189,8 +189,8 @@
 
     function updateEvaInfo(row, idx, totalRows) {
       // row[14] = column O (EVA), row[15] = column P (Station)
-      const eva = row[14] || '';
-      const station = row[15] || '';
+      const eva = row[14] || '?';
+      const station = row[15] || '?';
       const sampleNum = idx; // idx is 1-based, matches count
       const total = totalRows;
       const infoStr = `EVA ${eva} Station ${station} Sample# ${sampleNum} of ${total}`;
@@ -246,8 +246,8 @@
         sheetData = data.values || [];
         count = 1;
         displayRow(count);
-        // Start auto-refresh every 5 seconds (5000 ms)
-        setInterval(autoRefreshCurrentRow, 5000);
+        // Start auto-refresh every 10 seconds (10000 ms)
+        setInterval(autoRefreshCurrentRow, 10000);
       } catch (err) {
         alert('Failed to fetch sheet data.');
         console.error(err);
