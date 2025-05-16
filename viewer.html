@@ -94,6 +94,10 @@
       width: 50%;
       text-align: center; /* Center the column names */
     }
+    .flash-green {
+      background-color: #b6fcb6 !important;
+      transition: background-color 0.5s;
+    }
   </style>
 </head>
 <body>
@@ -144,9 +148,9 @@
 
   <script>
     // Dummy public sheet for demo (Sheet: https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit)
-    const SPREADSHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms';
-    const API_KEY = 'YOUR_API_KEY'; // Replace with your Google API key
-    const RANGE = 'Class Data!A1:G'; // Includes header row
+    const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo';
+    const API_KEY = 'AIzaSyAulwwKamF-YQhcJVBN5p1LbR99iItwZRI'; // Replace with your Google API key
+    const RANGE = 'Sheet1!A1:P'; // Includes header row
 
     let sheetData = [];
     let count = 1; // 1-based index for user navigation (first data row is count=1)
@@ -168,12 +172,18 @@
       ];
       fields.forEach(f => {
         const el = document.querySelector(f.selector);
-        if (el) el.textContent = f.value;
+        if (el) {
+          if (el.textContent !== f.value) {
+            el.textContent = f.value;
+            el.classList.add('flash-green');
+            setTimeout(() => el.classList.remove('flash-green'), 500);
+          } else {
+            el.textContent = f.value;
+          }
+        }
       });
       document.querySelector('.static-header h1').textContent = row[0] || 'Sample Name';
       updateCountDisplay();
-
-      // Use the filtered total row count
       updateEvaInfo(row, idx, getTotalDataRows());
     }
 
@@ -236,8 +246,8 @@
         sheetData = data.values || [];
         count = 1;
         displayRow(count);
-        // Start auto-refresh every 10 seconds (10000 ms)
-        setInterval(autoRefreshCurrentRow, 10000);
+        // Start auto-refresh every 5 seconds (5000 ms)
+        setInterval(autoRefreshCurrentRow, 5000);
       } catch (err) {
         alert('Failed to fetch sheet data.');
         console.error(err);
