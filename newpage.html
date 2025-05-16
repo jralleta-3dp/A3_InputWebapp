@@ -920,7 +920,7 @@
 
                 if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") { // Check if column B is empty
                     rangeToWrite = `Sheet1!B${targetRow}:J${targetRow}`; // Write to columns B and J
-                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", existingRow[8] || "", selectedVolume]]; // Write timestamp to B, preserve C-I, and volume to J
+                    values = [[nowGMT, existingRow[2] || "", existingRow[3] || "", existingRow[4] || "", existingRow[5] || "", existingRow[6] || "", existingRow[7] || "", selectedVolume]]; // Write timestamp to B, preserve C-I, and volume to J
                 } else {
                     rangeToWrite = `Sheet1!J${targetRow}`; // Write to column J only
                     values = [[selectedVolume]]; // Write the volume to column J
@@ -1507,10 +1507,11 @@
                     // Only now: clear and fetch for the new row
                     clearFields();
 
-                    // Set editableName to "Enter Sample Name" in grey
+                    // Set editableName to "Enter Sample Name" in grey and as placeholderer
                     const editableName = document.getElementById("editableName");
                     if (editableName) {
                         editableName.value = "Enter Sample Name";
+                        editableName.placeholder = "Enter Sample Name";
                         editableName.style.color = "#b5b7b9";
                         editableName.readOnly = false;
                         editableName.focus();
