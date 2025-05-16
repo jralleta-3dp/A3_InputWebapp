@@ -782,6 +782,32 @@
                 });
         });
       }
+      //function for integfrating timeout on page load
+      function fetchWithTimeoutAndPrompt(rowIndex, timeoutMs = 10000) {
+        let didRespond = false;
+
+        // Start the fetch
+        fetchRowData(rowIndex).then(data => {
+          didRespond = true;
+          fillInputsWithRowData(data);
+        }).catch(err => {
+          didRespond = true;
+          console.error("Fetch error:", err);
+          // Optionally show an error to the user here
+        });
+
+        // Set up the timeout to prompt sign-in if no response
+        setTimeout(() => {
+          if (!didRespond) {
+            alert("Session expired or not signed in. Please sign in with Google to continue.");
+            if (typeof tokenClient !== "undefined" && tokenClient) {
+              tokenClient.requestAccessToken({ prompt: 'consent' });
+            } else {
+              window.location.href = 'index.html'; // Fallback: redirect to login
+            }
+          }
+        }, timeoutMs);
+      }
       // function for writing Contamination Notes:
       function writeContaminationToSheet(selectedContamination, currentCount) {
         return safeApiCall(() => {
@@ -1597,21 +1623,18 @@
         }
   
       window.onload = () => {
-            if (!localStorage.getItem('accessToken')) {
-            alert("Session expired. Please sign in again.");
-            window.location.href = 'index.html'; // Redirect to your login page
-            return;
+        if (!localStorage.getItem('accessToken')) {
+          alert("Session expired. Please sign in again.");
+          window.location.href = 'index.html';
+          return;
         }
 
         initTokenClient();
 
-        // Initialize count from local storage
-        count = parseInt(localStorage.getItem('count')) || 1; // Default to 1 if no value is found
-        console.log("Count initialized to:", count);
-
+        count = parseInt(localStorage.getItem('count')) || 1;
         updateLabel();
         initializeNameAndEntry();
-        fetchRowData(count - 1).then(fillInputsWithRowData);
+        fetchWithTimeoutAndPrompt(count - 1);
 
         // Attach event listeners to all text inputs
         document.querySelectorAll('input[type="text"]').forEach(input => {
@@ -1674,19 +1697,19 @@
         backButton.addEventListener("click", () => {
             if (count > 1) {
                 count--;
-                localStorage.setItem('count', count); // Update local storage
-                clearFields(); // Clear first!
+                localStorage.setItem('count', count);
+                clearFields();
                 updateLabel();
-                fetchRowData(count - 1).then(fillInputsWithRowData);
+                fetchWithTimeoutAndPrompt(count - 1);
             }
         });
 
         nextButton.addEventListener("click", () => {
             count++;
-            localStorage.setItem('count', count); // Update local storage
-            clearFields(); // Clear first!
+            localStorage.setItem('count', count);
+            clearFields();
             updateLabel();
-            fetchRowData(count - 1).then(fillInputsWithRowData);
+            fetchWithTimeoutAndPrompt(count - 1);
         });
       };
     </script>
