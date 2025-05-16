@@ -448,10 +448,11 @@
           <!-- Label Box -->
           <div class="label-box">
             <input id="editableName" class="editable-name" type="text" placeholder="Enter Sample Name...." />
+            <span id="entryNumber" class="entry-number"></span>
             <button id="addRowButton" class="button green-button">+</button>
           </div>
-          <button class="button">Start Time</button>
-          <button class="button">End Time</button>
+          <button id="startTimeButton" class="button">Start Time</button>
+          <button id="endTimeButton" class="button">End Time</button>
           <button id="backButton" class="button">&#8592; Back</button>
           <button id="nextButton" class="button">Next &#8594;</button>
         </div>
@@ -1429,13 +1430,13 @@
       }
 
       // Start Time Button Logic
-      const startButton = document.querySelectorAll(".button-group-box .button")[0]; // First button in the first button-group-box
+      const startButton = document.getElementById("startTimeButton");
       startButton.addEventListener("click", () => {
         safeApiCall(() => writeStartTime(count));
       });
 
       // End Time Button Logic
-      const endButton = document.querySelectorAll(".button-group-box .button")[1]; // Second button in the first button-group-box
+      const endButton = document.getElementById("endTimeButton");
       endButton.addEventListener("click", () => {
         safeApiCall(() => writeEndTime(count));
       });
