@@ -1152,32 +1152,125 @@
       }
 
       function fillInputsWithRowData(rowData) {
-        // Map your sheet columns to input IDs
-        const mapping = [
-          { id: "editableName", col: 0 }, // A
-          { id: "CrewDescription", col: 4 }, // E
-          { id: "Units", col: 6 }, // G
-          { id: "MassEstimate", col: 8 }, // I
-          { id: "VolumeEstimate", col: 9 }, // J
-          { id: "ContainerNumber", col: 10 }, // K
-          { id: "ContaminationNotes", col: 11 }, // L
-          { id: "SamplingTools", col: 12 }, // M
-        ];
+        // Editable Name (A)
+        const editableName = document.getElementById("editableName");
+        if (editableName) {
+          const value = rowData[0] || "";
+          editableName.value = value;
+          editableName.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          editableName.readOnly = true;
+          editableName.addEventListener("focus", function handler() {
+            editableName.style.color = "#24292e";
+            editableName.readOnly = false;
+            if (editableName.value === "Sample Name") editableName.value = "";
+            editableName.removeEventListener("focus", handler);
+          });
+        }
 
-        mapping.forEach(field => {
-          const input = document.getElementById(field.id);
-          if (input) {
-            input.value = rowData[field.col] || "";
-            input.style.color = "#b5b7b9"; // Gray out
-            input.readOnly = true;
-            // Remove gray and readonly on focus (user wants to edit)
-            input.addEventListener("focus", function handler() {
-              input.style.color = "#24292e";
-              input.readOnly = false;
-              input.removeEventListener("focus", handler);
-            });
-          }
-        });
+        // Crew Description (E)
+        const crewDescription = document.getElementById("CrewDescription");
+        if (crewDescription) {
+          const value = rowData[4] || "";
+          crewDescription.value = value.trim() ? value : "Describe the sample...";
+          crewDescription.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          crewDescription.readOnly = true;
+          crewDescription.addEventListener("focus", function handler() {
+            crewDescription.style.color = "#24292e";
+            crewDescription.readOnly = false;
+            if (crewDescription.value === "Describe the sample...") crewDescription.value = "";
+            crewDescription.removeEventListener("focus", handler);
+          });
+        }
+
+        // Units (G)
+        const units = document.getElementById("Units");
+        if (units) {
+          const value = rowData[6] || "";
+          units.value = value.trim() ? value : "Units (e.g. g, kg, mL)";
+          units.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          units.readOnly = true;
+          units.addEventListener("focus", function handler() {
+            units.style.color = "#24292e";
+            units.readOnly = false;
+            if (units.value === "Units (e.g. g, kg, mL)") units.value = "";
+            units.removeEventListener("focus", handler);
+          });
+        }
+
+        // Mass Estimate (I)
+        const massEstimate = document.getElementById("MassEstimate");
+        if (massEstimate) {
+          const value = rowData[8] || "";
+          massEstimate.value = value.trim() ? value : "Estimated mass";
+          massEstimate.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          massEstimate.readOnly = true;
+          massEstimate.addEventListener("focus", function handler() {
+            massEstimate.style.color = "#24292e";
+            massEstimate.readOnly = false;
+            if (massEstimate.value === "Estimated mass") massEstimate.value = "";
+            massEstimate.removeEventListener("focus", handler);
+          });
+        }
+
+        // Volume Estimate (J)
+        const volumeEstimate = document.getElementById("VolumeEstimate");
+        if (volumeEstimate) {
+          const value = rowData[9] || "";
+          volumeEstimate.value = value.trim() ? value : "Estimated volume";
+          volumeEstimate.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          volumeEstimate.readOnly = true;
+          volumeEstimate.addEventListener("focus", function handler() {
+            volumeEstimate.style.color = "#24292e";
+            volumeEstimate.readOnly = false;
+            if (volumeEstimate.value === "Estimated volume") volumeEstimate.value = "";
+            volumeEstimate.removeEventListener("focus", handler);
+          });
+        }
+
+        // Container Number (K)
+        const containerNumber = document.getElementById("ContainerNumber");
+        if (containerNumber) {
+          const value = rowData[10] || "";
+          containerNumber.value = value.trim() ? value : "Container #";
+          containerNumber.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          containerNumber.readOnly = true;
+          containerNumber.addEventListener("focus", function handler() {
+            containerNumber.style.color = "#24292e";
+            containerNumber.readOnly = false;
+            if (containerNumber.value === "Container #") containerNumber.value = "";
+            containerNumber.removeEventListener("focus", handler);
+          });
+        }
+
+        // Contamination Notes (L)
+        const contaminationNotes = document.getElementById("ContaminationNotes");
+        if (contaminationNotes) {
+          const value = rowData[11] || "";
+          contaminationNotes.value = value.trim() ? value : "Contamination notes";
+          contaminationNotes.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          contaminationNotes.readOnly = true;
+          contaminationNotes.addEventListener("focus", function handler() {
+            contaminationNotes.style.color = "#24292e";
+            contaminationNotes.readOnly = false;
+            if (contaminationNotes.value === "Contamination notes") contaminationNotes.value = "";
+            contaminationNotes.removeEventListener("focus", handler);
+          });
+        }
+
+        // Sampling Tools (M)
+        const samplingTools = document.getElementById("SamplingTools");
+        if (samplingTools) {
+          const value = rowData[12] || "";
+          samplingTools.value = value.trim() ? value : "Sampling tool(s)";
+          samplingTools.style.color = value.trim() ? "#24292e" : "#b5b7b9";
+          samplingTools.readOnly = true;
+          samplingTools.addEventListener("focus", function handler() {
+            samplingTools.style.color = "#24292e";
+            samplingTools.readOnly = false;
+            if (samplingTools.value === "Sampling tool(s)") samplingTools.value = "";
+            samplingTools.removeEventListener("focus", handler);
+          });
+        }
 
         // Dropdowns
         if (document.getElementById("SampleType")) {
