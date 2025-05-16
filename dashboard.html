@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(ellipse at 60% 0%, #e6f4ea 0%, #f6f8fa 80%);
+      color: #24292e;
+      display: flex;
+      justify-content: center;
+      align-items: center; /* Center vertically */
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.13),
+        0 1.5px 8px 0 rgba(44,162,78,0.08),
+        0 0.5px 1.5px 0 rgba(33,136,56,0.10);
+      padding: 56px 40px 32px 40px;
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+      border: 1.5px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      z-index: 1;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 18px;
+      padding: 2px;
+      background: linear-gradient(120deg, #2da44e 0%, #e1e4e8 100%);
+      opacity: 0.13;
+      pointer-events: none;
+    }
+    .dashboard-title {
+      font-size: 2.3em;
+      font-weight: bold;
+      color: #24292e;
+      margin-bottom: 0;
+      text-align: center;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
+      position: relative;
+      padding-bottom: 8px;
+    }
+    .dashboard-title::after {
+      content: "";
+      display: block;
+      margin: 10px auto 0 auto;
+      width: 60px;
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      opacity: 0.7;
+    }
+    .dashboard-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      align-items: center;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+    .dashboard-btn {
+      width: 90%;
+      padding: 22px 0;
+      font-size: 1.25em;
+      font-weight: 700;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow:
+        0 2px 8px rgba(44, 162, 78, 0.08),
+        0 1.5px 6px 0 rgba(33,136,56,0.10);
+      transition: background 0.18s, transform 0.13s, box-shadow 0.18s;
+      letter-spacing: 1px;
+      outline: none;
+      text-align: center;
+      position: relative;
+      text-shadow: 0 1px 4px rgba(33,136,56,0.10);
+    }
+    .dashboard-btn:hover, .dashboard-btn:focus {
+      background: linear-gradient(90deg, #218838 60%, #2da44e 100%);
+      transform: translateY(-2px) scale(1.035);
+      box-shadow:
+        0 6px 18px rgba(44, 162, 78, 0.13),
+        0 2px 8px rgba(33,136,56,0.12),
+        0 0 12px 2px #2da44e33;
+    }
+    .dashboard-btn:active {
+      transform: scale(0.98);
+    }
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #57606a;
+      margin-top: 18px;
+      padding: 10px 0 0 0;
+      border-top: 1px solid #d0d7de;
+      width: 100%;
+      letter-spacing: 0.5px;
+      box-shadow: 0 -2px 8px rgba(44,162,78,0.04);
+    }
+    /* Add a subtle divider between buttons for visual symmetry */
+    .dashboard-btn::after {
+      content: "";
+      display: block;
+      margin: 18px auto 0 auto;
+      width: 60%;
+      height: 1.5px;
+      background: linear-gradient(90deg, #e1e4e8 0%, #d0d7de 100%);
+      border-radius: 1px;
+      /* Always show underline, even for last button */
+    }
+    /* Responsive for mobile */
+    @media (max-width: 600px) {
+      .container {
+        padding: 28px 6vw 18px 6vw;
+        max-width: 98vw;
+      }
+      .dashboard-title {
+        font-size: 1.3em;
+      }
+      .dashboard-btn {
+        font-size: 1em;
+        padding: 16px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="dashboard-title">Mission Sample Dashboard</div>
+    <div class="dashboard-buttons">
+        <button class="dashboard-btn" onclick="window.location.href='newpage.html'">Sample Documentarian</button>
+        <button class="dashboard-btn" onclick="window.location.href='viewer.html'">Imaging</button>
+        <button class="dashboard-btn" onclick="window.location.href='viewer.html'">Image Viewer</button>
+        <button class="dashboard-btn" onclick="window.location.href='viewer.html'">Sample Viewer</button>
+        <button class="dashboard-btn" onclick="window.location.href='AIOviewer.html'">AIO Viewer</button>
+    </div>
+    <div class="footer">J.A.N.K.I.E. 2025 by @jaredr</div>
+  </div>
+</body>
+</html>
