@@ -72,6 +72,56 @@
       opacity: 0.7;
     }
     /* --- Card/box shadow for all major sections --- */
+    .row-layout {
+      display: flex;
+      flex-direction: row; /* Align items in a row */
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 20px;
+      width: 100%;
+      box-sizing: border-box;
+      /* Remove vertical stacking */
+    }
+    .label-box,
+    .button-group-box {
+      /* Ensure all row children stretch to same height for symmetry */
+      align-items: center;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+    .second-row-layout {
+      display: flex;
+      flex-direction: row; /* Align items in a row */
+      justify-content: space-between;
+      align-items: stretch;
+      padding: 18px 18px 14px 18px;
+      border: 1.5px solid #e1e4e8;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow:
+        0 2px 8px rgba(44, 162, 78, 0.08),
+        0 1.5px 6px 0 rgba(33,136,56,0.10);
+      box-sizing: border-box;
+      gap: 20px;
+      position: relative;
+    }
+    .dropdown-group-box,
+    .checkbox-group-box {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      background-color: #f6f8fa;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+      padding: 16px;
+      box-sizing: border-box;
+      min-width: 0;
+      justify-content: flex-start;
+    }
     .row-layout,
     .second-row-layout,
     .third-row-layout,
