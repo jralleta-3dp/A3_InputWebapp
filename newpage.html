@@ -996,7 +996,7 @@
           return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${accessToken}",
+                    "Authorization": `Bearer ${accessToken}`,
                 }
             })
             .then(res => {
@@ -1461,74 +1461,74 @@
       });
 
       function insertRowBelow(targetRowIndex) {
-          return safeApiCall(() => {
-              const sheetId = 0; // Usually 0 for the first sheet
-              const insertRowIndex = targetRowIndex + 1;
+        return safeApiCall(() => {
+            const sheetId = 0; // Usually 0 for the first sheet
+            const insertRowIndex = targetRowIndex + 1;
 
-              const requestBody = {
-                  requests: [
-                      {
-                          insertDimension: {
-                              range: {
-                                  sheetId: sheetId,
-                                  dimension: "ROWS",
-                                  startIndex: insertRowIndex,
-                                  endIndex: insertRowIndex + 1,
-                              },
-                              inheritFromBefore: true,
-                          },
-                      },
-                  ],
-              };
+            const requestBody = {
+                requests: [
+                    {
+                        insertDimension: {
+                            range: {
+                                sheetId: sheetId,
+                                dimension: "ROWS",
+                                startIndex: insertRowIndex,
+                                endIndex: insertRowIndex + 1,
+                            },
+                            inheritFromBefore: true,
+                        },
+                    },
+                ],
+            };
 
-              return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
-                  method: "POST",
-                  headers: {
-                      "Authorization": `Bearer ${accessToken}`,
-                      "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(requestBody),
-              })
-                  .then((response) => {
-                      if (!response.ok) throw response;
-                      return response.json();
-                  })
-                  .then((data) => {
-                      console.log("Row inserted successfully:", data);
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody),
+            })
+                .then((response) => {
+                    if (!response.ok) throw response;
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log("Row inserted successfully:", data);
 
-                      // Increment count to reflect the new row
-                      count++;
-                      localStorage.setItem('count', count);
-                      console.log("Count updated to:", count);
+                    // Increment count to reflect the new row
+                    count++;
+                    localStorage.setItem('count', count);
+                    console.log("Count updated to:", count);
 
-                      // Update the label to reflect the new entry
-                      updateLabel();
+                    // Update the label to reflect the new entry
+                    updateLabel();
 
-                      // Only now: clear and fetch for the new row
-                      clearFields();
+                    // Only now: clear and fetch for the new row
+                    clearFields();
 
-                      // Set editableName to "Enter Sample Name" in grey
-                      const editableName = document.getElementById("editableName");
-                      if (editableName) {
-                          editableName.value = "Enter Sample Name";
-                          editableName.style.color = "#b5b7b9";
-                          editableName.readOnly = false;
-                          editableName.focus();
-                          editableName.addEventListener("focus", function handler() {
-                              if (editableName.value === "Enter Sample Name") editableName.value = "";
-                              editableName.style.color = "#24292e";
-                              editableName.readOnly = false;
-                              editableName.removeEventListener("focus", handler);
-                          });
-                      }
+                    // Set editableName to "Enter Sample Name" in grey
+                    const editableName = document.getElementById("editableName");
+                    if (editableName) {
+                        editableName.value = "Enter Sample Name";
+                        editableName.style.color = "#b5b7b9";
+                        editableName.readOnly = false;
+                        editableName.focus();
+                        editableName.addEventListener("focus", function handler() {
+                            if (editableName.value === "Enter Sample Name") editableName.value = "";
+                            editableName.style.color = "#24292e";
+                            editableName.readOnly = false;
+                            editableName.removeEventListener("focus", handler);
+                        });
+                    }
 
-                      fetchWithTimeoutAndPrompt(count - 1);
-                  })
-                  .catch((error) => {
-                      console.error("Failed to insert row:", error);
-                  });
-          });
-      }
+                    fetchWithTimeoutAndPrompt(count - 1);
+                })
+                .catch((error) => {
+                    console.error("Failed to insert row:", error);
+                });
+        });
+    }
 
       // Function to write the updated name to the spreadsheet
       function writeNameToSheet(rowIndex, name) {
