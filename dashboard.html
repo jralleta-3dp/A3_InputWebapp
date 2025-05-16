@@ -149,7 +149,7 @@
   <div class="container">
     <div class="dashboard-title">Mission Sample Dashboard</div>
     <div class="dashboard-buttons">
-        <button class="dashboard-btn" onclick="window.location.href='newpage.html'">Sample Documentarian</button>
+        <button class="dashboard-btn" id="sampleDocBtn">Sample Documentarian</button>
         <button class="dashboard-btn" onclick="window.location.href='viewer.html'">Imaging</button>
         <button class="dashboard-btn" onclick="window.location.href='viewer.html'">Image Viewer</button>
         <button class="dashboard-btn" onclick="window.location.href='viewer.html'">Sample Viewer</button>
@@ -157,5 +157,26 @@
     </div>
     <div class="footer">J.A.N.K.I.E. 2025 by @jaredr</div>
   </div>
+  <script>
+    // On load, check for accessToken in localStorage
+    window.onload = function() {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        // If not present, redirect to login
+        window.location.href = "index.html";
+      }
+      // Optionally, you can expose the token globally if needed:
+      window.accessToken = accessToken;
+
+      // Attach click handler for Sample Documentarian button
+      const sampleDocBtn = document.getElementById('sampleDocBtn');
+      if (sampleDocBtn) {
+        sampleDocBtn.addEventListener('click', function() {
+          // Pass token via query string (for demonstration, not for sensitive tokens in production)
+          window.location.href = "newpage.html?token=" + encodeURIComponent(accessToken);
+        });
+      }
+    };
+  </script>
 </body>
 </html>
