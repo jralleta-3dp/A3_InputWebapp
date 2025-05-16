@@ -1381,7 +1381,10 @@
             accessToken = tokenResponse.access_token;
             localStorage.setItem('accessToken', accessToken);
             console.log("Token refreshed.");
-            if (callback) callback();
+            // Force a browser page refresh after successful token refresh
+            window.location.reload();
+            // If you want to call the callback after reload, you can use sessionStorage to flag and handle it on load
+            // if (callback) callback();
           } else {
             alert("Session expired. Please sign in again.");
             localStorage.removeItem('accessToken');
