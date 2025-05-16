@@ -9,219 +9,152 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
-    /* Base styles */
+    /* --- Dashboard-inspired global background and container --- */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background-color: #f6f8fa; /* Light gray background like GitHub */
-      color: #24292e; /* Dark text color */
+      background: radial-gradient(ellipse at 60% 0%, #e6f4ea 0%, #f6f8fa 80%);
+      color: #24292e;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      padding: 20px;
+      align-items: center;
+      padding: 0;
       margin: 0;
+      min-height: 100vh;
     }
-
     .container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.13),
+        0 1.5px 8px 0 rgba(44,162,78,0.08),
+        0 0.5px 1.5px 0 rgba(33,136,56,0.10);
+      padding: 32px 32px 24px 32px;
+      max-width: 820px;
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 20px;
-      background-color: #ffffff; /* White background for the container */
-      padding: 24px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-      max-width: 800px;
-      width: 100%;
+      border: 1.5px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      z-index: 1;
     }
-
-    /* Section styles */
-    .row-layout,
-    .second-row-layout,
-    .third-row-layout,
-    .bottom-section,
-    .last-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 16px;
-      border: 1px solid #d0d7de; /* Light border for separation */
-      border-radius: 6px;
-      background-color: #ffffff;
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 18px;
+      padding: 2px;
+      background: linear-gradient(120deg, #2da44e 0%, #e1e4e8 100%);
+      opacity: 0.13;
+      pointer-events: none;
     }
-
-    /* First Row Layout */
-    .row-layout {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      width: 100%; /* Ensure it matches the container width */
-      box-sizing: border-box; /* Include padding and border in the width calculation */
-    }
-
-    /* Label Box */
-    .label-box {
-      display: flex;
-      flex-direction: row;
-      background-color: #f6f8fa; /* Light gray background */
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 70%; /* Take up 70% of the container */
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #24292e;
-      box-sizing: border-box; /* Include padding in the width calculation */
-    }
-
-    /* Button Group Box */
-    .button-group-box {
-      display: flex;
-      gap: 10px;
-      background-color: #ffffff; /* White background */
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      box-sizing: border-box; /* Include padding in the width calculation */
-      width: 30%; /* Take up 30% of the container */
-      justify-content: center; /* Center the buttons horizontally */
-      align-items: center; /* Center the buttons vertically */
-    }
-
-    /* Buttons */
-    .button {
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 600;
-      background-color: #2da44e; /* GitHub green */
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    .button:hover {
-      background-color: #218838; /* Darker green on hover */
-    }
-
-    .button.secondary {
-      background-color: #f6f8fa; /* Light gray for secondary buttons */
-      color: #24292e;
-      border: 1px solid #d0d7de;
-    }
-
-    .button.secondary:hover {
-      background-color: #eaeef2; /* Slightly darker gray on hover */
-    }
-
-    /* Labels */
-    label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #57606a; /* Subtle gray for labels */
-    }
-
-    /* Inputs and Selects */
-    input[type="text"],
-    select {
-      width: 100%;
-      padding: 8px 12px;
-      font-size: 14px;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      background-color: #ffffff;
-      color: #24292e;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-
-    input[type="text"]:focus,
-    select:focus {
-      border-color: #0969da; /* GitHub blue for focus */
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
-    }
-
-    input[type="text"].saved {
-      color: #0969da !important;
-      font-weight: bold;
-      transition: color 0.2s ease;
-    }
-
-    /* Checkboxes */
-    .checkbox-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2em; /* Make the text larger */
-      font-weight: bold;
-      color: #24292e;
-    }
-
-    .checkbox-label input {
-      width: 24px; /* Make the checkbox larger */
-      height: 24px;
-      cursor: pointer;
-    }
-
-    /* Textarea */
-    textarea {
-      width: 100%;
-      height: 100px;
-      padding: 8px 12px;
-      font-size: 14px;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      background-color: #ffffff;
-      color: #24292e;
-      resize: none;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-
-    textarea:focus {
-      border-color: #0969da;
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
-    }
-
-    /* Grid layout for bottom section */
-    .grid-3col {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 equal columns with flexible widths */
-      gap: 16px; /* Add spacing between grid items */
-      align-items: start; /* Align items to the top of their grid cells */
-    }
-
-    /* Section headers */
+    /* --- Section headers with green accent underline --- */
     .section-header {
       font-size: 18px;
       font-weight: bold;
       color: #24292e;
       margin-bottom: 8px;
+      position: relative;
+      padding-bottom: 6px;
+      text-align: left;
+      letter-spacing: 0.5px;
     }
-
-    /* Third Row Layout */
-    .third-row-layout {
+    .section-header::after {
+      content: "";
+      display: block;
+      margin: 8px 0 0 0;
+      width: 48px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      opacity: 0.7;
+    }
+    /* --- Card/box shadow for all major sections --- */
+    .row-layout,
+    .second-row-layout,
+    .third-row-layout,
+    .bottom-section,
+    .last-section {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow:
+        0 2px 8px rgba(44, 162, 78, 0.08),
+        0 1.5px 6px 0 rgba(33,136,56,0.10);
+      border: 1.5px solid #e1e4e8;
+      padding: 18px 18px 14px 18px;
+      gap: 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      position: relative;
+    }
+    /* --- Label Box and Button Group --- */
+    .label-box {
+      display: flex;
+      flex-direction: row;
+      background-color: #f6f8fa;
       padding: 16px;
-      border: 1px solid #d0d7de; /* Light border for separation */
-      border-radius: 6px;
-      background-color: #ffffff;
-      box-sizing: border-box; /* Include padding and border in the width calculation */
-    }
-
-    .third-row-layout label {
-      font-size: 18px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+      text-align: center;
+      width: 70%;
+      font-size: 1.2em;
       font-weight: bold;
-      color: #000000; /* Subtle gray for labels */
+      color: #24292e;
+      box-sizing: border-box;
+      align-items: center;
+      gap: 10px;
     }
-
-    /* Input Box */
-    .third-row-layout input[type="text"] {
-      width: 100%; /* Ensure it spans the full width of the section */
+    .button-group-box {
+      display: flex;
+      gap: 10px;
+      background-color: #ffffff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+      box-sizing: border-box;
+      width: 30%;
+      justify-content: center;
+      align-items: center;
+    }
+    /* --- Buttons --- */
+    .button, .green-button {
+      padding: 8px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.13s, box-shadow 0.18s;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.08), 0 1.5px 6px 0 rgba(33,136,56,0.10);
+      letter-spacing: 0.5px;
+      outline: none;
+      text-align: center;
+      text-shadow: 0 1px 4px rgba(33,136,56,0.10);
+      margin-left: 0;
+    }
+    .button:hover, .green-button:hover, .button:focus, .green-button:focus {
+      background: linear-gradient(90deg, #218838 60%, #2da44e 100%);
+      transform: translateY(-2px) scale(1.035);
+      box-shadow: 0 6px 18px rgba(44, 162, 78, 0.13), 0 2px 8px rgba(33,136,56,0.12), 0 0 12px 2px #2da44e33;
+    }
+    .button:active, .green-button:active {
+      transform: scale(0.98);
+    }
+    .button.secondary {
+      background-color: #f6f8fa;
+      color: #24292e;
+      border: 1px solid #d0d7de;
+    }
+    .button.secondary:hover {
+      background-color: #eaeef2;
+    }
+    /* --- Inputs and Selects --- */
+    input[type="text"], select {
+      width: 100%;
       padding: 8px 12px;
       font-size: 14px;
       border: 1px solid #d0d7de;
@@ -229,235 +162,103 @@
       background-color: #ffffff;
       color: #24292e;
       outline: none;
-      box-sizing: border-box; /* Include padding and border in the width calculation */
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(44, 162, 78, 0.04);
     }
-
-    .third-row-layout input[type="text"]:focus {
-      border-color: #0969da; /* GitHub blue for focus */
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
+    input[type="text"]:focus, select:focus {
+      border-color: #0969da;
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.13), 0 1px 4px rgba(44, 162, 78, 0.07);
     }
-
-    /* Second Row Layout */
-    .second-row-layout {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between; /* Space out the two boxes */
-      align-items: center;
-      padding: 16px;
-      border: 1px solid #d0d7de; /* Light border for separation */
-      border-radius: 6px;
-      background-color: #ffffff;
-      box-sizing: border-box;
+    input[type="text"].saved {
+      color: #0969da !important;
+      font-weight: bold;
+      transition: color 0.2s ease;
     }
-
-    /* Dropdown Group Box */
-    .dropdown-group-box {
-      display: flex;
-      flex-direction: row; /* Keep dropdowns horizontal */
-      gap: 20px; /* Add space between dropdowns */
-      padding: 16px;
-      background-color: #f6f8fa; /* Light gray background */
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      width: 48%; /* Match the width of the checkbox group box */
-      box-sizing: border-box;
-      justify-content: flex-start; /* Align dropdowns inside the box */
-      align-items: center; /* Vertically center the dropdowns */
-    }
-
-    /* Dropdown Inputs */
-    .dropdown-input select {
-      width: 100%; /* Ensure dropdown spans the full width of its container */
-      padding: 8px 12px; /* Reduce padding for a cleaner look */
-      font-size: 20px; /* Match font size with other inputs */
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      background-color: #ffffff;
-      color: #24292e;
-      outline: none;
-      box-sizing: border-box;
-      transition: border-color 0.2s ease;
-    }
-
-    .dropdown-input select:focus {
-      border-color: #0969da; /* GitHub blue for focus */
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
-    }
-
-    /* Checkbox Group Box */
-    .checkbox-group-box {
-      display: flex;
-      flex-direction: row; /* Keep checkboxes horizontal */
-      gap: 20px; /* Add space between checkboxes */
-      padding: 16px;
-      background-color: #f6f8fa; /* Light gray background */
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      width: 48%; /* Match the width of the dropdown group box */
-      box-sizing: border-box;
-      justify-content: flex-start; /* Align checkboxes inside the box */
-      align-items: center; /* Vertically center the checkboxes */
-    }
-
-    /* Checkbox Labels */
+    /* --- Checkboxes --- */
     .checkbox-label {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 1.2em; /* Make the text larger */
+      font-size: 1.2em;
       font-weight: bold;
       color: #24292e;
     }
-
-    /* Checkboxes */
     .checkbox-label input {
-      width: 28px; /* Make the checkbox larger */
+      width: 28px;
       height: 28px;
       cursor: pointer;
     }
-    /* Editable Name */
+    /* --- Editable Name --- */
     .editable-name {
-      font-size: 1.4em !important; /* Ensure the font size is applied */
-      font-weight: bold; /* Make the text bold */
-      color: #24292e; /* Default text color */
+      font-size: 1.4em !important;
+      font-weight: bold;
+      color: #24292e;
       border: none;
       background-color: transparent;
       outline: none;
       text-align: center;
       width: 200%;
       cursor: text;
-      transition: color 0.2s ease, font-weight 0.2s ease;
+      transition: color 0.2s, font-weight 0.2s;
     }
-
     .editable-name:focus {
-      border-bottom: 2px solid #0969da; /* Subtle underline when editing */
+      border-bottom: 2px solid #0969da;
     }
-
-    /* Bold and Colored Name After Editing */
     .editable-name.saved {
       font-weight: bold;
-      color: #0969da; /* GitHub blue */
+      color: #0969da;
     }
-
-    /* Entry Number */
+    /* --- Entry Number --- */
     .entry-number {
       visibility: hidden;
       font-size: 0.4em;
-      color: #57606a; /* Subtle gray */
+      color: #57606a;
       margin-top: 4px;
     }
-    .green-button {
-      padding: 4px 10px;
-      font-size: 16px;
-      font-weight: bold;
-      background-color: #2da44e; /* GitHub green */
-      color: white;
-      border: none;
-      border-radius: 2%; /* Circular button */
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      margin-left: 10px; /* Add spacing from the label */
-    }
-
-    .green-button:hover {
-      background-color: #218838; /* Darker green on hover */
-    }
-    /* Footer */
-    .footer {
-      text-align: center;
-      font-size: 12px; /* Small font size */
-      color: #57606a; /* Subtle gray color */
-      margin-top: 20px; /* Add spacing from the content above */
-      padding: 10px 0;
-      border-top: 1px solid #d0d7de; /* Subtle top border for separation */
-    } 
-
-    /* Bottom Section */
-    .bottom-section {
-      display: flex;
-      flex-direction: column; /* Stack the content vertically */
-      gap: 16px; /* Add spacing between rows */
-      padding: 16px; /* Consistent padding */
-      border: 1px solid #d0d7de; /* Light border for separation */
-      border-radius: 6px; /* Rounded corners */
-      background-color: #ffffff; /* White background */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-      box-sizing: border-box; /* Include padding and border in the width calculation */
-    }
-
-    /* Grid Layout for Sample Characteristics */
+    /* --- Grid layout for bottom section --- */
     .grid-3col {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 equal columns with flexible widths */
-      gap: 20px; /* Add spacing between grid items */
-      align-items: start; /* Align items to the top of their grid cells */
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
     }
-
-    /* Labels in the Bottom Section */
-    .bottom-section label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #57606a; /* Subtle gray for labels */
-      margin-bottom: 4px; /* Add spacing below labels */
+    /* --- Footer --- */
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #57606a;
+      margin-top: 18px;
+      padding: 10px 0 0 0;
+      border-top: 1px solid #d0d7de;
+      width: 100%;
+      letter-spacing: 0.5px;
+      box-shadow: 0 -2px 8px rgba(44,162,78,0.04);
     }
-
-    /* Inputs and Dropdowns in the Bottom Section */
-    .bottom-section input[type="text"],
-    .bottom-section select {
-      width: 65%; /* Ensure inputs span the full width of their container */
-      padding: 8px 12px;
-      font-size: 14px;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      background-color: #ffffff;
-      color: #24292e;
-      outline: none;
-      transition: border-color 0.2s ease;
+    /* --- Responsive for mobile --- */
+    @media (max-width: 900px) {
+      .container {
+        padding: 18px 2vw 12px 2vw;
+        max-width: 99vw;
+      }
+      .row-layout, .second-row-layout, .third-row-layout, .bottom-section, .last-section {
+        padding: 10px 4vw 8px 4vw;
+      }
+      .label-box, .button-group-box {
+        padding: 10px;
+      }
     }
-
-    .bottom-section input[type="text"]:focus,
-    .bottom-section select:focus {
-      border-color: #0969da; /* GitHub blue for focus */
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
-    }
-
-    /* Last Section */
-    .last-section {
-      display: flex;
-      flex-direction: column; /* Stack the content vertically */
-      gap: 16px; /* Add spacing between rows */
-      padding: 16px; /* Consistent padding */
-      border: 1px solid #d0d7de; /* Light border for separation */
-      border-radius: 6px; /* Rounded corners */
-      background-color: #ffffff; /* White background */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-      box-sizing: border-box; /* Include padding and border in the width calculation */
-    }
-
-    /* Layout for individual rows in the last section */
-    .last-section-layout {
-      display: flex;
-      flex-direction: column; /* Stack label and input vertically */
-      gap: 8px; /* Add spacing between label and input */
-    }
-
-    /* Inputs in the Last Section */
-    .last-section input[type="text"] {
-      width: 95% !important; /* Ensure inputs span the full width of their container */
-      padding: 8px 12px;
-      font-size: 14px;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      background-color: #ffffff;
-      color: #24292e;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-
-    .last-section input[type="text"]:focus {
-      border-color: #0969da; /* GitHub blue for focus */
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
+    @media (max-width: 600px) {
+      .container {
+        padding: 8px 2vw 8px 2vw;
+        max-width: 99vw;
+      }
+      .dashboard-title, .section-header {
+        font-size: 1.1em;
+      }
+      .button, .green-button {
+        font-size: 1em;
+        padding: 10px 0;
+      }
     }
   </style>
 </head>
