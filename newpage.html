@@ -1678,20 +1678,20 @@
             if (count > 1) {
                 count--;
                 localStorage.setItem('count', count); // Update local storage
+                clearFields(); // Clear first!
                 updateLabel();
                 updateNameAndEntry();
                 fetchRowData(count - 1).then(fillInputsWithRowData);
-                clearFields();
             }
         });
 
         nextButton.addEventListener("click", () => {
             count++;
             localStorage.setItem('count', count); // Update local storage
+            clearFields(); // Clear first!
             updateLabel();
             updateNameAndEntry();
             fetchRowData(count - 1).then(fillInputsWithRowData);
-            clearFields();
         });
       };
     </script>
