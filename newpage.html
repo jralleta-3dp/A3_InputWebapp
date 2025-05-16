@@ -1462,8 +1462,8 @@
 
       function insertRowBelow(targetRowIndex) {
           return safeApiCall(() => {
-              const sheetId = 0; // Replace with your sheet's ID (usually 0 for the first sheet)
-              const insertRowIndex = targetRowIndex + 1; // Add 1 to insert below the target row
+              const sheetId = 0; // Usually 0 for the first sheet
+              const insertRowIndex = targetRowIndex + 1;
 
               const requestBody = {
                   requests: [
@@ -1473,9 +1473,9 @@
                                   sheetId: sheetId,
                                   dimension: "ROWS",
                                   startIndex: insertRowIndex,
-                                  endIndex: insertRowIndex + 1, // Insert one row
+                                  endIndex: insertRowIndex + 1,
                               },
-                              inheritFromBefore: true, // Set to true to inherit formatting from the row above
+                              inheritFromBefore: true,
                           },
                       },
                   ],
@@ -1498,27 +1498,15 @@
 
                       // Increment count to reflect the new row
                       count++;
-                      localStorage.setItem('count', count); // Update local storage
+                      localStorage.setItem('count', count);
                       console.log("Count updated to:", count);
 
                       // Update the label to reflect the new entry
                       updateLabel();
 
-                      // Fetch and display the name for the new row
-                      fetchNameForRow(count - 1).then((name) => {
-                          const editableName = document.getElementById("editableName");
-                          const entryNumber = document.getElementById("entryNumber");
-
-                          if (editableName) {
-                              editableName.value = name || "Sample Name"; // Default to "Sample Name" if no name exists
-                              console.log("Editable name updated to:", name);
-                          }
-
-                          if (entryNumber) {
-                              entryNumber.innerText = `Entry #${count}`;
-                              console.log("Entry number updated to:", entryNumber.innerText);
-                          }
-                      });
+                      // Only now: clear and fetch for the new row
+                      clearFields();
+                      fetchWithTimeoutAndPrompt(count - 1);
                   })
                   .catch((error) => {
                       console.error("Failed to insert row:", error);
