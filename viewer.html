@@ -16,12 +16,13 @@
       min-height: 100vh;
     }
     .container {
-      max-width: 800px;
+      max-width: 600px; /* 1200px - 30% = 840px */
       margin: 0 auto;
       background: #ffffff;
-      padding: 30px 20px; /* Increased padding for top/bottom */
+      padding: 30px 20px;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
     }
     .static-header {
       position: sticky;
@@ -30,6 +31,35 @@
       z-index: 10;
       padding-bottom: 10px;
       border-bottom: 2px solid #d0d7de;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Spread children to edges */
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .static-header h1 {
+      margin: 0 10px;
+      max-width: 400px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 24px;
+      line-height: 1.2;
+      text-align: center;
+      flex: 1 1 auto;
+    }
+    .header-btn {
+      background-color: green;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      font-family: sans-serif;
+      font-size: 16px;
+      min-width: 60px;
     }
     table {
       width: 100%;
@@ -101,13 +131,11 @@
   </style>
 </head>
 <body>
-  <div class="container" style="max-width: 600px;">
-    <div class="static-header" style="display: flex; align-items: center; justify-content: center;">
-      <button id="backButton" style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); font-family: sans-serif; font-size: 16px;">&lt;</button>
-      <span style="width: 50px;"></span> <!-- Spacer -->
-      <h1 style="margin-left: 10px; margin-right: 10px;">Sample Name</h1>
-      <span style="width: 50px;"></span> <!-- Spacer -->
-      <button id="forwardButton" style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); font-family: sans-serif; font-size: 16px;">&gt;</button>
+  <div class="container">
+    <div class="static-header">
+      <button id="backButton" class="header-btn">&lt;</button>
+      <h1>Sample Name</h1>
+      <button id="forwardButton" class="header-btn">&gt;</button>
     </div>
     <div id="evaInfo" style="text-align: center; padding: 12px; color: #586069; font-size: 16px;">
       EVA __ Station __ Sample# __ of __
