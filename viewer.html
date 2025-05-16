@@ -5,38 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sample Name</title>
   <style>
+    /* --- Dashboard-inspired global background and container --- */
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f6f8fa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(ellipse at 60% 0%, #e6f4ea 0%, #f6f8fa 80%);
       color: #24292e;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      align-items: center;
+      justify-content: flex-start;
     }
     .container {
-      max-width: 600px; /* 1200px - 30% = 840px */
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 30px 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.13),
+        0 1.5px 8px 0 rgba(44,162,78,0.08),
+        0 0.5px 1.5px 0 rgba(33,136,56,0.10);
+      padding: 32px 32px 24px 32px;
+      max-width: 600px;
       width: 100%;
+      margin: 32px auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      border: 1.5px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      z-index: 1;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 18px;
+      padding: 2px;
+      background: linear-gradient(120deg, #2da44e 0%, #e1e4e8 100%);
+      opacity: 0.13;
+      pointer-events: none;
     }
     .static-header {
       position: sticky;
       top: 0;
-      background-color: #ffffff;
+      background: transparent; /* Make header background transparent */
       z-index: 10;
       padding-bottom: 10px;
       border-bottom: 2px solid #d0d7de;
       height: 60px;
       display: flex;
       align-items: center;
-      justify-content: space-between; /* Spread children to edges */
+      justify-content: space-between;
       width: 100%;
       box-sizing: border-box;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      box-shadow: none; /* Remove dropshadow */
     }
     .static-header h1 {
       margin: 0 10px;
@@ -44,89 +71,105 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 24px;
+      font-size: 2em;
       line-height: 1.2;
       text-align: center;
       flex: 1 1 auto;
+      font-weight: bold;
+      color: #24292e;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
     }
     .header-btn {
-      background-color: green;
-      color: white;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      color: #fff;
       border: none;
       padding: 10px 20px;
       cursor: pointer;
-      border-radius: 5px;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-      font-family: sans-serif;
-      font-size: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.08), 0 1.5px 6px 0 rgba(33,136,56,0.10);
+      font-family: inherit;
+      font-size: 1.1em;
+      font-weight: 700;
       min-width: 60px;
+      transition: background 0.18s, transform 0.13s, box-shadow 0.18s;
+      outline: none;
+      text-shadow: 0 1px 4px rgba(33,136,56,0.10);
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+    .header-btn:hover, .header-btn:focus {
+      background: linear-gradient(90deg, #218838 60%, #2da44e 100%);
+      transform: translateY(-2px) scale(1.035);
+      box-shadow: 0 6px 18px rgba(44, 162, 78, 0.13), 0 2px 8px rgba(33,136,56,0.12), 0 0 12px 2px #2da44e33;
     }
-    th, td {
-      border: 1px solid #d0d7de;
-      padding: 8px;
-      text-align: left;
+    .header-btn:active {
+      transform: scale(0.98);
     }
-    th {
-      background-color: #f6f8fa;
+    #evaInfo {
+      text-align: center;
+      padding: 12px;
+      color: #586069;
+      font-size: 1.1em;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    #pageCount {
+      color: #218838;
       font-weight: bold;
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    /* Add space between the containers */
-    .container:first-of-type {
-      margin-bottom: 20px;
-    }
-    /* Make the second container fill the remaining vertical space */
-    .container:last-of-type {
-      flex-grow: 0; /* Changed from 1 to 0 */
-      margin: 0 auto;
-      max-width: 600px; /* Reduced max-width to slim the container */
-      margin-bottom: 20px;
-      width: 100%; /* Ensure the container takes up full width */
-    }
-    /* Ensure the table in the second container takes full width */
-    .container:last-of-type table {
-      width: 100%;
     }
     .column-list {
       display: flex;
       flex-direction: column;
-      width: 100%; /* Ensure the column list takes up full width */
+      width: 100%;
+      gap: 0;
     }
     .column-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 10px; /* Increased padding */
-      font-size: 18px;
+      padding: 15px 10px;
+      font-size: 1.1em;
       border-bottom: 1px solid #d0d7de;
+      background: none;
     }
     .column-item:last-child {
       border-bottom: none;
     }
+    .column-name {
+      width: 50%;
+      text-align: center;
+      font-weight: 600;
+      color: #24292e;
+    }
     .empty-cell {
       width: 50%;
       text-align: right;
-      border-left: 1px solid #d0d7de; /* Add a left border to the empty cells */
-      padding: 15px 10px; /* Increased padding */
-    }
-    .bottom-line {
-      border-bottom: 2px solid #d0d7de;
-      margin-top: 20px; /* Add some space above the line */
-    }
-    .column-name {
-      width: 50%;
-      text-align: center; /* Center the column names */
+      border-left: 1px solid #d0d7de;
+      padding: 15px 10px;
+      color: #218838;
+      font-weight: 500;
+      background: none;
     }
     .flash-green {
       background-color: #b6fcb6 !important;
       transition: background-color 0.5s;
+    }
+    /* Responsive for mobile */
+    @media (max-width: 700px) {
+      .container {
+        padding: 18px 2vw 12px 2vw;
+        max-width: 99vw;
+      }
+      .static-header h1 {
+        font-size: 1.2em;
+      }
+      .header-btn {
+        font-size: 1em;
+        padding: 8px 12px;
+      }
+      .column-item {
+        font-size: 1em;
+        padding: 10px 4px;
+      }
     }
   </style>
 </head>
@@ -137,11 +180,11 @@
       <h1>Sample Name</h1>
       <button id="forwardButton" class="header-btn">&gt;</button>
     </div>
-    <div id="evaInfo" style="text-align: center; padding: 12px; color: #586069; font-size: 16px;">
+    <div id="evaInfo">
       EVA __ Station __ Sample# __ of __
     </div>
     <div style="text-align: center; margin-top: 10px;color: #d0d7de;">
-      # <span id="pageCount" style="color: #d0d7de;">1</span>
+      # <span id="pageCount">1</span>
     </div>
   </div>
 
@@ -175,13 +218,12 @@
   </div>
 
   <script>
-    // Dummy public sheet for demo (Sheet: https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit)
     const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo';
-    const API_KEY = 'AIzaSyAulwwKamF-YQhcJVBN5p1LbR99iItwZRI'; // Replace with your Google API key
-    const RANGE = 'Sheet1!A1:P'; // Includes header row
+    const API_KEY = 'AIzaSyAulwwKamF-YQhcJVBN5p1LbR99iItwZRI';
+    const RANGE = 'Sheet1!A1:P';
 
     let sheetData = [];
-    let count = 1; // 1-based index for user navigation (first data row is count=1)
+    let count = 1;
 
     function updateCountDisplay() {
       document.getElementById('pageCount').textContent = count;
@@ -191,12 +233,12 @@
       if (!sheetData.length || idx >= sheetData.length) return;
       const row = sheetData[idx];
       const fields = [
-        {selector: '.column-item:nth-child(1) .empty-cell', value: row[1] || ''}, // Timestamp
-        {selector: '.column-item:nth-child(2) .empty-cell', value: row[4] || ''}, // Description
-        {selector: '.column-item:nth-child(3) .empty-cell', value: row[5] || ''}, // Sample Type
-        {selector: '.column-item:nth-child(4) .empty-cell', value: row[6] || ''}, // Unit
-        {selector: '.column-item:nth-child(5) .empty-cell', value: row[10] || ''}, // Container
-        {selector: '.column-item:nth-child(6) .empty-cell', value: row[8] || ''}, // Mass Estimate
+        {selector: '.column-item:nth-child(1) .empty-cell', value: row[1] || ''},
+        {selector: '.column-item:nth-child(2) .empty-cell', value: row[4] || ''},
+        {selector: '.column-item:nth-child(3) .empty-cell', value: row[5] || ''},
+        {selector: '.column-item:nth-child(4) .empty-cell', value: row[6] || ''},
+        {selector: '.column-item:nth-child(5) .empty-cell', value: row[10] || ''},
+        {selector: '.column-item:nth-child(6) .empty-cell', value: row[8] || ''},
       ];
       fields.forEach(f => {
         const el = document.querySelector(f.selector);
@@ -216,17 +258,16 @@
     }
 
     function updateEvaInfo(row, idx, totalRows) {
-      // row[14] = column O (EVA), row[15] = column P (Station)
       const eva = row[14] || '?';
       const station = row[15] || '?';
-      const sampleNum = idx; // idx is 1-based, matches count
+      const sampleNum = idx;
       const total = totalRows;
       const infoStr = `EVA ${eva} Station ${station} Sample# ${sampleNum} of ${total}`;
       document.getElementById('evaInfo').textContent = infoStr;
     }
 
     function addCount() {
-      if (count < sheetData.length - 1) { // -1 because row 0 is header
+      if (count < sheetData.length - 1) {
         count++;
         displayRow(count);
       }
@@ -240,21 +281,17 @@
     }
 
     function getTotalDataRows() {
-      // Exclude the header row (sheetData[0])
       return sheetData.slice(1).filter(
         row => row && row.some(cell => cell && cell.trim() !== '')
       ).length;
     }
 
-    // Add this function to refresh only the current row's display
     function autoRefreshCurrentRow() {
-      // Re-fetch the sheet data, then update the current row display
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}?key=${API_KEY}`;
       fetch(url)
         .then(res => res.json())
         .then(data => {
           sheetData = data.values || [];
-          // Make sure count is still in bounds after refresh
           if (count >= sheetData.length) count = sheetData.length - 1;
           displayRow(count);
         })
@@ -274,7 +311,6 @@
         sheetData = data.values || [];
         count = 1;
         displayRow(count);
-        // Start auto-refresh every 10 seconds (10000 ms)
         setInterval(autoRefreshCurrentRow, 10000);
       } catch (err) {
         alert('Failed to fetch sheet data.');
