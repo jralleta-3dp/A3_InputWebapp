@@ -1134,6 +1134,70 @@
       });
     }
 
+      function fetchRowData(rowIndex) {
+        const range = `Sheet1!A${rowIndex + 2}:N${rowIndex + 2}`; // Adjust N to your last column
+        return safeApiCall(() => {
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?majorDimension=ROWS`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${accessToken}`,
+            }
+          })
+            .then(res => {
+              if (!res.ok) throw res;
+              return res.json();
+            })
+            .then(data => data.values?.[0] || []);
+        });
+      }
+
+      function fillInputsWithRowData(rowData) {
+        // Map your sheet columns to input IDs
+        const mapping = [
+          { id: "editableName", col: 0 }, // A
+          { id: "CrewDescription", col: 4 }, // E
+          { id: "Units", col: 6 }, // G
+          { id: "MassEstimate", col: 8 }, // I
+          { id: "VolumeEstimate", col: 9 }, // J
+          { id: "ContainerNumber", col: 10 }, // K
+          { id: "ContaminationNotes", col: 11 }, // L
+          { id: "SamplingTools", col: 12 }, // M
+        ];
+
+        mapping.forEach(field => {
+          const input = document.getElementById(field.id);
+          if (input) {
+            input.value = rowData[field.col] || "";
+            input.style.color = "#b5b7b9"; // Gray out
+            input.readOnly = true;
+            // Remove gray and readonly on focus (user wants to edit)
+            input.addEventListener("focus", function handler() {
+              input.style.color = "#24292e";
+              input.readOnly = false;
+              input.removeEventListener("focus", handler);
+            });
+          }
+        });
+
+        // Dropdowns
+        if (document.getElementById("SampleType")) {
+          document.getElementById("SampleType").value = rowData[5] || "";
+        }
+        if (document.getElementById("Condition")) {
+          document.getElementById("Condition").value = rowData[7] || "";
+        }
+        if (document.getElementById("Station")) {
+          document.getElementById("Station").value = rowData[14] || "";
+        }
+        if (document.getElementById("EVAnumber")) {
+          document.getElementById("EVAnumber").value = rowData[15] || "";
+        }
+
+        // Checkboxes
+        document.getElementById("Planned").checked = rowData[13] === "Planned";
+        document.getElementById("Unplanned").checked = rowData[13] === "Unplanned";
+      }
+
       let tokenClient;
       const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
       const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo';
@@ -1457,6 +1521,7 @@
 
         updateLabel();
         initializeNameAndEntry();
+        fetchRowData(count - 1).then(fillInputsWithRowData);
 
         // Attach event listeners to all text inputs
         document.querySelectorAll('input[type="text"]').forEach(input => {
@@ -1522,6 +1587,7 @@
                 localStorage.setItem('count', count); // Update local storage
                 updateLabel();
                 updateNameAndEntry();
+                fetchRowData(count - 1).then(fillInputsWithRowData);
                 clearFields();
             }
         });
@@ -1531,6 +1597,7 @@
             localStorage.setItem('count', count); // Update local storage
             updateLabel();
             updateNameAndEntry();
+            fetchRowData(count - 1).then(fillInputsWithRowData);
             clearFields();
         });
       };
