@@ -143,6 +143,12 @@
       box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3); /* Subtle blue outline */
     }
 
+    input[type="text"].saved {
+      color: #0969da !important;
+      font-weight: bold;
+      transition: color 0.2s ease;
+    }
+
     /* Checkboxes */
     .checkbox-label {
       display: flex;
@@ -1605,8 +1611,13 @@
                 safeApiCall(() => apiFunction(value, count)) // Pass count here
                     .then(() => {
                         console.log(`${event.target.id} written successfully.`);
-                        // Do NOT clear the input field; instead, set color to black
-                        event.target.style.color = "#24292e";
+                        // Flash blue, then revert to black
+                        event.target.classList.add("saved");
+                        event.target.style.color = "#0969da";
+                        setTimeout(() => {
+                            event.target.classList.remove("saved");
+                            event.target.style.color = "#24292e";
+                        }, 2000);
                     })
                     .catch(err => {
                         console.error(`Failed to write ${event.target.id}:`, err);
@@ -1721,4 +1732,3 @@
     </script>
   </body>
 </html>
-``` 
