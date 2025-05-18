@@ -148,7 +148,7 @@
       min-width: 180px;
       max-width: 250px;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       gap: 10px;
     }
 
@@ -180,6 +180,18 @@
       font-weight: bold;
       color: #24292e;
       margin-bottom: 4px;
+      position: relative;
+      padding-bottom: 6px;
+    }
+    .third-row-layout label::after {
+      content: "";
+      display: block;
+      margin: 8px 0 0 0;
+      width: 48px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      opacity: 0.7;
     }
 
     .third-row-layout input[type="text"] {
@@ -194,6 +206,7 @@
       transition: border-color 0.2s, box-shadow 0.2s;
       box-shadow: 0 1px 4px rgba(44, 162, 78, 0.04);
     }
+    
 
 
     .bottom-section,
@@ -461,21 +474,23 @@
           <!-- Dropdown Group Box -->
           <div class="dropdown-group-box">
             <label class="dropdown-input">
+              <label for="Station">Station:</label>
               <select id="Station" name="Station:">
                 <option value="" disabled selected>Station...</option>
-                <option value="Location 1">Location 1</option>
-                <option value="Location 2">Location 2</option>
-                <option value="Location 3">Location 3</option>
-                <option value="Location 4">Location 4</option>
+                <option value="Location 1">Station 1</option>
+                <option value="Location 2">Station 2</option>
+                <option value="Location 3">Station 3</option>
+                <option value="Location 4">Station 4</option>
               </select>
             </label>
             <label class="dropdown-input">
+              <label for ="EVAnumber">EVA #:</label>
               <select id="EVAnumber" name="EVA Number:">
                 <option value="" disabled selected>EVA...</option>
-                <option value="Location A">A</option>
-                <option value="Location B">B</option>
-                <option value="Location C">C</option>
-                <option value="Location D">D</option>
+                <option value="Location A">1</option>
+                <option value="Location B">2</option>
+                <option value="Location C">3</option>
+                <option value="Location D">4</option>
               </select>
             </label>
           </div>
@@ -758,6 +773,117 @@
                         body: JSON.stringify({ values })
                     });
                 });
+        });
+      }
+      // Add: function for writing Station to sheet (column P, index 15)
+      function writeStationToSheet(selectedStation, currentCount) {
+        return safeApiCall(() => {
+          const targetRow = currentCount + 1;
+          const nowGMT = new Date().toISOString();
+          const rangeToCheck = `Sheet1!B${targetRow}`;
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${accessToken}`,
+            }
+          })
+          .then(res => {
+            if (!res.ok) throw res;
+            return res.json();
+          })
+          .then(data => {
+            const existingRow = data.values?.[0] || [];
+            let rangeToWrite;
+            let values;
+            if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") {
+              // Write to columns B through P (columns 2-16)
+              rangeToWrite = `Sheet1!B${targetRow}:P${targetRow}`;
+              // Fill up to column O (index 14) with existing or empty, then column P (index 15) with selectedStation
+              values = [[
+                nowGMT, // B
+                existingRow[2] || "", // C
+                existingRow[3] || "", // D
+                existingRow[4] || "", // E
+                existingRow[5] || "", // F
+                existingRow[6] || "", // G
+                existingRow[7] || "", // H
+                existingRow[8] || "", // I
+                existingRow[9] || "", // J
+                existingRow[10] || "", // K
+                existingRow[11] || "", // L
+                existingRow[12] || "", // M
+                existingRow[13] || "", // N
+                existingRow[14] || "", // O (EVA)
+                selectedStation // P (Station)
+              ]];
+            } else {
+              rangeToWrite = `Sheet1!P${targetRow}`;
+              values = [[selectedStation]];
+            }
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
+              method: "PUT",
+              headers: {
+                "Authorization": `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ values })
+            });
+          });
+        });
+      }
+      // Add: function for writing EVA to sheet (column O, index 14)
+      function writeEVAToSheet(selectedEVA, currentCount) {
+        return safeApiCall(() => {
+          const targetRow = currentCount + 1;
+          const nowGMT = new Date().toISOString();
+          const rangeToCheck = `Sheet1!B${targetRow}`;
+          return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToCheck}?majorDimension=ROWS`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${accessToken}`,
+            }
+          })
+          .then(res => {
+            if (!res.ok) throw res;
+            return res.json();
+          })
+          .then(data => {
+            const existingRow = data.values?.[0] || [];
+            let rangeToWrite;
+            let values;
+            if (existingRow.length === 0 || existingRow[0] === undefined || existingRow[0] === "") {
+              // Write to columns B through O (columns 2-15)
+              rangeToWrite = `Sheet1!B${targetRow}:O${targetRow}`;
+              // Fill up to column N (index 13) with existing or empty, then column O (index 14) with selectedEVA
+              values = [[
+                nowGMT, // B
+                existingRow[2] || "", // C
+                existingRow[3] || "", // D
+                existingRow[4] || "", // E
+                existingRow[5] || "", // F
+                existingRow[6] || "", // G
+                existingRow[7] || "", // H
+                existingRow[8] || "", // I
+                existingRow[9] || "", // J
+                existingRow[10] || "", // K
+                existingRow[11] || "", // L
+                existingRow[12] || "", // M
+                existingRow[13] || "", // N
+                selectedEVA // O (EVA)
+              ]];
+            } else {
+              rangeToWrite = `Sheet1!O${targetRow}`;
+              values = [[selectedEVA]];
+            }
+            return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${rangeToWrite}?valueInputOption=RAW`, {
+              method: "PUT",
+              headers: {
+                "Authorization": `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ values })
+            });
+          });
         });
       }
       //function for integfrating timeout on page load
@@ -1675,6 +1801,12 @@
                         break;
                     case "Condition":
                         handleDropdownChange(event, (value) => writeConditionToSheet(value, count));
+                        break;
+                    case "Station":
+                        handleDropdownChange(event, (value) => writeStationToSheet(value, count));
+                        break;
+                    case "EVAnumber":
+                        handleDropdownChange(event, (value) => writeEVAToSheet(value, count));
                         break;
                     default:
                         console.warn(`No handler defined for dropdown: ${select.id}`);
