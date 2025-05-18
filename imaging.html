@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imaging</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(ellipse at 60% 0%, #e6f4ea 0%, #f6f8fa 80%);
+      color: #24292e;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.13),
+        0 1.5px 8px 0 rgba(44,162,78,0.08),
+        0 0.5px 1.5px 0 rgba(33,136,56,0.10);
+      padding: 32px 32px 24px 32px;
+      max-width: 1200px; /* Match newpage.html */
+      min-width: 1000px;
+      width: 100%;
+      margin: 32px auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      border: 1.5px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      z-index: 1;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 18px;
+      padding: 2px;
+      background: linear-gradient(120deg, #2da44e 0%, #e1e4e8 100%);
+      opacity: 0.13;
+      pointer-events: none;
+    }
+    .section-header {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #24292e;
+      margin-bottom: 8px;
+      position: relative;
+      padding-bottom: 6px;
+      text-align: left;
+      letter-spacing: 0.5px;
+    }
+    .section-header::after {
+      content: "";
+      display: block;
+      margin: 8px 0 0 0;
+      width: 48px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      opacity: 0.7;
+    }
+    @media (max-width: 700px) {
+      .container {
+        padding: 18px 2vw 12px 2vw;
+        max-width: 99vw;
+      }
+      .section-header {
+        font-size: 1.1em;
+      }
+    }
+    .imaging-row {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      width: 100%;
+      justify-content: space-between;
+      align-items: stretch; /* Ensure all children stretch to same height */
+      margin-top: 18px;
+    }
+    .imaging-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1 1 0;
+      background: #f6f8fa;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
+      padding: 12px 0; /* Slightly increased from 2px 0 */
+      text-align: center;
+      font-size: 1.1em;
+      font-weight: 500;
+      color: #218838;
+      border: 1.5px solid #e1e4e8;
+      min-width: 0;
+      box-sizing: border-box;
+      width: 100%;   /* Ensure all boxes take full width of their flex space */
+    }
+    /* Reduce vertical padding ONLY for the first container's boxes */
+    .container:first-of-type .imaging-box {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    .imaging-box > * {
+      max-width: 90%;
+      width: 100%;
+    }
+    .imaging-box > .button {
+      margin-top: 0;
+      margin-bottom: 0;
+      width: 48%;
+    }
+    .imaging-box > .button + .button {
+      margin-top: 0;
+      margin-left: 50%;
+    }
+    .imaging-box.buttons-horizontal {
+      flex-basis: 36%; /* Make the middle box wider */
+      max-width: 30%;
+      min-width: 320px;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+    }
+    .imaging-box.buttons-horizontal .button {
+      margin: 0 2%;
+      width: 40%;
+      align-self: center;
+    }
+    @media (max-width: 900px) {
+      .container {
+        padding: 18px 2vw 12px 2vw;
+        max-width: 99vw;
+        min-width: unset;
+      }
+      .imaging-row {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .imaging-box {
+        padding: 18px 0;
+        font-size: 1em;
+      }
+    }
+    .imaging-name-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      justify-content: center;
+      gap: 12px;
+    }
+    .editable-name {
+      flex: 0 1 80%;
+      min-width: 0;
+      font-size: 1.3em !important;
+      font-weight: bold;
+      color: #24292e;
+      border: none;
+      background-color: transparent;
+      outline: none;
+      text-align: center;
+      width: 80%;
+      cursor: text;
+      transition: color 0.2s, font-weight 0.2s;
+      margin-bottom: 8px;
+    }
+    .editable-name:focus {
+      border-bottom: 2px solid #0969da;
+    }
+    .editable-name.saved {
+      font-weight: bold;
+      color: #0969da;
+    }
+    .entry-number {
+      visibility: hidden;
+      font-size: 0.4em;
+      color: #57606a;
+      margin-top: 4px;
+    }
+    .button, .green-button {
+      padding: 12px 0;
+      font-size: 1.08em;
+      font-weight: 700;
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.13s, box-shadow 0.18s;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.08), 0 1.5px 6px 0 rgba(33,136,56,0.10);
+      letter-spacing: 0.5px;
+      outline: none;
+      text-align: center;
+      text-shadow: 0 1px 4px rgba(33,136,56,0.10);
+      width: 48%;
+      min-width: 120px;
+      margin: 0 1%;
+      display: inline-block;
+      height: 48px;
+      line-height: 1.2;
+    }
+    .button:hover, .green-button:hover, .button:focus, .green-button:focus {
+      background: linear-gradient(90deg, #218838 60%, #2da44e 100%);
+      transform: translateY(-2px) scale(1.035);
+      box-shadow: 0 6px 18px rgba(44, 162, 78, 0.13), 0 2px 8px rgba(33,136,56,0.12), 0 0 12px 2px #2da44e33;
+    }
+    .button:active, .green-button:active {
+      transform: scale(0.98);
+    }
+    .plus-button {
+      flex: 0 1 40px;
+      max-width: 40px;
+      min-width: 40px;
+      height: 40px;
+      padding: 0;
+      font-size: 1.5em;
+      font-weight: bold;
+      border-radius: 20%;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .plus-button:active {
+      transform: scale(0.96);
+    }
+    .footer {
+      text-align: center;
+      font-size: 1.1em;
+      color: #57606a;
+      margin-top: 18px;
+      padding: 10px 0 0 0;
+      border-top: 1px solid #d0d7de;
+      width: 100%;
+      letter-spacing: 0.5px;
+      box-shadow: 0 -2px 8px rgba(44,162,78,0.04);
+    }
+    .imaging-checkbox-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      margin-top: 12px;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.08em;
+      font-weight: 500;
+      color: #24292e;
+    }
+    .imaging-checkbox-row input[type="checkbox"] {
+      width: 40px;
+      height: 40px;
+      accent-color: #2da44e;
+      cursor: pointer;
+    }
+    .imaging-dropdown-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      margin-top: 12px;
+    }
+    .dropdown-label {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      font-size: 1.08em;
+      font-weight: 500;
+      color: #24292e;
+      gap: 6px;
+    }
+    .imaging-dropdown-row select {
+      width: 160px;
+      padding: 8px 12px;
+      font-size: 1em;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #24292e;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(44, 162, 78, 0.04);
+    }
+    .imaging-dropdown-row.large,
+    .imaging-checkbox-row.large {
+      gap: 48px;
+      margin-top: 0;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    .dropdown-label.large,
+    .checkbox-label.large {
+      font-size: 1.25em;
+      gap: 12px;
+    }
+    .imaging-dropdown-row.large select.large {
+      width: 200px;
+      padding: 16px 18px;
+      font-size: 1.15em;
+    }
+    .imaging-checkbox-row.large input[type="checkbox"] {
+      width: 32px;
+      height: 32px;
+    }
+    @media (max-width: 900px) {
+      .imaging-row {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .imaging-box {
+        padding: 18px 0;
+        font-size: 1em;
+      }
+      .imaging-dropdown-row.large select.large {
+        width: 98vw;
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="section-header">Imaging</div>
+    <div class="imaging-row">
+      <div class="imaging-box">
+        <!-- Editable Name input from newpage.html -->
+        <div class="imaging-name-row">
+          <input id="editableName" class="editable-name" type="text" placeholder="Enter Image Name..." />
+          <button id="addRowButton" class="button green-button plus-button">+</button>
+        </div>
+        <span id="entryNumber" class="entry-number"></span>
+      </div>
+      <div class="imaging-box buttons-horizontal">
+        <button class="button green-button" id="startTimeButton">Start Time</button>
+        <button class="button green-button" id="endTimeButton">End Time</button>
+      </div>
+      <div class="imaging-box buttons-horizontal">
+        <button class="button green-button" id="backButton">&#8592; Back</button>
+        <button class="button green-button" id="nextButton">Next &#8594;</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="imaging-row">
+      <div class="imaging-box">
+        <div class="imaging-dropdown-row">
+          <label class="dropdown-label">
+            <span>EVA #:</span>
+            <select>
+              <option value="">Select...</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </label>
+          <label class="dropdown-label">
+            <span>Station:</span>
+            <select>
+              <option value="">Select...</option>
+              <option value="Station 1">Station 1</option>
+              <option value="Station 2">Station 2</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="imaging-box">
+        <div class="imaging-checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="c2box1cb1" name="c2box1group" />
+            EV1
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="c2box1cb2" name="c2box1group" />
+            EV2
+          </label>
+        </div>
+      </div>
+      <div class="imaging-box">
+        <div class="imaging-checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="plannedCheckbox" name="plannedGroup" />
+            Planned
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="unplannedCheckbox" name="plannedGroup" />
+            Unplanned
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="section-header">Crew Description</div>
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <input
+        type="text"
+        id="crewDescriptionInput"
+        placeholder="Enter crew description..."
+        style="
+          width: 98%;
+          padding: 14px 18px;
+          font-size: 1.13em;
+          border: 1.5px solid #d0d7de;
+          border-radius: 8px;
+          background: #f6f8fa;
+          color: #24292e;
+          box-shadow: 0 1px 4px rgba(44,162,78,0.06);
+          outline: none;
+          margin: 10px 0 8px 0;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        "
+        onfocus="this.style.borderColor='#2da44e';this.style.boxShadow='0 0 0 2px #2da44e33';"
+        onblur="this.style.borderColor='#d0d7de';this.style.boxShadow='0 1px 4px rgba(44,162,78,0.06)';"
+      />
+    </div>
+  </div>
+  <div class="container">
+    <div class="section-header">Image Characteristics</div>
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <div style="display: flex; width: 98%; gap: 50px; justify-content: space-between;">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
+          <label for="imgCharDropdown" style="font-weight: 500; margin-bottom: 6px; color: #24292e;">Image Type:</label>
+          <select id="imgCharDropdown" style="width: 100%; padding: 10px 12px; border: 1.5px solid #d0d7de; border-radius: 8px; background: #f6f8fa; font-size: 1em; color: #24292e;">
+            <option value="">Select Image Type...</option>
+            <option value="OptionA">Option A</option>
+            <option value="OptionB">Option B</option>
+            <option value="OptionC">Option C</option>
+          </select>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
+          <label for="imgCharInput1" style="font-weight: 500; margin-bottom: 6px; color: #24292e;">Target:</label>
+          <input id="imgCharInput1" type="text" placeholder="Enter Image Target..." style="width: 100%; padding: 10px 12px; border: 1.5px solid #d0d7de; border-radius: 8px; background: #f6f8fa; font-size: 1em; color: #24292e;" />
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
+          <label for="imgCharInput2" style="font-weight: 500; margin-bottom: 6px; color: #24292e;">Unit:</label>
+          <input id="imgCharInput2" type="text" placeholder="Enter Unit.." style="width: 100%; padding: 10px 12px; border: 1.5px solid #d0d7de; border-radius: 8px; background: #f6f8fa; font-size: 1em; color: #24292e;" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer" id="footerImageCount"></div>
+</body>
+<script>
+  // Google Sheet ID (same as newpage.html)
+  const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo'; 
+
+  // On page load, ensure GIS token is present (from dashboard)
+  window.onload = function() {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      window.location.href = "index.html";
+      return;
+    }
+    window.accessToken = accessToken;
+
+    // Check if token is valid, if not, prompt GIS sign in
+    safeApiCall(() => Promise.resolve()).catch(() => {
+      // If token is invalid, safeApiCall will handle GIS prompt or redirect
+    });
+
+    initializeImageNameAndEntry();
+    updateFooterImageCount();
+    setupBackNextButtons();
+    setupExclusiveCheckboxesContainer2Box1();
+    setupWriteHandlers(); // <-- Add this line
+    fetchAndPrefillRow(imageCount - 1); // Prefill on load
+  };
+
+  // GIS token management logic (from newpage.html)
+  let tokenClient;
+  const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
+
+  function initTokenClient() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
+      callback: (tokenResponse) => {
+        if (tokenResponse.access_token) {
+          window.accessToken = tokenResponse.access_token;
+          localStorage.setItem('accessToken', tokenResponse.access_token);
+          window.location.reload();
+        } else {
+          alert("Session expired. Please sign in again.");
+          localStorage.removeItem('accessToken');
+          window.location.href = 'index.html';
+        }
+      }
+    });
+  }
+
+  function refreshAccessToken(callback) {
+    if (!tokenClient) {
+      alert("Session expired. Please sign in again.");
+      window.location.href = 'index.html';
+      return;
+    }
+    tokenClient.callback = (tokenResponse) => {
+      if (tokenResponse.access_token) {
+        window.accessToken = tokenResponse.access_token;
+        localStorage.setItem('accessToken', tokenResponse.access_token);
+        window.location.reload();
+      } else {
+        alert("Session expired. Please sign in again.");
+        localStorage.removeItem('accessToken');
+        window.location.href = 'index.html';
+      }
+    };
+    tokenClient.requestAccessToken({ prompt: '' });
+  }
+
+  // Safe API call wrapper
+  function safeApiCall(apiFunction) {
+    if (!window.accessToken) {
+      if (!tokenClient) initTokenClient();
+      return new Promise((resolve, reject) => {
+        tokenClient.callback = (tokenResponse) => {
+          if (tokenResponse.access_token) {
+            window.accessToken = tokenResponse.access_token;
+            localStorage.setItem('accessToken', tokenResponse.access_token);
+            apiFunction().then(resolve).catch(reject);
+          } else {
+            alert("Sign-in required. Please sign in to continue.");
+            reject("No access token");
+          }
+        };
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      });
+    }
+    return apiFunction().catch(err => {
+      if (err?.status === 401 || (err?.message && err.message.includes('401'))) {
+        if (!tokenClient) initTokenClient();
+        return new Promise((resolve, reject) => {
+          refreshAccessToken(() => {
+            apiFunction().then(resolve).catch(reject);
+          });
+        });
+      } else {
+        console.error("API error:", err);
+        throw err;
+      }
+    });
+  }
+
+  // Editable name logic for Imaging (Sheet2)
+  // You can adjust the SHEET2_ID and range as needed
+  const SHEET2_ID = 'Sheet2';
+  let imageCount = 1;
+
+  // Function to write the updated image name to Sheet2
+  function writeImageNameToSheet(rowIndex, name) {
+    const range = `${SHEET2_ID}!A${rowIndex + 2}:A${rowIndex + 2}`;
+    const values = [[name]];
+    return safeApiCall(() =>
+      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?valueInputOption=RAW`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${window.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ values }),
+      })
+      .then((response) => {
+        if (!response.ok) throw response;
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Image name updated successfully:", data);
+      })
+      .catch((error) => {
+        console.error("Failed to update image name:", error);
+      })
+    );
+  }
+
+  // Initialize the editable name and entry number for Imaging
+  function initializeImageNameAndEntry() {
+    const editableName = document.getElementById("editableName");
+    const entryNumber = document.getElementById("entryNumber");
+
+    // Optionally fetch and display the name for the current row here
+
+    // Update the entry number (if you want to show it)
+    entryNumber.innerText = `Entry #${imageCount}`;
+
+    // Add event listener for editing the name
+    editableName.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const updatedName = editableName.value.trim();
+        if (updatedName) {
+          writeImageNameToSheet(imageCount - 1, updatedName).then(() => {
+            // Apply the "saved" style
+            editableName.classList.add("saved");
+            editableName.style.color = "#0969da";
+            setTimeout(() => {
+              editableName.classList.remove("saved");
+              editableName.style.color = "#24292e";
+            }, 2000);
+          });
+        }
+      }
+    });
+  }
+
+  // Define imageCount and display in footer
+  function updateFooterImageCount() {
+    const footer = document.getElementById('footerImageCount');
+    if (footer) {
+      footer.textContent = `#${imageCount}`;
+    }
+  }
+
+  // Clear all inputs and selections
+  function clearAllInputs() {
+    // Clear all text inputs
+    document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
+    // Clear all selects
+    document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+    // Clear all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  }
+
+  // Fetch and pre-fill information from the spreadsheet for the given rowIndex (0-based)
+  function fetchAndPrefillRow(rowIndex) {
+    safeApiCall(() => doPrefillRow(rowIndex));
+  }
+
+  function doPrefillRow(rowIndex) {
+    const range = `${SHEET2_ID}!A${rowIndex + 2}:L${rowIndex + 2}`;
+    return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}`, {
+      headers: {
+        "Authorization": `Bearer ${window.accessToken}`,
+      }
+    })
+    .then(response => {
+      if (!response.ok) throw response;
+      return response.json();
+    })
+    .then(data => {
+      const row = (data.values && data.values[0]) ? data.values[0] : [];
+      // Column mapping (0-based):
+      // 0: editable name, 4: station, 5: EVA#, 6: EV1/EV2, 7: Planned/Unplanned, 8: Crew desc, 9: Image type, 10: Target, 11: Unit
+
+      // Editable name
+      document.getElementById("editableName").value = row[0] || "";
+
+      // EVA# (dropdown 1)
+      const evaSelect = document.querySelector('.imaging-dropdown-row select');
+      if (evaSelect && row[5]) {
+        let found = false;
+        for (let i = 0; i < evaSelect.options.length; i++) {
+          if (evaSelect.options[i].text.trim().toLowerCase() === row[5].trim().toLowerCase()) {
+            evaSelect.selectedIndex = i;
+            found = true;
+            break;
+          }
+        }
+        if (!found) evaSelect.selectedIndex = 0;
+      }
+
+      // Station (dropdown 2)
+      const stationSelect = document.querySelectorAll('.imaging-dropdown-row select')[1];
+      if (stationSelect && row[4]) {
+        let found = false;
+        for (let i = 0; i < stationSelect.options.length; i++) {
+          if (stationSelect.options[i].text.trim().toLowerCase() === row[4].trim().toLowerCase()) {
+            stationSelect.selectedIndex = i;
+            found = true;
+            break;
+          }
+        }
+        if (!found) stationSelect.selectedIndex = 0;
+      }
+
+      // EV1/EV2
+      document.getElementById('c2box1cb1').checked = (row[6] === "EV1");
+      document.getElementById('c2box1cb2').checked = (row[6] === "EV2");
+
+      // Planned/Unplanned (now using unique IDs)
+      document.getElementById('plannedCheckbox').checked = (row[7] === "Planned");
+      document.getElementById('unplannedCheckbox').checked = (row[7] === "Unplanned");
+
+      // Crew Description
+      document.getElementById("crewDescriptionInput").value = row[8] || "";
+
+      // Image Type (dropdown)
+      const imgTypeSelect = document.getElementById("imgCharDropdown");
+      if (imgTypeSelect && row[9]) {
+        let found = false;
+        for (let i = 0; i < imgTypeSelect.options.length; i++) {
+          if (imgTypeSelect.options[i].text.trim().toLowerCase() === row[9].trim().toLowerCase()) {
+            imgTypeSelect.selectedIndex = i;
+            found = true;
+            break;
+          }
+        }
+        if (!found) imgTypeSelect.selectedIndex = 0;
+      }
+
+      // Target
+      document.getElementById("imgCharInput1").value = row[10] || "";
+
+      // Unit
+      document.getElementById("imgCharInput2").value = row[11] || "";
+    })
+    .catch(error => {
+      // Optionally handle error
+    });
+  }
+
+  // Back/Next button logic
+  function setupBackNextButtons() {
+    const backBtn = document.getElementById('backButton');
+    const nextBtn = document.getElementById('nextButton');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        if (imageCount > 1) {
+          imageCount--;
+          updateFooterImageCount();
+          clearAllInputs();
+          fetchAndPrefillRow(imageCount - 1);
+        }
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        imageCount++;
+        updateFooterImageCount();
+        clearAllInputs();
+        fetchAndPrefillRow(imageCount - 1);
+      });
+    }
+  }
+
+  // Only allow one checkbox to be checked at a time in container 2, box 1 and planned/unplanned
+  function setupExclusiveCheckboxesContainer2Box1() {
+    // EV1/EV2
+    const cb1 = document.getElementById('c2box1cb1');
+    const cb2 = document.getElementById('c2box1cb2');
+    if (cb1 && cb2) {
+      cb1.addEventListener('change', () => { if (cb1.checked) cb2.checked = false; });
+      cb2.addEventListener('change', () => { if (cb2.checked) cb1.checked = false; });
+    }
+    // Planned/Unplanned
+    const planned = document.getElementById('plannedCheckbox');
+    const unplanned = document.getElementById('unplannedCheckbox');
+    if (planned && unplanned) {
+      planned.addEventListener('change', () => { if (planned.checked) unplanned.checked = false; });
+      unplanned.addEventListener('change', () => { if (unplanned.checked) planned.checked = false; });
+    }
+  }
+
+  // Utility: flash input green then back to original color
+  function flashGreen(element) {
+    const origColor = element.style.color;
+    element.style.color = "#218838";
+    setTimeout(() => {
+      element.style.color = origColor || "#24292e";
+    }, 800);
+  }
+
+  // Utility: flash button green background then back to white
+  function flashButtonGreen(button) {
+    const origBg = button.style.background;
+    const origColor = button.style.color;
+    button.style.background = "#218838";
+    button.style.color = "#fff";
+    setTimeout(() => {
+      button.style.background = origBg || "";
+      button.style.color = origColor || "#fff";
+    }, 800);
+  }
+
+  // --- WRITE FUNCTIONS ---
+
+  // Write a value to a specific column (colIndex: 0-based, e.g. 0 = A, 1 = B, ...)
+  function writeToSheet2(rowIndex, colIndex, value) {
+    const colLetter = String.fromCharCode(65 + colIndex); // A, B, C, ...
+    const range = `${SHEET2_ID}!${colLetter}${rowIndex + 2}:${colLetter}${rowIndex + 2}`;
+    const values = [[value]];
+    return safeApiCall(() =>
+      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?valueInputOption=RAW`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${window.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ values }),
+      })
+      .then(response => {
+        if (!response.ok) throw response;
+        return response.json();
+      })
+    );
+  }
+
+  // --- EVENT HANDLERS FOR WRITING ---
+
+  function setupWriteHandlers() {
+    // Editable Name (col 0)
+    const editableName = document.getElementById("editableName");
+    editableName.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = editableName.value.trim();
+        writeToSheet2(imageCount - 1, 0, val).then(() => flashGreen(editableName));
+      }
+    });
+
+    // Crew Description (col 8)
+    const crewDesc = document.getElementById("crewDescriptionInput");
+    crewDesc.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = crewDesc.value.trim();
+        writeToSheet2(imageCount - 1, 8, val).then(() => flashGreen(crewDesc));
+      }
+    });
+
+    // Target (col 10)
+    const targetInput = document.getElementById("imgCharInput1");
+    targetInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = targetInput.value.trim();
+        writeToSheet2(imageCount - 1, 10, val).then(() => flashGreen(targetInput));
+      }
+    });
+
+    // Unit (col 11)
+    const unitInput = document.getElementById("imgCharInput2");
+    unitInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = unitInput.value.trim();
+        writeToSheet2(imageCount - 1, 11, val).then(() => flashGreen(unitInput));
+      }
+    });
+
+    // Image Type (col 9)
+    const imgTypeSelect = document.getElementById("imgCharDropdown");
+    imgTypeSelect.addEventListener("change", () => {
+      const val = imgTypeSelect.options[imgTypeSelect.selectedIndex].text;
+      writeToSheet2(imageCount - 1, 9, val).then(() => flashGreen(imgTypeSelect));
+    });
+
+    // EVA# (col 5)
+    const evaSelect = document.querySelector('.imaging-dropdown-row select');
+    evaSelect.addEventListener("change", () => {
+      const val = evaSelect.options[evaSelect.selectedIndex].text;
+      writeToSheet2(imageCount - 1, 5, val).then(() => flashGreen(evaSelect));
+    });
+
+    // Station (col 4)
+    const stationSelect = document.querySelectorAll('.imaging-dropdown-row select')[1];
+    stationSelect.addEventListener("change", () => {
+      const val = stationSelect.options[stationSelect.selectedIndex].text;
+      writeToSheet2(imageCount - 1, 4, val).then(() => flashGreen(stationSelect));
+    });
+
+    // EV1/EV2 (col 6)
+    const ev1 = document.getElementById('c2box1cb1');
+    const ev2 = document.getElementById('c2box1cb2');
+    ev1.addEventListener("change", () => {
+      if (ev1.checked) {
+        writeToSheet2(imageCount - 1, 6, "EV1").then(() => flashGreen(ev1.parentElement));
+      }
+    });
+    ev2.addEventListener("change", () => {
+      if (ev2.checked) {
+        writeToSheet2(imageCount - 1, 6, "EV2").then(() => flashGreen(ev2.parentElement));
+      }
+    });
+
+    // Planned/Unplanned (col 7)
+    const planned = document.getElementById('plannedCheckbox');
+    const unplanned = document.getElementById('unplannedCheckbox');
+    planned.addEventListener("change", () => {
+      if (planned.checked) {
+        writeToSheet2(imageCount - 1, 7, "Planned").then(() => flashGreen(planned.parentElement));
+      }
+    });
+    unplanned.addEventListener("change", () => {
+      if (unplanned.checked) {
+        writeToSheet2(imageCount - 1, 7, "Unplanned").then(() => flashGreen(unplanned.parentElement));
+      }
+    });
+
+    // Start/End Time buttons (col 2 and 3, only time)
+    const startBtn = document.getElementById('startTimeButton');
+    const endBtn = document.getElementById('endTimeButton');
+    if (startBtn) {
+      startBtn.addEventListener("click", () => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        writeToSheet2(imageCount - 1, 2, timeStr).then(() => flashButtonGreen(startBtn));
+      });
+    }
+    if (endBtn) {
+      endBtn.addEventListener("click", () => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        writeToSheet2(imageCount - 1, 3, timeStr).then(() => flashButtonGreen(endBtn));
+      });
+    }
+  }
+</script>
+</html>
+
