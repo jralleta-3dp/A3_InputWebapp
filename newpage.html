@@ -372,7 +372,7 @@
       align-items: center;
       gap: 10px;
       font-size: 1.2em;
-      font-weight: bold;
+      
       color: #24292e;
     }
     .checkbox-label input {
@@ -474,25 +474,27 @@
           <!-- Dropdown Group Box -->
           <div class="dropdown-group-box">
             <label class="dropdown-input">
-              <label for="Station">Station:</label>
-              <select id="Station" name="Station:">
-                <option value="" disabled selected>Station...</option>
-                <option value="Location 1">Station 1</option>
-                <option value="Location 2">Station 2</option>
-                <option value="Location 3">Station 3</option>
-                <option value="Location 4">Station 4</option>
-              </select>
-            </label>
-            <label class="dropdown-input">
               <label for ="EVAnumber">EVA #:</label>
               <select id="EVAnumber" name="EVA Number:">
                 <option value="" disabled selected>EVA...</option>
-                <option value="Location A">1</option>
-                <option value="Location B">2</option>
-                <option value="Location C">3</option>
-                <option value="Location D">4</option>
+                <option value="1">1</option>
+                <option value="1">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
               </select>
             </label>
+            <label class="dropdown-input">
+              <label for="Station">Station:</label>
+              <select id="Station" name="Station:">
+                <option value="" disabled selected>Station...</option>
+                <option value="Traverse">Traverse</option>
+                <option value="Station 1">Station 1</option>
+                <option value="Station 2">Station 2</option>
+                <option value="Station 3">Station 3</option>
+                <option value="Station 4">Station 4</option>
+              </select>
+            </label>
+            
           </div>
         
           <!-- Checkbox Group Box -->
@@ -517,7 +519,7 @@
           <div class="grid-3col">
             <!-- Row 1: Labels -->
             <label for="SampleType">Sample Type:</label>
-            <label for="Units">Units:</label>
+            <label for="Units">Unit:</label>
             <label for="Condition">Condition:</label>
         
             <!-- Row 2: Inputs -->
