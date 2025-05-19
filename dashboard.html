@@ -143,11 +143,98 @@
         padding: 16px 0;
       }
     }
+    /* Dark mode styles */
+    body.dark-mode {
+      background: #181c1f;
+      color: #e6e6e6;
+    }
+    .container.dark-mode {
+      background-color: #23272b;
+      border-color: #333c43;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.33);
+    }
+    .dashboard-title.dark-mode {
+      color: #e6e6e6;
+      text-shadow: none;
+    }
+    .dashboard-btn.dark-mode {
+      background: linear-gradient(90deg, #218838 60%, #2da44e 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.18), 0 1.5px 6px 0 rgba(33,136,56,0.18);
+    }
+    .dashboard-btn.dark-mode:hover, .dashboard-btn.dark-mode:focus {
+      background: linear-gradient(90deg, #2da44e 60%, #218838 100%);
+    }
+    .footer.dark-mode {
+      color: #b6bfc7;
+      border-top: 1px solid #333c43;
+      box-shadow: 0 -2px 8px rgba(44,162,78,0.10);
+    }
+    /* Dark mode toggle slider */
+    .dark-mode-toggle {
+      position: absolute;
+      top: 18px;
+      right: 32px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1em;
+      font-weight: 500;
+      color: #24292e;
+      user-select: none;
+    }
+    .dark-mode .dark-mode-toggle {
+      color: #e6e6e6;
+    }
+    .dark-mode-switch {
+      width: 38px;
+      height: 20px;
+      position: relative;
+      display: inline-block;
+    }
+    .dark-mode-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 20px;
+      transition: .3s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: .3s;
+    }
+    input:checked + .slider {
+      background-color: #218838;
+    }
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
   </style>
 </head>
 <body>
+  <div class="dark-mode-toggle">
+    <span>🌙</span>
+    <label class="dark-mode-switch">
+      <input type="checkbox" id="darkModeCheckbox">
+      <span class="slider"></span>
+    </label>
+  </div>
   <div class="container">
-    <div class="dashboard-title">J.A.N.K.I.E Dashboard</div>
+    <div class="dashboard-title">A3G Dashboard</div>
     <div class="dashboard-buttons">
         <button class="dashboard-btn" id="sampleDocBtn">Sample Documentarian</button>
         <button class="dashboard-btn" onclick="window.location.href='imaging.html'">Imaging</button>
@@ -158,6 +245,24 @@
     <div class="footer">J.A.N.K.I.E. 2025 by @jaredr</div>
   </div>
   <script>
+    // Dark mode logic
+    function setDarkMode(enabled) {
+      document.body.classList.toggle('dark-mode', enabled);
+      document.querySelectorAll('.container').forEach(el => el.classList.toggle('dark-mode', enabled));
+      document.querySelectorAll('.dashboard-title').forEach(el => el.classList.toggle('dark-mode', enabled));
+      document.querySelectorAll('.dashboard-btn').forEach(el => el.classList.toggle('dark-mode', enabled));
+      document.querySelectorAll('.footer').forEach(el => el.classList.toggle('dark-mode', enabled));
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      document.getElementById('darkModeCheckbox').checked = darkMode;
+      setDarkMode(darkMode);
+    });
+    document.getElementById('darkModeCheckbox').addEventListener('change', function() {
+      setDarkMode(this.checked);
+      localStorage.setItem('darkMode', this.checked);
+    });
+
     // On load, check for accessToken in localStorage
     window.onload = function() {
       const accessToken = localStorage.getItem('accessToken');
