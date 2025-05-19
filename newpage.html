@@ -1675,15 +1675,8 @@
         const startTimeDisplay = document.getElementById("startTimeDisplay");
         const endTimeDisplay = document.getElementById("endTimeDisplay");
         if (startTimeDisplay) {
-          const startVal = rowData[1] || "";
-          let timeOnly = "";
-          if (startVal) {
-            const d = new Date(startVal);
-            if (!isNaN(d)) {
-              timeOnly = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            }
-          }
-          startTimeDisplay.textContent = timeOnly ? `Start: ${timeOnly}` : "";
+          // Only clear the display, do not show start time on fetch
+          startTimeDisplay.textContent = "";
         }
         if (endTimeDisplay) {
           const endVal = rowData[3] || "";
