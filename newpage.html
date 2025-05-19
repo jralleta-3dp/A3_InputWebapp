@@ -122,7 +122,7 @@
         0 1.5px 6px 0 rgba(33,136,56,0.10);
       border: 1.5px solid #e1e4e8;
       padding: 18px 18px 14px 18px;
-      gap: 10px;
+      gap: 20px;
       display: flex;
       flex-direction: row;
       justify-content: left;
@@ -426,6 +426,29 @@
       letter-spacing: 0.5px;
       box-shadow: 0 -2px 8px rgba(44,162,78,0.04);
     }
+
+    .row-layout .button-box {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .row-layout .time-box {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .row-layout .button-time-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
     /* --- Responsive for mobile --- */
     @media (max-width: 900px) {
       .container {
@@ -456,18 +479,30 @@
 </head>
 <body>
     <div class="container">
+        <div class="section-header">Sampling</div>
         <!-- Button row, this should be a back and next arrow -->
         <div class="row-layout">
+          <button id="backButton" class="button">&#8592; Back</button>
           <!-- Label Box -->
+
           <div class="label-box">
             <input id="editableName" class="editable-name" type="text" placeholder="Enter Sample Name...." />
             <span id="entryNumber" class="entry-number"></span>
             <button id="addRowButton" class="button green-button">+</button>
           </div>
-          <button id="startTimeButton" class="button">Start Time</button>
-          <button id="endTimeButton" class="button">End Time</button>
-          <button id="backButton" class="button">&#8592; Back</button>
+          <div class="button-time-group">
+            <div class="button-box">
+              <button id="startTimeButton" class="button">Start Time</button>
+              <button id="endTimeButton" class="button">End Time</button>
+            </div>
+            <div class="time-box">
+              <div id="startTimeDisplay" style="font-size:0.9em;color:#57606a;margin-bottom:4px;"></div>
+              <div id="endTimeDisplay" style="font-size:0.9em;color:#57606a;margin-bottom:4px;"></div>
+            </div>
+          </div>
+          
           <button id="nextButton" class="button">Next &#8594;</button>
+          
         </div>
 
         <div class="second-row-layout">
@@ -1433,6 +1468,32 @@
         if (entryNumber) {
           entryNumber.innerText = `Entry #${count}`;
         }
+
+        // Start/End Time (B, D)
+        const startTimeDisplay = document.getElementById("startTimeDisplay");
+        const endTimeDisplay = document.getElementById("endTimeDisplay");
+        if (startTimeDisplay) {
+          const startVal = rowData[1] || "";
+          let timeOnly = "";
+          if (startVal) {
+            const d = new Date(startVal);
+            if (!isNaN(d)) {
+              timeOnly = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+          }
+          startTimeDisplay.textContent = timeOnly ? `Start: ${timeOnly}` : "";
+        }
+        if (endTimeDisplay) {
+          const endVal = rowData[3] || "";
+          let timeOnly = "";
+          if (endVal) {
+            const d = new Date(endVal);
+            if (!isNaN(d)) {
+              timeOnly = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+          }
+          endTimeDisplay.textContent = timeOnly ? `End: ${timeOnly}` : "";
+        }
       }
 
       let tokenClient;
@@ -1555,18 +1616,33 @@
         document.querySelectorAll('input[type="text"]').forEach(input => input.value = "");
         document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+        // Clear time displays
+        const startTimeDisplay = document.getElementById("startTimeDisplay");
+        const endTimeDisplay = document.getElementById("endTimeDisplay");
+        if (startTimeDisplay) startTimeDisplay.textContent = "";
+        if (endTimeDisplay) endTimeDisplay.textContent = "";
       }
 
       // Start Time Button Logic
       const startButton = document.getElementById("startTimeButton");
       startButton.addEventListener("click", () => {
-        safeApiCall(() => writeStartTime(count));
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        safeApiCall(() => writeStartTime(count)).then(() => {
+          const startTimeDisplay = document.getElementById("startTimeDisplay");
+          if (startTimeDisplay) startTimeDisplay.textContent = `Start: ${timeStr}`;
+        });
       });
 
       // End Time Button Logic
       const endButton = document.getElementById("endTimeButton");
       endButton.addEventListener("click", () => {
-        safeApiCall(() => writeEndTime(count));
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        safeApiCall(() => writeEndTime(count)).then(() => {
+          const endTimeDisplay = document.getElementById("endTimeDisplay");
+          if (endTimeDisplay) endTimeDisplay.textContent = `End: ${timeStr}`;
+        });
       });
 
       function insertRowBelow(targetRowIndex) {
@@ -1740,7 +1816,7 @@
                     console.error(`Failed to write ${event.target.id}:`, err);
                 });
             }
-        }
+               }
   
       window.onload = () => {
         if (!localStorage.getItem('accessToken')) {
