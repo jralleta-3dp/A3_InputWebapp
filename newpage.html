@@ -1709,8 +1709,20 @@
       const checkbox2 = document.getElementById('Unplanned');
 
       // Add event listeners to the checkboxes to ensure only one can be checked at a time
-      checkbox1.addEventListener('change', () => { if (checkbox1.checked) checkbox2.checked = false; });
-      checkbox2.addEventListener('change', () => { if (checkbox2.checked) checkbox1.checked = false; });
+      checkbox1.addEventListener('change', () => { 
+        if (checkbox1.checked) {
+          checkbox2.checked = false;
+          // Write label to sheet
+          safeApiCall(() => writeCheckboxToSheet('Planned', count));
+        }
+      });
+      checkbox2.addEventListener('change', () => { 
+        if (checkbox2.checked) {
+          checkbox1.checked = false;
+          // Write label to sheet
+          safeApiCall(() => writeCheckboxToSheet('Unplanned', count));
+        }
+      });
 
       // Function to initialize the token client
       // This function is called when the page loads to set up the token client.
@@ -1730,7 +1742,7 @@
         });
       }
   
-      // Function to refresh the access token
+      // // Function to refresh the access token
       // This function is called when the access token is expired or invalid.
       function refreshAccessToken(callback) {
         if (!tokenClient) {
