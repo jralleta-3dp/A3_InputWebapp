@@ -1504,7 +1504,7 @@
     }
 
       function fetchRowData(rowIndex) {
-        const range = `Sheet1!A${rowIndex + 2}:N${rowIndex + 2}`; // Adjust N to your last column
+        const range = `Sheet1!A${rowIndex + 2}:P${rowIndex + 2}`; // Adjust N to your last column
         return safeApiCall(() => {
           return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?majorDimension=ROWS`, {
             method: "GET",
@@ -1650,11 +1650,11 @@
         if (condition) {
           condition.value = rowData[7] || "";
         }
-        const station = document.getElementById("Station");
+        const station = document.getElementById("EVAnumber");
         if (station) {
           station.value = rowData[14] || "";
         }
-        const evaNumber = document.getElementById("EVAnumber");
+        const evaNumber = document.getElementById("Station");
         if (evaNumber) {
           evaNumber.value = rowData[15] || "";
         }
