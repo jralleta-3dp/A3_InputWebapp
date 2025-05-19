@@ -224,6 +224,8 @@
 
     let sheetData = [];
     let count = 1;
+    let lastTotalRows = 0; // Track previous total rows
+    let lastRowIds = []; // Store unique row IDs (e.g. timestamp or name) for change detection
 
     function updateCountDisplay() {
       document.getElementById('pageCount').textContent = count;
@@ -280,6 +282,12 @@
       }
     }
 
+    function getRowId(row) {
+      // Use a unique identifier for a row, fallback to JSON string if needed
+      // Prefer timestamp (col 1), or name (col 0), or full row string
+      return (row[0] || '') + '|' + (row[1] || '');
+    }
+
     function getTotalDataRows() {
       return sheetData.slice(1).filter(
         row => row && row.some(cell => cell && cell.trim() !== '')
@@ -291,9 +299,16 @@
       fetch(url)
         .then(res => res.json())
         .then(data => {
+          const oldTotal = getTotalDataRows();
           sheetData = data.values || [];
-          if (count >= sheetData.length) count = sheetData.length - 1;
-          displayRow(count);
+          const newTotal = getTotalDataRows();
+          if (newTotal > oldTotal) {
+            count = sheetData.length - 1;
+            displayRow(count);
+          } else {
+            if (count >= sheetData.length) count = sheetData.length - 1;
+            displayRow(count);
+          }
         })
         .catch(err => {
           console.error('Auto-refresh failed:', err);
@@ -310,8 +325,45 @@
         const data = await res.json();
         sheetData = data.values || [];
         count = 1;
+        lastTotalRows = getTotalDataRows();
+        lastRowIds = sheetData.map(getRowId);
         displayRow(count);
-        setInterval(autoRefreshCurrentRow, 10000);
+        setInterval(() => {
+          const prevRowIds = lastRowIds;
+          const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+          fetch(url)
+            .then(res => res.json())
+            .then(data => {
+              const oldTotal = lastTotalRows;
+              const oldRowIds = prevRowIds;
+              sheetData = data.values || [];
+              const newTotal = getTotalDataRows();
+              const newRowIds = sheetData.map(getRowId);
+
+              // Find the index of the new row (first row in newRowIds not in oldRowIds)
+              let newRowIdx = -1;
+              for (let i = 0; i < newRowIds.length; i++) {
+                if (!oldRowIds.includes(newRowIds[i]) && sheetData[i] && sheetData[i].some(cell => cell && cell.trim() !== '')) {
+                  newRowIdx = i;
+                  break;
+                }
+              }
+
+              if (newRowIdx !== -1) {
+                count = newRowIdx;
+                displayRow(count);
+              } else {
+                if (count >= sheetData.length) count = sheetData.length - 1;
+                displayRow(count);
+              }
+
+              lastTotalRows = newTotal;
+              lastRowIds = newRowIds;
+            })
+            .catch(err => {
+              console.error('Auto-refresh failed:', err);
+            });
+        }, 10000);
       } catch (err) {
         alert('Failed to fetch sheet data.');
         console.error(err);
