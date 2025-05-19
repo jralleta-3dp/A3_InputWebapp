@@ -476,6 +476,9 @@
       // If token is invalid, safeApiCall will handle GIS prompt or redirect
     });
 
+    // Start periodic token validity polling
+    startTokenValidityPolling();
+
     initializeImageNameAndEntry();
     updateFooterImageCount();
     setupBackNextButtons();
@@ -916,6 +919,27 @@
         writeToSheet2(imageCount - 1, 3, timeStr).then(() => flashButtonGreen(endBtn));
       });
     }
+  }
+
+  // Periodically check token validity every 30 seconds
+  function startTokenValidityPolling() {
+    setInterval(() => {
+      // Try a lightweight API call to check token validity
+      safeApiCall(() =>
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/" + SPREADSHEET_ID + "?fields=spreadsheetId", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${window.accessToken}`,
+          }
+        })
+        .then(res => {
+          if (!res.ok) throw res;
+          return res.json();
+        })
+      ).catch(() => {
+        // If token is invalid, safeApiCall will prompt sign-in or redirect
+      });
+    }, 30000); // 30 seconds
   }
 </script>
 </html>
