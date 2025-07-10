@@ -471,9 +471,29 @@
     }
     window.accessToken = accessToken;
 
+    // Initialize token client first
+    initTokenClient();
+
     // Check if token is valid, if not, prompt GIS sign in
-    safeApiCall(() => Promise.resolve()).catch(() => {
-      // If token is invalid, safeApiCall will handle GIS prompt or redirect
+    safeApiCall(() => 
+      fetch("https://sheets.googleapis.com/v4/spreadsheets/" + SPREADSHEET_ID + "?fields=spreadsheetId", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${window.accessToken}`,
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw res;
+        return res.json();
+      })
+    ).catch(() => {
+      // If token is invalid, prompt Google sign in
+      if (tokenClient) {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      } else {
+        alert("Authentication required. Redirecting to sign-in page.");
+        window.location.href = 'index.html';
+      }
     });
 
     // Start periodic token validity polling
@@ -483,8 +503,8 @@
     updateFooterImageCount();
     setupBackNextButtons();
     setupExclusiveCheckboxesContainer2Box1();
-    setupWriteHandlers(); // <-- Add this line
-    fetchAndPrefillRow(imageCount - 1); // Prefill on load
+    setupWriteHandlers();
+    fetchAndPrefillRow(imageCount - 1);
   };
 
   // GIS token management logic (from newpage.html)
