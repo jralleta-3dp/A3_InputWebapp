@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imaging</title>
+  <title>A2 Notation Prototype</title>
+  
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -37,6 +41,12 @@
       position: relative;
       z-index: 1;
     }
+    
+    /* Reduce padding for the second container */
+    .container:nth-child(2) {
+      padding: 16px 0px 38px 32px;
+    }
+    
     .container::before {
       content: "";
       position: absolute;
@@ -92,15 +102,15 @@
       justify-content: center;
       align-items: center;
       flex: 1 1 0;
-      background: #f6f8fa;
+      background: transparent;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(44, 162, 78, 0.07);
-      padding: 12px 0; /* Slightly increased from 2px 0 */
+      box-shadow: none;
+      padding: 12px 0;
       text-align: center;
       font-size: 1.1em;
       font-weight: 500;
       color: #218838;
-      border: 1.5px solid #e1e4e8;
+      border: none;
       min-width: 0;
       box-sizing: border-box;
       width: 100%;   /* Ensure all boxes take full width of their flex space */
@@ -273,7 +283,7 @@
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      gap: 32px;
+      gap: 48px;
       margin-top: 12px;
     }
     .dropdown-label {
@@ -320,30 +330,107 @@
       width: 32px;
       height: 32px;
     }
-    @media (max-width: 900px) {
-      .imaging-row {
-        flex-direction: column;
-        gap: 16px;
-      }
-      .imaging-box {
-        padding: 18px 0;
-        font-size: 1em;
-      }
-      .imaging-dropdown-row.large select.large {
-        width: 98vw;
-        min-width: 0;
-      }
+    /* Multi-select dropdown styles */
+    .multiselect {
+      position: relative;
+      display: inline-block;
+      width: 160px;
     }
+    
+    .multiselect-header {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 1em;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #24292e;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(44, 162, 78, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .multiselect-header:hover {
+      border-color: #2da44e;
+    }
+    
+    .multiselect-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #d0d7de;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 9999;
+      display: none;
+    }
+    
+    .multiselect-options.open {
+      display: block;
+    }
+    
+    .multiselect-option {
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    
+    .multiselect-option:hover {
+      background-color: #f6f8fa;
+    }
+    
+    .multiselect-option input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #2da44e;
+    }
+    
+    .dropdown-arrow {
+      font-size: 0.8em;
+      transition: transform 0.2s;
+    }
+    
+    .dropdown-arrow.open {
+      transform: rotate(180deg);
+    }
+    
+    /* Ensure containers don't interfere with dropdown */
+    .container {
+      /* ...existing code... */
+      z-index: 1;
+      position: relative;
+    }
+    
+    .container:nth-child(3) {
+      z-index: 0; /* Lower z-index for subsequent containers */
+    }
+    
+    .container:nth-child(4) {
+      z-index: 0;
+    }
+    
+    /* ...existing code... */
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="section-header">Imaging</div>
+    <div class="section-header">A2 Notation Prototype</div>
     <div class="imaging-row">
       <div class="imaging-box">
         <!-- Editable Name input from newpage.html -->
         <div class="imaging-name-row">
-          <input id="editableName" class="editable-name" type="text" placeholder="Enter Image Name..." />
+          <input id="editableName" class="editable-name" type="text" placeholder="Enter Notes Here Marie..." />
           <button id="addRowButton" class="button green-button plus-button">+</button>
         </div>
         <span id="entryNumber" class="entry-number"></span>
@@ -364,32 +451,51 @@
       <div class="imaging-box">
         <div class="imaging-dropdown-row">
           <label class="dropdown-label">
-            <span>EVA #:</span>
+            <span>Target:</span>
             <select>
               <option value="">Select...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
+              <option value="1">Target 1</option>
+              <option value="2">Target 2</option>
             </select>
           </label>
           <label class="dropdown-label">
-            <span>Station:</span>
-            <select>
-              <option value="">Select...</option>
-              <option value="Station 1">Station 1</option>
-              <option value="Station 2">Station 2</option>
-            </select>
+            <span>Science Theme(s):</span>
+            <div class="multiselect" id="scienceThemeSelect">
+              <div class="multiselect-header">
+                <span class="selected-text">Select themes...</span>
+                <span class="dropdown-arrow">▼</span>
+              </div>
+              <div class="multiselect-options">
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme1" value="Geology">
+                  <label for="theme1">Geology</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme2" value="Biology">
+                  <label for="theme2">Biology</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme3" value="Astrobiology">
+                  <label for="theme3">Astrobiology</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme4" value="Operations">
+                  <label for="theme4">Operations</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme5" value="Technology">
+                  <label for="theme5">Technology</label>
+                </div>
+              </div>
+            </div>
           </label>
         </div>
       </div>
       <div class="imaging-box">
         <div class="imaging-checkbox-row">
           <label class="checkbox-label">
-            <input type="checkbox" id="c2box1cb1" name="c2box1group" />
-            EV1
-          </label>
-          <label class="checkbox-label">
+            Something Funky?
             <input type="checkbox" id="c2box1cb2" name="c2box1group" />
-            EV2
           </label>
         </div>
       </div>
@@ -408,11 +514,11 @@
     </div>
   </div>
   <div class="container">
-    <div class="section-header">Crew Description</div>
+    <div class="section-header">Jeremy (Enter To Save)</div>
     <div style="display: flex; justify-content: center; width: 100%;">
       <input
         type="text"
-        id="crewDescriptionInput"
+        id="jeremyDescriptionInput"
         placeholder="Enter crew description..."
         style="
           width: 98%;
@@ -433,13 +539,88 @@
     </div>
   </div>
   <div class="container">
-    <div class="section-header">Image Characteristics</div>
+    <div class="section-header">Kristina (Enter To Save)</div>
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <input
+        type="text"
+        id="kristinaDescriptionInput"
+        placeholder="Enter crew description..."
+        style="
+          width: 98%;
+          padding: 14px 18px;
+          font-size: 1.13em;
+          border: 1.5px solid #d0d7de;
+          border-radius: 8px;
+          background: #f6f8fa;
+          color: #24292e;
+          box-shadow: 0 1px 4px rgba(44,162,78,0.06);
+          outline: none;
+          margin: 10px 0 8px 0;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        "
+        onfocus="this.style.borderColor='#2da44e';this.style.boxShadow='0 0 0 2px #2da44e33';"
+        onblur="this.style.borderColor='#d0d7de';this.style.boxShadow='0 1px 4px rgba(44,162,78,0.06)';"
+      />
+    </div>
+  </div>
+  <div class="container">
+    <div class="section-header">Name (Enter To Save)</div>
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <input
+        type="text"
+        id="nameDescriptionInput"
+        placeholder="Enter crew description..."
+        style="
+          width: 98%;
+          padding: 14px 18px;
+          font-size: 1.13em;
+          border: 1.5px solid #d0d7de;
+          border-radius: 8px;
+          background: #f6f8fa;
+          color: #24292e;
+          box-shadow: 0 1px 4px rgba(44,162,78,0.06);
+          outline: none;
+          margin: 10px 0 8px 0;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        "
+        onfocus="this.style.borderColor='#2da44e';this.style.boxShadow='0 0 0 2px #2da44e33';"
+        onblur="this.style.borderColor='#d0d7de';this.style.boxShadow='0 1px 4px rgba(44,162,78,0.06)';"
+      />
+    </div>
+  </div>
+  <div class="container">
+    <div class="section-header">Other Name (Enter To Save)</div>
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <input
+        type="text"
+        id="otherNameDescriptionInput"
+        placeholder="Enter crew description..."
+        style="
+          width: 98%;
+          padding: 14px 18px;
+          font-size: 1.13em;
+          border: 1.5px solid #d0d7de;
+          border-radius: 8px;
+          background: #f6f8fa;
+          color: #24292e;
+          box-shadow: 0 1px 4px rgba(44,162,78,0.06);
+          outline: none;
+          margin: 10px 0 8px 0;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        "
+        onfocus="this.style.borderColor='#2da44e';this.style.boxShadow='0 0 0 2px #2da44e33';"
+        onblur="this.style.borderColor='#d0d7de';this.style.boxShadow='0 1px 4px rgba(44,162,78,0.06)';"
+      />
+    </div>
+  </div>
+  <div class="container">
+    <div class="section-header">Observation Characteristics</div>
     <div style="display: flex; justify-content: center; width: 100%;">
       <div style="display: flex; width: 98%; gap: 50px; justify-content: space-between;">
         <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
-          <label for="imgCharDropdown" style="font-weight: 500; margin-bottom: 6px; color: #24292e;">Image Type:</label>
+          <label for="imgCharDropdown" style="font-weight: 500; margin-bottom: 6px; color: #24292e;">Other Observer(s):</label>
           <select id="imgCharDropdown" style="width: 100%; padding: 10px 12px; border: 1.5px solid #d0d7de; border-radius: 8px; background: #f6f8fa; font-size: 1em; color: #24292e;">
-            <option value="">Select Image Type...</option>
+            <option value="">Select other Observer(s)...</option>
             <option value="OptionA">Option A</option>
             <option value="OptionB">Option B</option>
             <option value="OptionC">Option C</option>
@@ -462,40 +643,150 @@
   // Google Sheet ID (same as newpage.html)
   const SPREADSHEET_ID = '1efR88nP511yGEPgjsR9KcT0nE2TQImzuxyYYZ6uUKGo'; 
 
-  // On page load, ensure GIS token is present (from dashboard)
+  // On page load, clear token and prompt fresh Google sign in
   window.onload = function() {
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-      window.location.href = "index.html";
-      return;
-    }
-    window.accessToken = accessToken;
+    // Clear any existing token from localStorage
+    localStorage.removeItem('accessToken');
+    window.accessToken = null;
 
-    // Initialize token client first
+    // Initialize Google Identity Services
     initTokenClient();
 
-    // Check if token is valid, if not, prompt GIS sign in
-    safeApiCall(() => 
-      fetch("https://sheets.googleapis.com/v4/spreadsheets/" + SPREADSHEET_ID + "?fields=spreadsheetId", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${window.accessToken}`,
+    // Immediately prompt for Google sign-in
+    if (tokenClient) {
+      tokenClient.requestAccessToken({ prompt: 'consent' });
+    } else {
+      // If GIS not loaded yet, wait a bit and try again
+      setTimeout(() => {
+        initTokenClient();
+        if (tokenClient) {
+          tokenClient.requestAccessToken({ prompt: 'consent' });
+        } else {
+          alert("Google Sign-In failed to load. Please refresh the page.");
         }
-      })
-      .then(res => {
-        if (!res.ok) throw res;
-        return res.json();
-      })
-    ).catch(() => {
-      // If token is invalid, prompt Google sign in
-      if (tokenClient) {
-        tokenClient.requestAccessToken({ prompt: 'consent' });
+      }, 1000);
+    }
+  };
+
+  // GIS token management logic
+  let tokenClient;
+  const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
+
+  function initTokenClient() {
+    if (typeof google !== 'undefined' && google.accounts) {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/spreadsheets',
+        callback: (tokenResponse) => {
+          if (tokenResponse.access_token) {
+            window.accessToken = tokenResponse.access_token;
+            localStorage.setItem('accessToken', tokenResponse.access_token);
+            console.log("Successfully signed in with Google");
+            
+            // Initialize the page after successful sign-in
+            initializePage();
+          } else {
+            alert("Google sign-in failed. Please try again.");
+            window.location.href = 'index.html';
+          }
+        }
+      });
+    }
+  }
+
+  // Multi-select dropdown functionality
+  function setupMultiSelect() {
+    const multiselect = document.getElementById('scienceThemeSelect');
+    const header = multiselect.querySelector('.multiselect-header');
+    const options = multiselect.querySelector('.multiselect-options');
+    const arrow = multiselect.querySelector('.dropdown-arrow');
+    const selectedText = multiselect.querySelector('.selected-text');
+    const checkboxes = multiselect.querySelectorAll('input[type="checkbox"]');
+    
+    let selectedThemes = [];
+    let userInteracted = false;
+
+    // Toggle dropdown
+    header.addEventListener('click', () => {
+      options.classList.toggle('open');
+      arrow.classList.toggle('open');
+    });
+
+    // Update selected text display only
+    function updateSelectedText() {
+      if (selectedThemes.length === 0) {
+        selectedText.textContent = 'Select themes...';
+      } else if (selectedThemes.length === 1) {
+        selectedText.textContent = selectedThemes[0];
       } else {
-        alert("Authentication required. Redirecting to sign-in page.");
-        window.location.href = 'index.html';
+        selectedText.textContent = `${selectedThemes.length} themes selected`;
+      }
+    }
+
+    // Handle checkbox changes
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        userInteracted = true;
+        const value = checkbox.value;
+        
+        if (checkbox.checked) {
+          // Add to list if not already present
+          if (!selectedThemes.includes(value)) {
+            selectedThemes.push(value);
+          }
+        } else {
+          // Remove from list
+          selectedThemes = selectedThemes.filter(theme => theme !== value);
+        }
+        
+        updateSelectedText();
+      });
+    });
+
+    // Write to sheet when clicking outside (only if user interacted)
+    document.addEventListener('click', (e) => {
+      if (!multiselect.contains(e.target)) {
+        // Close dropdown
+        options.classList.remove('open');
+        arrow.classList.remove('open');
+        
+        // Write to sheet only if user interacted with checkboxes
+        if (userInteracted) {
+          const selectedString = selectedThemes.join(', ');
+          writeToSheet2(imageCount - 1, 13, selectedString).then(() => {
+            flashGreen(multiselect);
+          }).catch(err => {
+            console.error('Failed to write themes to sheet:', err);
+          });
+          userInteracted = false; // Reset interaction flag
+        }
       }
     });
 
+    // Public method to set themes programmatically (for prefilling)
+    multiselect.setThemes = function(themes) {
+      selectedThemes = themes.slice(); // Copy array
+      
+      // Clear all checkboxes first
+      checkboxes.forEach(cb => cb.checked = false);
+      
+      // Check the ones that match
+      themes.forEach(theme => {
+        const checkbox = Array.from(checkboxes).find(cb => cb.value === theme);
+        if (checkbox) checkbox.checked = true;
+      });
+      
+      updateSelectedText();
+    };
+
+    // Public method to get current themes
+    multiselect.getThemes = function() {
+      return selectedThemes.slice(); // Return copy of array
+    };
+  }
+
+  // Initialize page components after successful authentication
+  function initializePage() {
     // Start periodic token validity polling
     startTokenValidityPolling();
 
@@ -503,32 +794,12 @@
     updateFooterImageCount();
     setupBackNextButtons();
     setupExclusiveCheckboxesContainer2Box1();
+    setupMultiSelect(); // Add this line
     setupWriteHandlers();
     fetchAndPrefillRow(imageCount - 1);
-  };
-
-  // GIS token management logic (from newpage.html)
-  let tokenClient;
-  const CLIENT_ID = '263288053429-39j61v5mij7mhrtqg9peqov1i33nedc6.apps.googleusercontent.com';
-
-  function initTokenClient() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: 'https://www.googleapis.com/auth/spreadsheets',
-      callback: (tokenResponse) => {
-        if (tokenResponse.access_token) {
-          window.accessToken = tokenResponse.access_token;
-          localStorage.setItem('accessToken', tokenResponse.access_token);
-          window.location.reload();
-        } else {
-          alert("Session expired. Please sign in again.");
-          localStorage.removeItem('accessToken');
-          window.location.href = 'index.html';
-        }
-      }
-    });
   }
 
+  // Refresh access token
   function refreshAccessToken(callback) {
     if (!tokenClient) {
       alert("Session expired. Please sign in again.");
@@ -539,7 +810,7 @@
       if (tokenResponse.access_token) {
         window.accessToken = tokenResponse.access_token;
         localStorage.setItem('accessToken', tokenResponse.access_token);
-        window.location.reload();
+        if (callback) callback();
       } else {
         alert("Session expired. Please sign in again.");
         localStorage.removeItem('accessToken');
@@ -552,24 +823,17 @@
   // Safe API call wrapper
   function safeApiCall(apiFunction) {
     if (!window.accessToken) {
-      if (!tokenClient) initTokenClient();
       return new Promise((resolve, reject) => {
-        tokenClient.callback = (tokenResponse) => {
-          if (tokenResponse.access_token) {
-            window.accessToken = tokenResponse.access_token;
-            localStorage.setItem('accessToken', tokenResponse.access_token);
-            apiFunction().then(resolve).catch(reject);
-          } else {
-            alert("Sign-in required. Please sign in to continue.");
-            reject("No access token");
-          }
-        };
-        tokenClient.requestAccessToken({ prompt: 'consent' });
+        if (tokenClient) {
+          tokenClient.requestAccessToken({ prompt: 'consent' });
+        } else {
+          alert("Sign-in required. Please refresh the page.");
+          reject("No access token");
+        }
       });
     }
     return apiFunction().catch(err => {
       if (err?.status === 401 || (err?.message && err.message.includes('401'))) {
-        if (!tokenClient) initTokenClient();
         return new Promise((resolve, reject) => {
           refreshAccessToken(() => {
             apiFunction().then(resolve).catch(reject);
@@ -658,6 +922,12 @@
     document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
     // Clear all checkboxes
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    
+    // Clear multi-select dropdown
+    const multiselect = document.getElementById('scienceThemeSelect');
+    if (multiselect && multiselect.setThemes) {
+      multiselect.setThemes([]);
+    }
   }
 
   // Fetch and pre-fill information from the spreadsheet for the given rowIndex (0-based)
@@ -666,7 +936,7 @@
   }
 
   function doPrefillRow(rowIndex) {
-    const range = `${SHEET2_ID}!A${rowIndex + 2}:L${rowIndex + 2}`;
+    const range = `${SHEET2_ID}!A${rowIndex + 2}:Q${rowIndex + 2}`; // Extended to column Q
     return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}`, {
       headers: {
         "Authorization": `Bearer ${window.accessToken}`,
@@ -678,57 +948,46 @@
     })
     .then(data => {
       const row = (data.values && data.values[0]) ? data.values[0] : [];
-      // Column mapping (0-based):
-      // 0: editable name, 4: station, 5: EVA#, 6: EV1/EV2, 7: Planned/Unplanned, 8: Crew desc, 9: Image type, 10: Target, 11: Unit
+
+      // Updated Column mapping (0-based):
+      // 0: Name, 1: Start Time, 2: End Time, 3: Target, 4: Planned/Unplanned, 5: Something Funky, 6: Jeremy, 7: Kristina, 8: Name, 9: Other Name, 10: Other Observers, 11: Image Target, 12: Unit, 13: Science Themes
 
       // Editable name
       document.getElementById("editableName").value = row[0] || "";
 
-      // EVA# (dropdown 1)
-      const evaSelect = document.querySelector('.imaging-dropdown-row select');
-      if (evaSelect && row[5]) {
+      // Target (dropdown 1)
+      const targetSelect = document.querySelector('.imaging-dropdown-row select');
+      if (targetSelect && row[3]) {
         let found = false;
-        for (let i = 0; i < evaSelect.options.length; i++) {
-          if (evaSelect.options[i].text.trim().toLowerCase() === row[5].trim().toLowerCase()) {
-            evaSelect.selectedIndex = i;
+        for (let i = 0; i < targetSelect.options.length; i++) {
+          if (targetSelect.options[i].value === row[3]) {
+            targetSelect.selectedIndex = i;
             found = true;
             break;
           }
         }
-        if (!found) evaSelect.selectedIndex = 0;
+        if (!found) targetSelect.selectedIndex = 0;
       }
 
-      // Station (dropdown 2)
-      const stationSelect = document.querySelectorAll('.imaging-dropdown-row select')[1];
-      if (stationSelect && row[4]) {
-        let found = false;
-        for (let i = 0; i < stationSelect.options.length; i++) {
-          if (stationSelect.options[i].text.trim().toLowerCase() === row[4].trim().toLowerCase()) {
-            stationSelect.selectedIndex = i;
-            found = true;
-            break;
-          }
-        }
-        if (!found) stationSelect.selectedIndex = 0;
-      }
+      // Something Funky checkbox
+      document.getElementById('c2box1cb2').checked = (row[5] === "YES");
 
-      // EV1/EV2
-      document.getElementById('c2box1cb1').checked = (row[6] === "EV1");
-      document.getElementById('c2box1cb2').checked = (row[6] === "EV2");
+      // Planned/Unplanned
+      document.getElementById('plannedCheckbox').checked = (row[4] === "Planned");
+      document.getElementById('unplannedCheckbox').checked = (row[4] === "Unplanned");
 
-      // Planned/Unplanned (now using unique IDs)
-      document.getElementById('plannedCheckbox').checked = (row[7] === "Planned");
-      document.getElementById('unplannedCheckbox').checked = (row[7] === "Unplanned");
+      // Crew Description inputs with corrected column mapping
+      document.getElementById("jeremyDescriptionInput").value = row[6] || "";
+      document.getElementById("kristinaDescriptionInput").value = row[7] || "";
+      document.getElementById("nameDescriptionInput").value = row[8] || "";
+      document.getElementById("otherNameDescriptionInput").value = row[9] || "";
 
-      // Crew Description
-      document.getElementById("crewDescriptionInput").value = row[8] || "";
-
-      // Image Type (dropdown)
+      // Image Type dropdown
       const imgTypeSelect = document.getElementById("imgCharDropdown");
-      if (imgTypeSelect && row[9]) {
+      if (imgTypeSelect && row[10]) {
         let found = false;
         for (let i = 0; i < imgTypeSelect.options.length; i++) {
-          if (imgTypeSelect.options[i].text.trim().toLowerCase() === row[9].trim().toLowerCase()) {
+          if (imgTypeSelect.options[i].value === row[10]) {
             imgTypeSelect.selectedIndex = i;
             found = true;
             break;
@@ -737,14 +996,24 @@
         if (!found) imgTypeSelect.selectedIndex = 0;
       }
 
-      // Target
-      document.getElementById("imgCharInput1").value = row[10] || "";
+      // Image Target
+      document.getElementById("imgCharInput1").value = row[11] || "";
 
       // Unit
-      document.getElementById("imgCharInput2").value = row[11] || "";
+      document.getElementById("imgCharInput2").value = row[12] || "";
+
+      // Science Themes (col 13) - handle multi-select
+      const scienceThemes = row[13] || "";
+      const selectedThemes = scienceThemes.split(', ').filter(theme => theme.trim());
+      const multiselect = document.getElementById('scienceThemeSelect');
+      
+      // Use the public method to set themes
+      if (multiselect && multiselect.setThemes) {
+        multiselect.setThemes(selectedThemes);
+      }
     })
     .catch(error => {
-      // Optionally handle error
+      console.error("Failed to fetch row data:", error);
     });
   }
 
@@ -835,7 +1104,6 @@
   }
 
   // --- EVENT HANDLERS FOR WRITING ---
-
   function setupWriteHandlers() {
     // Editable Name (col 0)
     const editableName = document.getElementById("editableName");
@@ -846,99 +1114,129 @@
       }
     });
 
-    // Crew Description (col 8)
-    const crewDesc = document.getElementById("crewDescriptionInput");
-    crewDesc.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.keyCode === 13) {
-        const val = crewDesc.value.trim();
-        writeToSheet2(imageCount - 1, 8, val).then(() => flashGreen(crewDesc));
-      }
-    });
-
-    // Target (col 10)
-    const targetInput = document.getElementById("imgCharInput1");
-    targetInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.keyCode === 13) {
-        const val = targetInput.value.trim();
-        writeToSheet2(imageCount - 1, 10, val).then(() => flashGreen(targetInput));
-      }
-    });
-
-    // Unit (col 11)
-    const unitInput = document.getElementById("imgCharInput2");
-    unitInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.keyCode === 13) {
-        const val = unitInput.value.trim();
-        writeToSheet2(imageCount - 1, 11, val).then(() => flashGreen(unitInput));
-      }
-    });
-
-    // Image Type (col 9)
-    const imgTypeSelect = document.getElementById("imgCharDropdown");
-    imgTypeSelect.addEventListener("change", () => {
-      const val = imgTypeSelect.options[imgTypeSelect.selectedIndex].text;
-      writeToSheet2(imageCount - 1, 9, val).then(() => flashGreen(imgTypeSelect));
-    });
-
-    // EVA# (col 5)
-    const evaSelect = document.querySelector('.imaging-dropdown-row select');
-    evaSelect.addEventListener("change", () => {
-      const val = evaSelect.options[evaSelect.selectedIndex].text;
-      writeToSheet2(imageCount - 1, 5, val).then(() => flashGreen(evaSelect));
-    });
-
-    // Station (col 4)
-    const stationSelect = document.querySelectorAll('.imaging-dropdown-row select')[1];
-    stationSelect.addEventListener("change", () => {
-      const val = stationSelect.options[stationSelect.selectedIndex].text;
-      writeToSheet2(imageCount - 1, 4, val).then(() => flashGreen(stationSelect));
-    });
-
-    // EV1/EV2 (col 6)
-    const ev1 = document.getElementById('c2box1cb1');
-    const ev2 = document.getElementById('c2box1cb2');
-    ev1.addEventListener("change", () => {
-      if (ev1.checked) {
-        writeToSheet2(imageCount - 1, 6, "EV1").then(() => flashGreen(ev1.parentElement));
-      }
-    });
-    ev2.addEventListener("change", () => {
-      if (ev2.checked) {
-        writeToSheet2(imageCount - 1, 6, "EV2").then(() => flashGreen(ev2.parentElement));
-      }
-    });
-
-    // Planned/Unplanned (col 7)
-    const planned = document.getElementById('plannedCheckbox');
-    const unplanned = document.getElementById('unplannedCheckbox');
-    planned.addEventListener("change", () => {
-      if (planned.checked) {
-        writeToSheet2(imageCount - 1, 7, "Planned").then(() => flashGreen(planned.parentElement));
-      }
-    });
-    unplanned.addEventListener("change", () => {
-      if (unplanned.checked) {
-        writeToSheet2(imageCount - 1, 7, "Unplanned").then(() => flashGreen(unplanned.parentElement));
-      }
-    });
-
-    // Start/End Time buttons (col 2 and 3, only time)
+    // Start/End Time buttons (col 1 and 2)
     const startBtn = document.getElementById('startTimeButton');
     const endBtn = document.getElementById('endTimeButton');
     if (startBtn) {
       startBtn.addEventListener("click", () => {
         const now = new Date();
         const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        writeToSheet2(imageCount - 1, 2, timeStr).then(() => flashButtonGreen(startBtn));
+        writeToSheet2(imageCount - 1, 1, timeStr).then(() => flashButtonGreen(startBtn));
       });
     }
     if (endBtn) {
       endBtn.addEventListener("click", () => {
         const now = new Date();
         const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        writeToSheet2(imageCount - 1, 3, timeStr).then(() => flashButtonGreen(endBtn));
+        writeToSheet2(imageCount - 1, 2, timeStr).then(() => flashButtonGreen(endBtn));
       });
     }
+
+    // Target dropdown (col 3)
+    const targetSelect = document.querySelector('.imaging-dropdown-row select');
+    targetSelect.addEventListener("change", () => {
+      const val = targetSelect.value;
+      if (val) {
+        writeToSheet2(imageCount - 1, 3, val).then(() => flashGreen(targetSelect));
+      }
+    });
+
+    // Planned/Unplanned (col 4)
+    const planned = document.getElementById('plannedCheckbox');
+    const unplanned = document.getElementById('unplannedCheckbox');
+    planned.addEventListener("change", () => {
+      if (planned.checked) {
+        writeToSheet2(imageCount - 1, 4, "Planned").then(() => flashGreen(planned.parentElement));
+      }
+    });
+    unplanned.addEventListener("change", () => {
+      if (unplanned.checked) {
+        writeToSheet2(imageCount - 1, 4, "Unplanned").then(() => flashGreen(unplanned.parentElement));
+      }
+    });
+
+    // Something Funky (col 5)
+    const funkyCheckbox = document.getElementById('c2box1cb2');
+    funkyCheckbox.addEventListener("change", () => {
+      const val = funkyCheckbox.checked ? "YES" : "";
+      writeToSheet2(imageCount - 1, 5, val).then(() => flashGreen(funkyCheckbox.parentElement));
+    });
+
+    // Jeremy Description (col 6)
+    const jeremyDesc = document.getElementById("jeremyDescriptionInput");
+    jeremyDesc.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = jeremyDesc.value.trim();
+        writeToSheet2(imageCount - 1, 6, val).then(() => flashGreen(jeremyDesc));
+      }
+    });
+
+    // Kristina Description (col 7)
+    const kristinaDesc = document.getElementById("kristinaDescriptionInput");
+    kristinaDesc.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = kristinaDesc.value.trim();
+        writeToSheet2(imageCount - 1, 7, val).then(() => flashGreen(kristinaDesc));
+      }
+    });
+
+    // Name Description (col 8)
+    const nameDesc = document.getElementById("nameDescriptionInput");
+    nameDesc.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = nameDesc.value.trim();
+        writeToSheet2(imageCount - 1, 8, val).then(() => flashGreen(nameDesc));
+      }
+    });
+
+    // Other Name Description (col 9)
+    const otherNameDesc = document.getElementById("otherNameDescriptionInput");
+    otherNameDesc.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = otherNameDesc.value.trim();
+        writeToSheet2(imageCount - 1, 9, val).then(() => flashGreen(otherNameDesc));
+      }
+    });
+
+    // Other Observers (col 10)
+    const imgTypeSelect = document.getElementById("imgCharDropdown");
+    imgTypeSelect.addEventListener("change", () => {
+      const val = imgTypeSelect.value;
+      if (val) {
+        writeToSheet2(imageCount - 1, 10, val).then(() => flashGreen(imgTypeSelect));
+      }
+    });
+
+    // Image Target (col 11)
+    const targetInput = document.getElementById("imgCharInput1");
+    targetInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = targetInput.value.trim();
+        writeToSheet2(imageCount - 1, 11, val).then(() => flashGreen(targetInput));
+      }
+    });
+
+    // Unit (col 12)
+    const unitInput = document.getElementById("imgCharInput2");
+    unitInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.keyCode === 13) {
+        const val = unitInput.value.trim();
+        writeToSheet2(imageCount - 1, 12, val).then(() => flashGreen(unitInput));
+      }
+    });
+    // Write to sheet when clicking outside (only if user interacted) col 13
+    document.addEventListener('click', (e) => {
+      if (!multiselect.contains(e.target)) {
+        // ...existing code...
+        if (userInteracted) {
+          const selectedString = selectedThemes.join(', ');
+          writeToSheet2(imageCount - 1, 13, selectedString).then(() => {  // <-- Column 13
+            flashGreen(multiselect);
+          })
+          // ...existing code...
+        }
+      }
+    });
   }
 
   // Periodically check token validity every 30 seconds
@@ -957,10 +1255,29 @@
           return res.json();
         })
       ).catch(() => {
-        // If token is invalid, safeApiCall will prompt sign-in or redirect
+        // If token is invalid, safeApiCall will handle refresh
       });
     }, 30000); // 30 seconds
   }
+    setInterval(() => {
+      // Try a lightweight API call to check token validity
+      safeApiCall(() =>
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/" + SPREADSHEET_ID + "?fields=spreadsheetId", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${window.accessToken}`,
+          }
+        })
+        .then(res => {
+          if (!res.ok) throw res;
+          return res.json();
+        })
+      ).catch(() => {
+        // If token is invalid, safeApiCall will handle refresh
+      });
+    }, 30000); // 30 seconds
+</script>
+</html>
 </script>
 </html>
 
