@@ -371,6 +371,8 @@
       overflow-y: auto;
       z-index: 9999;
       display: none;
+      width: 300px;
+      min-width: 260px;
     }
     
     .multiselect-options.open {
@@ -436,10 +438,6 @@
         <span id="entryNumber" class="entry-number"></span>
       </div>
       <div class="imaging-box buttons-horizontal">
-        <button class="button green-button" id="startTimeButton">Start Time</button>
-        <button class="button green-button" id="endTimeButton">End Time</button>
-      </div>
-      <div class="imaging-box buttons-horizontal">
         <button class="button green-button" id="backButton">&#8592; Back</button>
         <button class="button green-button" id="nextButton">Next &#8594;</button>
       </div>
@@ -454,8 +452,8 @@
             <span>Target:</span>
             <select>
               <option value="">Select...</option>
-              <option value="1">Target 1</option>
-              <option value="2">Target 2</option>
+              <option value="1">Hi Marie</option>
+              <option value="2">Don't use this yet lol!</option>
             </select>
           </label>
           <label class="dropdown-label">
@@ -467,24 +465,44 @@
               </div>
               <div class="multiselect-options">
                 <div class="multiselect-option">
-                  <input type="checkbox" id="theme1" value="Geology">
-                  <label for="theme1">Geology</label>
+                  <input type="checkbox" id="theme1" value="1. Impact History">
+                  <label for="theme1">1. Impact History</label>
                 </div>
                 <div class="multiselect-option">
-                  <input type="checkbox" id="theme2" value="Biology">
-                  <label for="theme2">Biology</label>
+                  <input type="checkbox" id="theme2" value="2. Impact Flashes">
+                  <label for="theme2">2. Impact Flashes</label>
                 </div>
                 <div class="multiselect-option">
-                  <input type="checkbox" id="theme3" value="Astrobiology">
-                  <label for="theme3">Astrobiology</label>
+                  <input type="checkbox" id="theme3" value="3. Volcanic History">
+                  <label for="theme3">3. Volcanic History</label>
                 </div>
                 <div class="multiselect-option">
-                  <input type="checkbox" id="theme4" value="Operations">
-                  <label for="theme4">Operations</label>
+                  <input type="checkbox" id="theme4" value="4. Tectonics">
+                  <label for="theme4">4. Tectonics</label>
                 </div>
                 <div class="multiselect-option">
-                  <input type="checkbox" id="theme5" value="Technology">
-                  <label for="theme5">Technology</label>
+                  <input type="checkbox" id="theme5" value="5. Color Provinces and Albedo">
+                  <label for="theme5">5. Color Provinces and Albedo</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme6" value="6. Dust, Exosphere, and Deep Space">
+                  <label for="theme6">6. Dust, Exosphere, and Deep Space</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme7" value="7. Earth Observations">
+                  <label for="theme7">7. Earth Observations</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme8" value="8. Limb and Terminator">
+                  <label for="theme8">8. Limb and Terminator</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme9" value="9. Landing Sites and Poles">
+                  <label for="theme9">9. Landing Sites and Poles</label>
+                </div>
+                <div class="multiselect-option">
+                  <input type="checkbox" id="theme10" value="10. Photometric Observations">
+                  <label for="theme10">10. Photometric Observations</label>
                 </div>
               </div>
             </div>
@@ -1224,19 +1242,28 @@
         writeToSheet2(imageCount - 1, 12, val).then(() => flashGreen(unitInput));
       }
     });
-    // Write to sheet when clicking outside (only if user interacted) col 13
-    document.addEventListener('click', (e) => {
-      if (!multiselect.contains(e.target)) {
-        // ...existing code...
-        if (userInteracted) {
-          const selectedString = selectedThemes.join(', ');
-          writeToSheet2(imageCount - 1, 13, selectedString).then(() => {  // <-- Column 13
-            flashGreen(multiselect);
-          })
-          // ...existing code...
+
+    // Multi-select themes handling (col 13) - moved inside setupWriteHandlers
+    const multiselect = document.getElementById('scienceThemeSelect');
+    if (multiselect) {
+      // Write to sheet when clicking outside (only if user interacted) col 13
+      document.addEventListener('click', (e) => {
+        if (!multiselect.contains(e.target)) {
+          // Get current themes if the multiselect is set up
+          if (multiselect.getThemes) {
+            const selectedString = multiselect.getThemes().join(', ');
+            if (selectedString !== multiselect.lastSavedValue) {
+              writeToSheet2(imageCount - 1, 13, selectedString).then(() => {
+                flashGreen(multiselect);
+                multiselect.lastSavedValue = selectedString;
+              }).catch(err => {
+                console.error('Failed to write themes to sheet:', err);
+              });
+            }
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   // Periodically check token validity every 30 seconds
@@ -1276,6 +1303,8 @@
         // If token is invalid, safeApiCall will handle refresh
       });
     }, 30000); // 30 seconds
+</script>
+</html>
 </script>
 </html>
 </script>
