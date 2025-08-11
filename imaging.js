@@ -105,7 +105,7 @@ function refreshAccessToken(callback) {
 function updateFooterImageCount() {
   const footer = document.getElementById('footerImageCount');
   if (footer) {
-    footer.textContent = `#${imageCount}`;
+    footer.textContent = `Image: ${imageCount}`;
   }
   
   const entryNumber = document.getElementById('entryNumber');
@@ -124,7 +124,6 @@ function setupBackNextButtons() {
       if (imageCount > 1) {
         imageCount--;
         updateFooterImageCount();
-        clearAllInputs();
         fetchAndPrefillRow(imageCount - 1);
       }
     });
@@ -134,7 +133,6 @@ function setupBackNextButtons() {
     nextBtn.addEventListener('click', () => {
       imageCount++;
       updateFooterImageCount();
-      clearAllInputs();
       fetchAndPrefillRow(imageCount - 1);
     });
   }
@@ -591,4 +589,126 @@ function setupWriteHandlers() {
       }
     });
   }
+
+  // Plus button handler for inserting a new row
+  const addRowButton = document.getElementById("addRowButton");
+  if (addRowButton) {
+    addRowButton.addEventListener("click", () => {
+      console.log("Plus button clicked, current imageCount:", imageCount); // Debugging log
+      // Insert below current row (imageCount instead of imageCount - 1)
+      insertRowBelow(imageCount).then(() => {
+        // Increment imageCount to move to the newly inserted row
+        imageCount++;
+        updateFooterImageCount();
+        
+        // Clear all inputs for the new row
+        clearAllInputs();
+        
+        // Fetch and display the new empty row data
+        fetchAndPrefillRow(imageCount - 1);
+        
+        // Visual feedback
+        flashGreen(addRowButton);
+        console.log("Row inserted successfully and moved to new row!");
+      }).catch(error => {
+        console.error("Error inserting row:", error);
+        
+        // Show user-friendly error message
+        const errorMsg = error.message || "Failed to insert row";
+        alert(`Error: ${errorMsg}`);
+        
+        // Flash red on error
+        flashRed(addRowButton);
+      });
+    });
+  }
 }
+
+// Helper function to clear all inputs for new row
+function clearAllInputs() {
+  // Clear all dropdowns
+  const dropdowns = ["targetoneDropdown", "targettwoDropdown", "targetthreeDropdown"];
+  dropdowns.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) element.value = "";
+  });
+  
+  // Clear all checkboxes
+  const checkboxes = ["targetoneCheck", "targettwoCheck", "targetthreeCheck"];
+  checkboxes.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) element.checked = false;
+  });
+  
+  // Clear all text inputs
+  const textInputs = ["targetoneTextInput", "targettwoTextInput", "targetthreeTextInput"];
+  textInputs.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) element.value = "";
+  });
+}
+
+// Function to insert a new row in the Google Sheet (copied exactly from newpage.html)
+function insertRowBelow(targetRowIndex) {
+  return safeApiCall(() => {
+      const sheetId = 479827154; // Sheet2 ID extracted from the Google Sheets URL
+      const insertRowIndex = targetRowIndex + 1;
+
+      const requestBody = {
+          requests: [
+              {
+                  insertDimension: {
+                      range: {
+                          sheetId: sheetId,
+                          dimension: "ROWS",
+                          startIndex: insertRowIndex,
+                          endIndex: insertRowIndex + 1,
+                      },
+                      inheritFromBefore: true,
+                  },
+              },
+          ],
+      };
+
+      return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
+          method: "POST",
+          headers: {
+              "Authorization": `Bearer ${window.accessToken}`,
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+      })
+          .then((response) => {
+              if (!response.ok) throw response;
+              return response.json();
+          })
+          .then((data) => {
+              console.log("Row inserted successfully in Sheet2:", data);
+              return data;
+          });
+  });
+}
+
+// Helper function for red flash feedback on errors
+function flashRed(element) {
+  if (!element) return;
+  
+  const originalBg = element.style.backgroundColor;
+  element.style.backgroundColor = "#ff6b6b";
+  element.style.transition = "background-color 0.2s ease";
+  
+  setTimeout(() => {
+    element.style.backgroundColor = originalBg;
+    setTimeout(() => {
+      element.style.transition = "";
+    }, 200);
+  }, 200);
+}
+
+// Initialize the display when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize the counter display
+  updateFooterImageCount();
+  
+  console.log("Page loaded, imageCount initialized to:", imageCount);
+});
