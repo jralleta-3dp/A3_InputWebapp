@@ -15,14 +15,31 @@
   <div class="container">
     <div class="section-header">A2 Notation Prototype</div>
     <div class="imaging-row">
-      <div class="imaging-box">
-        <!-- Editable Name input from newpage.html -->
-        <div class="imaging-name-row">
-          <input id="editableName" class="editable-name" type="text" placeholder="Target Name..." />
-          <button id="addRowButton" class="button green-button plus-button">+</button>
-        </div>
-        <span id="entryNumber" class="entry-number"></span>
+      <!-- Name Input Section -->
+      <div class="imaging-name-row">
+        <input id="editableName" class="editable-name" type="text" placeholder="Entry Name..." />
+        <button id="addRowButton" class="plus-button">+</button>
       </div>
+      
+      <!-- Entry Number -->
+      <span id="entryNumber" class="entry-number"></span>
+      
+      <!-- Time Controls -->
+      <div class="button-time-group">
+        <div class="button-box">
+          <button id="startTimeButton" class="button">Start Time</button>
+          <button id="endTimeButton" class="button">End Time</button>
+        </div>
+        <div class="time-box">
+          <div id="startTimeDisplay" style="font-size:0.9em;color:#57606a;margin-bottom:4px;"></div>
+          <div id="endTimeDisplay" style="font-size:0.9em;color:#57606a;margin-bottom:4px;"></div>
+        </div>
+      </div>
+      
+      <!-- Spacer -->
+      <div></div>
+      
+      <!-- Navigation Buttons -->
       <div class="imaging-box buttons-horizontal">
         <button class="button green-button" id="backButton">&#8592; Back</button>
         <button class="button green-button" id="nextButton">Next &#8594;</button>
@@ -68,26 +85,102 @@
     </div>
   </div>
   <div class="container">
-    <div class="section-header">Jeremy (Enter To Save)</div>
+    <div class="section-header">General Observations (Enter to Save)</div>
     <div style="display: flex; justify-content: center; width: 100%;">
-      <input
-        type="text"
+      <textarea
         id="jeremyDescriptionInput"
         class="text-input"
         placeholder="Enter crew description..."
-      />
+        rows="3"
+      ></textarea>
     </div>
   </div>
 
   <div class="container">
-    <div class="section-header">Andre (Enter To Save)</div>
-    <div style="display: flex; justify-content: center; width: 100%;">
-      <input
-        type="text"
-        id="andreDescriptionInput"
-        class="text-input"
-        placeholder="Enter crew description..."
-      />
+    <div class="section-header">Target Summaries (Enter To Save)</div>
+    <div class = "target-input">
+      <div class="target-input-one-row-one">
+        <label class="target-dropdown">
+          <span>Target:</span>
+          <select id="targetoneSelect">
+            <option value="">Select...</option>
+            <option value="Target 1">Target 1</option>
+            <option value="Target 2">Target 2</option>
+            <option value="Target 3">Target 3</option>
+            <option value="Target 4">Target 4</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" id="downlinkASAPone" name="downlinkASAPone" value="Downlink ASAP"> Downlink ASAP
+        </label>
+        <label>
+          <input type="checkbox" id="crewquestionone" name="crewquestionone" value="Crew Question"> Crew Question
+        </label>
+      </div>
+      <div class="target-input-one-row-two">
+        <textarea
+          id="targetoneTextInput"
+          class="text-input"
+          placeholder="Enter target notes..."
+          rows="2"
+        ></textarea>
+      </div>
+    </div>
+    <div class = "target-input">
+      <div class="target-input-two-row-one">
+        <label class="target-dropdown">
+          <span>Target:</span>
+          <select id="targettwoSelect">
+            <option value="">Select...</option>
+            <option value="Target 1">Target 1</option>
+            <option value="Target 2">Target 2</option>
+            <option value="Target 3">Target 3</option>
+            <option value="Target 4">Target 4</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" id="downlinkASAPtwo" name="downlinkASAPtwo" value="Downlink ASAP"> Downlink ASAP
+        </label>
+        <label>
+          <input type="checkbox" id="crewquestiontwo" name="crewquestiontwo" value="Crew Question"> Crew Question
+        </label>
+      </div>
+      <div class="target-input-two-row-two">
+        <textarea
+          id="targettwoTextInput"
+          class="text-input"
+          placeholder="Enter target notes..."
+          rows="2"
+        ></textarea>
+      </div>
+    </div>
+    <div class = "target-input">
+      <div class="target-input-three-row-one">
+        <label class="target-dropdown">
+          <span>Target:</span>
+          <select id="targetthreeSelect">
+            <option value="">Select...</option>
+            <option value="Target 1">Target 1</option>
+            <option value="Target 2">Target 2</option>
+            <option value="Target 3">Target 3</option>
+            <option value="Target 4">Target 4</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" id="downlinkASAPthree" name="downlinkASAPthree" value="Downlink ASAP"> Downlink ASAP
+        </label>
+        <label>
+          <input type="checkbox" id="crewquestionthree" name="crewquestionthree" value="Crew Question"> Crew Question
+        </label>
+      </div>
+      <div class="target-input-three-row-two">
+        <textarea
+          id="targetthreeTextInput"
+          class="text-input"
+          placeholder="Enter target notes..."
+          rows="2"
+        ></textarea>
+      </div>
     </div>
   </div>
   <div class="footer" id="footerImageCount"></div>
