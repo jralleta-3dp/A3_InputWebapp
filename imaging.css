@@ -3,55 +3,44 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #24292e;
   margin: 0;
-  padding: clamp(10px, 2vw, 30px);
+  padding: clamp(2px, 0.5vw, 8px);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   overflow-x: auto;
-  font-size: clamp(14px, 1.2vw, 18px);
+  font-size: clamp(12px, 0.8vw, 16px);
 }
 
 .container {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: clamp(10px, 2vw, 20px);
+  border-radius: clamp(6px, 1vw, 16px);
   box-shadow:
-    0 clamp(10px, 2vw, 20px) clamp(20px, 4vw, 40px) rgba(0,0,0,0.1),
-    0 clamp(4px, 1vw, 8px) clamp(12px, 2.5vw, 25px) rgba(0,0,0,0.08),
-    0 clamp(2px, 0.3vw, 3px) clamp(5px, 1vw, 10px) rgba(0,0,0,0.05);
-  padding: clamp(20px, 5vw, 60px) clamp(15px, 3vw, 40px);
-  max-width: min(95vw, 2400px);
-  width: 90vw;
-  margin: clamp(10px, 2vh, 20px) auto;
+    0 clamp(5px, 1vw, 15px) clamp(10px, 2vw, 30px) rgba(0,0,0,0.1),
+    0 clamp(2px, 0.5vw, 6px) clamp(5px, 1.2vw, 20px) rgba(0,0,0,0.08),
+    0 clamp(1px, 0.2vw, 2px) clamp(2px, 0.5vw, 8px) rgba(0,0,0,0.05);
+  padding: clamp(6px, 1.2vw, 20px) clamp(5px, 1vw, 15px);
+  max-width: min(98vw, 1400px);
+  width: 95vw;
+  margin: clamp(1px, 0.3vh, 5px) auto;
   display: flex;
   flex-direction: column;
-  gap: clamp(20px, 4vw, 40px);
+  gap: clamp(4px, 0.8vw, 12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: visible;
-  min-width: 300px;
-}
-
-.container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
-  border-radius: 20px 20px 0 0;
+  min-width: 280px;
 }
 
 .section-header {
-  font-size: clamp(1.5em, 3vw, 2.5em);
+  font-size: clamp(1em, 1.4vw, 1.3em);
   font-weight: 700;
   color: #2d3748;
-  margin-bottom: clamp(8px, 1.5vw, 15px);
+  margin-bottom: clamp(3px, 0.8vw, 6px);
   position: relative;
-  padding-bottom: clamp(5px, 1vw, 10px);
+  padding-bottom: clamp(2px, 0.4vw, 4px);
   text-align: left;
   letter-spacing: 0.5px;
 }
@@ -59,29 +48,29 @@ body {
 .section-header::after {
   content: "";
   display: block;
-  margin: clamp(6px, 1.2vw, 12px) 0 0 0;
-  width: clamp(30px, 6vw, 60px);
-  height: clamp(2px, 0.4vw, 4px);
+  margin: clamp(2px, 0.5vw, 4px) 0 0 0;
+  width: clamp(20px, 3vw, 30px);
+  height: clamp(1.5px, 0.2vw, 2px);
   border-radius: 2px;
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
 }
 
 .imaging-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 25vw, 300px), 1fr));
-  gap: clamp(20px, 4vw, 50px);
-  width: clamp(85%, 90vw, 95%);
-  max-width: min(90vw, 1600px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: clamp(4px, 0.8vw, 8px);
+  width: 95%;
   align-items: center;
-  justify-content: center;
-  margin: clamp(15px, 3vw, 30px) auto 0 auto;
-  min-height: clamp(80px, 12vh, 160px);
-  padding: clamp(25px, 4vw, 50px) clamp(30px, 5vw, 60px);
-  border-radius: clamp(8px, 1.5vw, 16px);
+  justify-content: space-between;
+  margin: clamp(4px, 1vw, 8px) auto 0 auto;
+  min-height: clamp(40px, 6vh, 60px);
+  padding: clamp(8px, 1.5vw, 16px);
+  border-radius: clamp(8px, 1.2vw, 12px);
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
   border: 2px solid rgba(102, 126, 234, 0.1);
   transition: all 0.3s ease;
-  box-shadow: 0 clamp(4px, 1vw, 8px) clamp(12px, 2.5vw, 25px) rgba(0,0,0,0.08);
+  box-shadow: 0 clamp(4px, 0.8vw, 6px) clamp(10px, 2vw, 18px) rgba(0,0,0,0.08);
 }
 
 .imaging-row:hover {
@@ -106,7 +95,10 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: clamp(4px, 0.8vw, 8px);
+  flex-shrink: 0;
+  min-width: clamp(120px, 15vw, 160px);
+  margin-left: clamp(4px, 0.8vw, 8px);
 }
 
 .imaging-name-row {
@@ -114,13 +106,15 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: clamp(10px, 2vw, 20px);
-  min-width: clamp(200px, 25vw, 300px);
+  gap: clamp(6px, 1.2vw, 10px);
+  flex: 1;
+  min-width: clamp(120px, 15vw, 180px);
+  max-width: clamp(180px, 25vw, 250px);
 }
 
 .editable-name {
   flex: 1;
-  font-size: clamp(1.2em, 2vw, 1.8em);
+  font-size: clamp(0.9em, 1.2vw, 1.1em);
   font-weight: 600;
   color: #2d3748;
   border: none;
@@ -129,10 +123,10 @@ body {
   text-align: left;
   cursor: text;
   transition: all 0.3s ease;
-  padding: clamp(5px, 1vw, 10px) clamp(3px, 0.5vw, 5px);
-  border-radius: clamp(4px, 0.8vw, 8px);
+  padding: clamp(3px, 0.6vw, 6px) clamp(2px, 0.3vw, 3px);
+  border-radius: clamp(3px, 0.5vw, 5px);
   border: 2px solid transparent;
-  min-width: clamp(100px, 15vw, 150px);
+  min-width: clamp(80px, 12vw, 100px);
 }
 
 .editable-name:focus {
@@ -147,16 +141,17 @@ body {
 }
 
 .entry-number {
-  font-size: clamp(1em, 1.8vw, 1.5em);
+  font-size: clamp(0.8em, 1.1vw, 1em);
   font-weight: 700;
   color: #667eea;
-  padding: clamp(6px, 1.2vw, 12px) clamp(3px, 0.5vw, 5px);
+  padding: clamp(4px, 0.8vw, 8px) clamp(6px, 1vw, 10px);
   background: linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-radius: clamp(12px, 2.5vw, 25px);
+  border-radius: clamp(10px, 1.5vw, 15px);
   border: 2px solid rgba(102, 126, 234, 0.2);
   white-space: nowrap;
-  min-width: clamp(40px, 6vw, 60px);
+  min-width: clamp(35px, 5vw, 50px);
   text-align: center;
+  flex-shrink: 0;
 }
 
 /* Button Time Group Styling - Horizontal Layout */
@@ -165,15 +160,17 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: clamp(20px, 4vw, 40px);
-  padding: 0px clamp(30px, 6vw, 60px);
-  min-width: clamp(300px, 40vw, 450px);
+  gap: clamp(8px, 1.5vw, 15px);
+  padding: 0;
+  flex: 1;
+  min-width: clamp(180px, 22vw, 280px);
+  max-width: clamp(250px, 35vw, 400px);
 }
 
 .button-box {
   display: flex;
   flex-direction: row;
-  gap: 1px;
+  gap: clamp(1px, 0.1vw, 2px);
   padding: 0px;
   align-items: center;
   justify-content: center;
@@ -182,57 +179,67 @@ body {
 .time-box {
   display: flex;
   flex-direction: column;
-  gap: clamp(4px, 0.8vw, 8px);
+  gap: clamp(3px, 0.6vw, 5px);
   align-items: center;
   justify-content: center;
-  font-size: clamp(1.2em, 2vw, 1.7em);
+  font-size: clamp(0.8em, 1.1vw, 1.1em);
   color: #4a5568;
   font-weight: 500;
-  padding: clamp(15px, 3vw, 30px) clamp(25px, 5vw, 50px);
+  padding: clamp(12px, 2vw, 18px) clamp(18px, 3vw, 28px);
   background: rgba(102, 126, 234, 0.05);
-  border-radius: clamp(6px, 1.2vw, 12px);
+  border-radius: clamp(6px, 0.8vw, 9px);
   border: 1px solid rgba(102, 126, 234, 0.1);
   white-space: nowrap;
-  min-width: clamp(100px, 15vw, 150px);
+  min-width: clamp(80px, 12vw, 100px);
   text-align: center;
 }
 
 .button, .green-button {
-  padding: clamp(10px, 2vw, 20px) clamp(10px, 2vw, 20px);
-  font-size: clamp(1em, 1.6vw, 1.4em);
+  padding: clamp(6px, 1vw, 10px) clamp(8px, 1.4vw, 12px);
+  font-size: clamp(0.7em, 0.9vw, 0.9em);
   font-weight: 600;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
   border: none;
-  border-radius: clamp(6px, 1.2vw, 12px);
+  border-radius: clamp(4px, 0.6vw, 6px);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 clamp(4px, 1vw, 8px) clamp(10px, 2vw, 20px) rgba(102, 126, 234, 0.3);
-  letter-spacing: 0.5px;
-  outline: none;
+  box-shadow: 0 clamp(3px, 0.5vw, 4px) clamp(8px, 1.4vw, 12px) rgba(102, 126, 234, 0.3);
   text-align: center;
-  min-width: clamp(120px, 16vw, 160px);
-  margin: 0 clamp(6px, 1.2vw, 12px);
-  border: 2px solid transparent;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: clamp(60px, 9vw, 80px);
+  min-height: clamp(28px, 4vw, 32px);
 }
 
-.button:hover, .green-button:hover, .button:focus, .green-button:focus {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 clamp(6px, 1.2vw, 12px) clamp(15px, 3vw, 30px) rgba(102, 126, 234, 0.4);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+.green-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 clamp(4px, 0.6vw, 6px) clamp(10px, 1.8vw, 15px) rgba(72, 187, 120, 0.3);
+}
+
+.button:hover, .green-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 clamp(6px, 1vw, 8px) clamp(15px, 2.5vw, 20px) rgba(102, 126, 234, 0.4);
+}
+
+.green-button:hover {
+  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  box-shadow: 0 clamp(6px, 1vw, 8px) clamp(15px, 2.5vw, 20px) rgba(72, 187, 120, 0.4);
 }
 
 .button:active, .green-button:active {
   transform: translateY(-1px);
-  box-shadow: 0 clamp(3px, 0.6vw, 6px) clamp(8px, 1.5vw, 15px) rgba(102, 126, 234, 0.3);
+  box-shadow: 0 clamp(4px, 0.8vw, 6px) clamp(10px, 2vw, 15px) rgba(102, 126, 234, 0.3);
 }
 
 .plus-button {
-  width: clamp(30px, 4vw, 40px);
-  height: clamp(30px, 4vw, 40px);
+  width: clamp(25px, 3vw, 30px);
+  height: clamp(25px, 3vw, 30px);
   padding: 0;
-  font-size: clamp(1.2em, 2vw, 1.7em);
+  font-size: clamp(1em, 1.3vw, 1.2em);
   font-weight: 700;
   border-radius: 60%;
   margin: 0;
@@ -241,7 +248,7 @@ body {
   justify-content: center;
   color: #fff;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 clamp(3px, 0.6vw, 6px) clamp(8px, 1.5vw, 15px) rgba(102, 126, 234, 0.3);
+  box-shadow: 0 clamp(3px, 0.5vw, 4px) clamp(8px, 1.5vw, 12px) rgba(102, 126, 234, 0.3);
 }
 
 .dropdown-row {
@@ -249,59 +256,59 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: clamp(50px, 15vw, 200px);
-  margin-top: clamp(15px, 3vw, 30px);
-  padding: clamp(10px, 2vw, 20px) 0;
+  gap: clamp(30px, 6vw, 80px);
+  margin-top: clamp(6px, 1.2vw, 12px);
+  padding: clamp(6px, 1.2vw, 10px) 0;
 }
 
 .dropdown-label {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: clamp(1.4em, 2.5vw, 2em);
+  font-size: clamp(1em, 1.4vw, 1.3em);
   font-weight: 600;
   color: #2d3748;
-  gap: clamp(6px, 1.2vw, 12px);
+  gap: clamp(5px, 0.8vw, 8px);
 }
 
 .dropdown-row select {
-  width: clamp(200px, 25vw, 300px);
-  padding: clamp(8px, 1.6vw, 16px) clamp(10px, 2vw, 20px);
-  font-size: clamp(0.9em, 1.3vw, 1.1em);
+  width: clamp(160px, 20vw, 220px);
+  padding: clamp(8px, 1.2vw, 12px) clamp(12px, 1.6vw, 16px);
+  font-size: clamp(0.8em, 1vw, 0.95em);
   border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: clamp(6px, 1.2vw, 12px);
+  border-radius: clamp(6px, 0.8vw, 9px);
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
   color: #2d3748;
   outline: none;
   transition: all 0.3s ease;
-  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(6px, 1.2vw, 12px) rgba(102, 126, 234, 0.1);
+  box-shadow: 0 clamp(2px, 0.4vw, 3px) clamp(6px, 1.2vw, 9px) rgba(102, 126, 234, 0.1);
   font-weight: 500;
 }
 
 .dropdown-row select:hover, .dropdown-row select:focus {
   border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 clamp(3px, 0.6vw, 6px) clamp(10px, 2vw, 20px) rgba(102, 126, 234, 0.2);
+  box-shadow: 0 clamp(4px, 0.8vw, 6px) clamp(12px, 2.2vw, 20px) rgba(102, 126, 234, 0.2);
   transform: translateY(-1px);
 }
 
 .text-input {
-  width: clamp(90%, 94vw, 94%);
-  padding: clamp(11px, 2.2vw, 22px) clamp(14px, 2.8vw, 28px);
-  font-size: clamp(1em, 1.6vw, 1.4em);
+  width: clamp(88%, 92vw, 94%);
+  padding: clamp(6px, 1.2vw, 12px) clamp(8px, 1.5vw, 16px);
+  font-size: clamp(0.8em, 1.1vw, 1em);
   border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: clamp(6px, 1.2vw, 12px);
+  border-radius: clamp(6px, 0.8vw, 9px);
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
   color: #2d3748;
-  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(6px, 1.2vw, 12px) rgba(102, 126, 234, 0.1);
+  box-shadow: 0 clamp(2px, 0.4vw, 3px) clamp(6px, 1.2vw, 9px) rgba(102, 126, 234, 0.1);
   outline: none;
-  margin: clamp(10px, 2vw, 20px) 0 clamp(8px, 1.5vw, 15px) 0;
+  margin: clamp(6px, 1.2vw, 10px) 0 clamp(4px, 1vw, 8px) 0;
   transition: all 0.3s ease;
   font-weight: 500;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   resize: vertical;
-  min-height: 80px;
+  min-height: clamp(35px, 5vw, 50px);
   font-family: inherit;
 }
 
@@ -314,311 +321,37 @@ body {
 
 .footer {
   text-align: center;
-  font-size: clamp(1em, 1.5vw, 1.3em);
+  font-size: clamp(0.9em, 1.2vw, 1.1em);
   font-weight: 600;
   color: #667eea;
-  margin-top: clamp(12px, 2.5vw, 25px);
-  padding: clamp(10px, 2vw, 20px) 0;
+  margin-top: clamp(15px, 2.5vw, 20px);
+  padding: clamp(12px, 2vw, 16px) 0;
   border-top: 2px solid rgba(102, 126, 234, 0.1);
   width: 100%;
   letter-spacing: 1px;
   background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-  border-radius: 0 0 clamp(10px, 2vw, 20px) clamp(10px, 2vw, 20px);
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 20px 10px;
-    width: 98%;
-    max-width: none;
-  }
-  
-  .imaging-row {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 20px 10px;
-  }
-  
-  .imaging-name-row {
-    min-width: auto;
-    justify-content: center;
-  }
-  
-  .editable-name {
-    min-width: auto;
-    text-align: center;
-    font-size: 1.1em;
-  }
-  
-  .button-time-group {
-    min-width: auto;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .time-box {
-    min-width: auto;
-    font-size: 1em;
-  }
-  
-  .dropdown-row {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .dropdown-row select {
-    width: 100%;
-    max-width: 300px;
-  }
-}
-
-@media (max-width: 1400px) {
-  .container {
-    max-width: 2200px;
-    width: 90%;
-    padding: 50px 30px;
-  }
-  
-  .imaging-row {
-    gap: 33px;
-    padding: 35px 25px;
-    width: 95%;
-    max-width: 1200px;
-    grid-template-columns: auto auto auto auto auto;
-    justify-content: center;
-  }
-}
-
-/* Very narrow screen mode (narrow split screen) */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-  
-  .container {
-    padding: 15px 10px;
-    width: 98%;
-    max-width: none;
-    margin: 10px auto;
-    gap: 20px;
-  }
-  
-  .section-header {
-    font-size: 1.8em;
-    text-align: center;
-  }
-  
-  .imaging-row {
-    padding: 15px 5px;
-    gap: 10px;
-  }
-  
-  .editable-name {
-    font-size: 1em;
-    padding: 8px 12px;
-  }
-  
-  .entry-number {
-    font-size: 1em;
-  }
-  
-  .time-box {
-    font-size: 0.9em;
-    padding: 8px 12px;
-  }
-  
-  .imaging-box button {
-    font-size: 0.9em;
-    padding: 8px 12px;
-    min-width: 80px;
-  }
-  
-  .dropdown-row select {
-    width: 100%;
-    max-width: 250px;
-    font-size: 0.9em;
-  }
-  
-  .target-input {
-    padding: 15px 10px;
-    margin: 15px 0;
-  }
-  
-  .target-dropdown {
-    font-size: 1.2em;
-  }
-  
-  .target-input-one-row-one label,
-  .target-input-two-row-one label,
-  .target-input-three-row-one label {
-    font-size: 1.3em;
-  }
-  
-  .target-input-one-row-two .text-input,
-  .target-input-two-row-two .text-input,
-  .target-input-three-row-two .text-input {
-    font-size: 1.2em;
-    padding: 12px 16px;
-  }
-  
-  .footer {
-    font-size: 0.9em;
-    padding: 15px 10px;
-  }
-}
-
-/* Half-screen mode optimization */
-@media (max-width: 1200px) and (min-width: 769px) {
-  .container {
-    max-width: 100%;
-    width: 95%;
-    padding: 40px 20px;
-  }
-  
-  .imaging-row {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 25px 15px;
-  }
-  
-  .imaging-name-row {
-    min-width: auto;
-    justify-content: center;
-  }
-  
-  .editable-name {
-    min-width: auto;
-    text-align: center;
-    font-size: 1.4em;
-  }
-  
-  .entry-number {
-    font-size: 1.2em;
-    margin: 0 auto;
-  }
-  
-  .button-time-group {
-    min-width: auto;
-    flex-direction: row;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
-  
-  .time-box {
-    min-width: 120px;
-    font-size: 1.1em;
-  }
-  
-  .imaging-box.buttons-horizontal {
-    min-width: auto;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
-  
-  .dropdown-row {
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-  }
-  
-  .dropdown-row select {
-    width: 280px;
-    max-width: 90%;
-  }
-  
-  .target-input-one-row-one,
-  .target-input-two-row-one,
-  .target-input-three-row-one {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .target-dropdown {
-    min-width: auto;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .target-dropdown select {
-    width: 280px;
-    max-width: 90%;
-  }
-}
-
-@media (max-width: 768px) {
-  .imaging-row {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px 10px;
-  }
-  
-  .imaging-name-row {
-    min-width: auto;
-    justify-content: center;
-  }
-  
-  .editable-name {
-    min-width: auto;
-    text-align: center;
-    font-size: 1.2em;
-  }
-  
-  .entry-number {
-    order: 2;
-    font-size: 1.1em;
-    margin: 0 auto;
-  }
-  
-  .button-time-group {
-    min-width: auto;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .imaging-box.buttons-horizontal {
-    order: 4;
-    min-width: auto;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  
-  .dropdown-row {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .dropdown-row select {
-    width: 250px;
-    max-width: 90%;
-  }
+  border-radius: 0 0 clamp(8px, 1.2vw, 12px) clamp(8px, 1.2vw, 12px);
 }
 
 /* Target Input Section Styles */
 .target-input {
   display: flex;
   flex-direction: column;
-  gap: clamp(10px, 2vw, 20px);
-  margin: clamp(15px, 3vw, 30px) 0;
-  padding: clamp(15px, 3vw, 30px);
-  border-radius: clamp(8px, 1.6vw, 16px);
+  gap: clamp(4px, 0.8vw, 8px);
+  margin: clamp(6px, 1.2vw, 12px) 0;
+  padding: clamp(8px, 1.5vw, 15px);
+  border-radius: clamp(6px, 0.8vw, 9px);
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
   border: 2px solid rgba(102, 126, 234, 0.1);
   transition: all 0.3s ease;
-  box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(12px, 2.5vw, 25px) rgba(0,0,0,0.08);
+  box-shadow: 0 clamp(2px, 0.4vw, 3px) clamp(6px, 1.2vw, 10px) rgba(0,0,0,0.08);
 }
 
 .target-input:hover {
   background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
   border-color: rgba(102, 126, 234, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 clamp(6px, 1.2vw, 12px) clamp(18px, 3.5vw, 35px) rgba(0,0,0,0.12);
+  box-shadow: 0 clamp(6px, 1.2vw, 9px) clamp(20px, 3vw, 28px) rgba(0,0,0,0.12);
 }
 
 /* Target Input Row One - Dropdown and Checkboxes */
@@ -629,7 +362,7 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: clamp(20px, 4vw, 40px);
+  gap: clamp(12px, 2vw, 20px);
   flex-wrap: wrap;
 }
 
@@ -638,31 +371,31 @@ body {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  font-size: clamp(1.2em, 1.8vw, 1.5em);
+  font-size: clamp(0.9em, 1.3vw, 1.1em);
   font-weight: 600;
   color: #2d3748;
-  gap: clamp(4px, 0.8vw, 8px);
-  min-width: clamp(150px, 20vw, 200px);
+  gap: clamp(5px, 0.8vw, 8px);
+  min-width: clamp(120px, 15vw, 160px);
 }
 
 .target-dropdown select {
-  width: clamp(180px, 25vw, 250px);
-  padding: clamp(6px, 1.2vw, 12px) clamp(8px, 1.6vw, 16px);
-  font-size: clamp(0.7em, 1vw, 0.8em);
+  width: clamp(150px, 18vw, 200px);
+  padding: clamp(6px, 1vw, 10px) clamp(10px, 1.5vw, 14px);
+  font-size: clamp(0.7em, 0.9vw, 0.8em);
   border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: clamp(5px, 1vw, 10px);
+  border-radius: clamp(6px, 0.8vw, 9px);
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
   color: #2d3748;
   outline: none;
   transition: all 0.3s ease;
-  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(6px, 1.2vw, 12px) rgba(102, 126, 234, 0.1);
+  box-shadow: 0 clamp(2px, 0.4vw, 3px) clamp(6px, 1.2vw, 9px) rgba(102, 126, 234, 0.1);
   font-weight: 500;
 }
 
 .target-dropdown select:hover,
 .target-dropdown select:focus {
   border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 clamp(3px, 0.6vw, 6px) clamp(10px, 2vw, 20px) rgba(102, 126, 234, 0.2);
+  box-shadow: 0 clamp(3px, 0.6vw, 5px) clamp(10px, 2vw, 15px) rgba(102, 126, 234, 0.2);
   transform: translateY(-1px);
 }
 
@@ -672,176 +405,15 @@ body {
 .target-input-three-row-one label {
   display: flex;
   align-items: center;
-  font-size: clamp(1.4em, 2.5vw, 2em);
+  font-size: clamp(0.8em, 1.1vw, 1em);
   font-weight: 500;
   color: #2d3748;
-  gap: clamp(5px, 1vw, 10px);
+  gap: clamp(6px, 0.8vw, 8px);
   cursor: pointer;
-  padding: clamp(5px, 1vw, 10px) clamp(8px, 1.5vw, 15px);
-  border-radius: clamp(4px, 0.8vw, 8px);
+  padding: clamp(6px, 1vw, 8px) clamp(8px, 1.2vw, 12px);
+  border-radius: clamp(6px, 0.8vw, 9px);
   transition: all 0.3s ease;
-  white-space: nowrap;
+  border: 2px solid transparent;
 }
 
-.target-input-one-row-one label:hover,
-.target-input-two-row-one label:hover,
-.target-input-three-row-one label:hover {
-  background: rgba(102, 126, 234, 0.05);
-  transform: translateY(-1px);
-}
-
-/* Custom Checkbox Styling */
-.target-input-one-row-one input[type="checkbox"],
-.target-input-two-row-one input[type="checkbox"],
-.target-input-three-row-one input[type="checkbox"] {
-  width: clamp(30px, 4vw, 40px);
-  height: clamp(30px, 4vw, 40px);
-  border: 2px solid rgba(102, 126, 234, 0.3);
-  border-radius: clamp(2px, 0.4vw, 4px);
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 0;
-}
-
-.target-input-one-row-one input[type="checkbox"]:checked,
-.target-input-two-row-one input[type="checkbox"]:checked,
-.target-input-three-row-one input[type="checkbox"]:checked {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
-}
-
-.target-input-one-row-one input[type="checkbox"]:hover,
-.target-input-two-row-one input[type="checkbox"]:hover,
-.target-input-three-row-one input[type="checkbox"]:hover {
-  border-color: rgba(102, 126, 234, 0.6);
-  box-shadow: 0 clamp(1px, 0.2vw, 2px) clamp(4px, 0.8vw, 8px) rgba(102, 126, 234, 0.2);
-}
-
-/* Target Input Row Two - Text Areas */
-.target-input-one-row-two,
-.target-input-two-row-two,
-.target-input-three-row-two {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.target-input-one-row-two .text-input,
-.target-input-two-row-two .text-input,
-.target-input-three-row-two .text-input {
-  width: clamp(90%, 94vw, 94%);
-  padding: clamp(9px, 1.8vw, 18px) clamp(12px, 2.4vw, 24px);
-  font-size: clamp(1.2em, 2vw, 1.8em);
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: clamp(5px, 1vw, 10px);
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-  color: #2d3748;
-  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(6px, 1.2vw, 12px) rgba(102, 126, 234, 0.1);
-  outline: none;
-  margin: clamp(5px, 1vw, 10px) 0;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-  resize: vertical;
-  min-height: clamp(40px, 6vh, 60px);
-  font-family: inherit;
-}
-
-.target-input-one-row-two .text-input:focus,
-.target-input-two-row-two .text-input:focus,
-.target-input-three-row-two .text-input:focus {
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 clamp(3px, 0.6vw, 6px) clamp(10px, 2vw, 20px) rgba(102, 126, 234, 0.2);
-  transform: translateY(-1px);
-  background: #ffffff;
-}
-
-/* Responsive Design for Target Inputs */
-@media (max-width: 1200px) and (min-width: 769px) {
-  .target-input-one-row-one,
-  .target-input-two-row-one,
-  .target-input-three-row-one {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .target-dropdown {
-    min-width: auto;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .target-dropdown select {
-    width: 280px;
-    max-width: 90%;
-  }
-  
-  .target-input-one-row-one label,
-  .target-input-two-row-one label,
-  .target-input-three-row-one label {
-    justify-content: center;
-    font-size: 1.8em;
-  }
-}
-
-@media (max-width: 768px) {
-  .target-input-one-row-one,
-  .target-input-two-row-one,
-  .target-input-three-row-one {
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .target-dropdown {
-    min-width: auto;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .target-dropdown select {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .target-input-one-row-one label,
-  .target-input-two-row-one label,
-  .target-input-three-row-one label {
-    width: 100%;
-    justify-content: center;
-    font-size: 1.6em;
-  }
-  
-  .target-input-one-row-two .text-input,
-  .target-input-two-row-two .text-input,
-  .target-input-three-row-two .text-input {
-    font-size: 1.4em;
-    padding: 15px 20px;
-  }
-}
-
-/* 
-================================================================================
-VIEWPORT-BASED RESPONSIVE DESIGN SYSTEM IMPLEMENTED
-================================================================================
-
-This CSS now uses a comprehensive viewport-based scaling system using:
-- clamp() functions for fluid scaling between minimum and maximum values
-- vw (viewport width) and vh (viewport height) units for relative sizing
-- Percentage-based widths with viewport constraints
-
-Key Features:
-✓ Automatically scales with browser window size
-✓ Works seamlessly in half-screen mode, split screen, and full screen
-✓ No fixed breakpoints - truly fluid responsive design
-✓ Elements scale proportionally to maintain visual hierarchy
-✓ Consistent spacing and sizing across all screen sizes
-
-The old media queries above are maintained for edge cases, but the primary
-responsive behavior now comes from the viewport-based measurements in the
-main CSS rules using clamp(), vw, vh, and fluid sizing.
-*/
+/* No media queries - using only clamp() and viewport units for fluid responsive design */
